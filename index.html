@@ -1,0 +1,1750 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reserved parking near Mumbai's busy places</title>
+  <meta name="description" content="Pick your area. Get a reserved parking space within about 400 m in Mumbai, by the day or month." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #ffffff;
+      --text: #111111;
+      --muted: #4a4a4a;
+      --border: #cccccc;
+      --border-strong: #888888;
+      --accent: #0b3d91;
+      --accent-text: #ffffff;
+      --error: #b00020;
+      --error-bg: #fff5f6;
+      --notice-bg: #f6f6f6;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Noto Sans Devanagari", sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-text-size-adjust: 100%;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 20px 16px 40px;
+    }
+
+    /* Language gate (first visit) */
+    .lang-gate {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 24px 16px;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .lang-gate-title {
+      font-size: 20px;
+      font-weight: 600;
+      margin: 0 0 20px;
+    }
+
+    .lang-gate-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .lang-choice-btn {
+      width: 100%;
+      min-height: 56px;
+      padding: 14px 16px;
+      font-family: inherit;
+      font-size: 18px;
+      font-weight: 600;
+      text-align: left;
+      color: var(--text);
+      background-color: var(--bg);
+      border: 1px solid var(--border-strong);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .lang-choice-btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    /* Main page top bar */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .top-bar label {
+      font-size: 16px;
+      font-weight: 600;
+      margin: 0;
+    }
+
+    .top-bar select {
+      width: auto;
+      min-width: 140px;
+      min-height: 48px;
+      padding: 8px 12px;
+      font-family: inherit;
+      font-size: 16px;
+      color: var(--text);
+      background-color: var(--bg);
+      border: 1px solid var(--border-strong);
+      border-radius: 4px;
+    }
+
+    /* Typography */
+    h1 {
+      font-size: 24px;
+      line-height: 1.3;
+      font-weight: 700;
+      margin: 0 0 12px;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      margin: 0 0 28px;
+      color: var(--text);
+    }
+
+    h2 {
+      font-size: 20px;
+      line-height: 1.35;
+      font-weight: 700;
+      margin: 0 0 16px;
+    }
+
+    /* Forms */
+    .field {
+      margin-bottom: 20px;
+    }
+
+    .field-label {
+      display: block;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="tel"],
+    input[type="date"],
+    input[type="number"],
+    select {
+      display: block;
+      width: 100%;
+      min-height: 48px;
+      padding: 10px 12px;
+      font-family: inherit;
+      font-size: 16px;
+      line-height: 1.4;
+      color: var(--text);
+      background-color: var(--bg);
+      border: 1px solid var(--border-strong);
+      border-radius: 4px;
+    }
+
+    input:focus-visible,
+    select:focus-visible,
+    button:focus-visible,
+    a:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 2px;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .radio-option {
+      flex: 1 1 140px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-height: 48px;
+      padding: 10px 12px;
+      border: 1px solid var(--border-strong);
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+      background-color: var(--bg);
+    }
+
+    .radio-option input[type="radio"] {
+      width: 20px;
+      height: 20px;
+      margin: 0;
+      accent-color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .price-box {
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      border: 1px solid var(--border);
+      background-color: var(--notice-bg);
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 4px;
+    }
+
+    .price-box.is-warning {
+      border-color: var(--error);
+      background-color: var(--error-bg);
+      color: var(--error);
+      font-weight: 400;
+    }
+
+    .field-error {
+      margin-top: 6px;
+      font-size: 15px;
+      color: var(--error);
+    }
+
+    .form-error-banner {
+      padding: 12px 14px;
+      margin-bottom: 16px;
+      border: 1px solid var(--error);
+      background-color: var(--error-bg);
+      color: var(--error);
+      font-size: 16px;
+      border-radius: 4px;
+    }
+
+    .submit-btn {
+      display: block;
+      width: 100%;
+      min-height: 52px;
+      padding: 12px 16px;
+      font-family: inherit;
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--accent-text);
+      background-color: var(--accent);
+      border: 1px solid var(--accent);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .submit-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .secondary-btn {
+      display: block;
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 16px;
+      font-family: inherit;
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--text);
+      background-color: var(--bg);
+      border: 1px solid var(--border-strong);
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .secondary-btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+    }
+
+    .confirm-box {
+      padding: 16px;
+      border: 1px solid var(--border-strong);
+      background-color: var(--notice-bg);
+      border-radius: 4px;
+      margin-bottom: 24px;
+    }
+
+    .confirm-summary {
+      margin: 0 0 16px;
+      font-size: 16px;
+      line-height: 1.5;
+    }
+
+    .checkbox-option {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      min-height: 48px;
+      padding: 12px;
+      border: 1px solid var(--border-strong);
+      border-radius: 4px;
+      background-color: var(--bg);
+      cursor: pointer;
+      font-size: 16px;
+      line-height: 1.45;
+      margin-bottom: 8px;
+    }
+
+    .checkbox-option input[type="checkbox"] {
+      width: 22px;
+      height: 22px;
+      margin: 2px 0 0;
+      accent-color: var(--accent);
+      flex-shrink: 0;
+    }
+
+    .confirm-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-top: 16px;
+    }
+
+    .thank-you-box {
+      padding: 16px;
+      border: 1px solid var(--border-strong);
+      background-color: var(--notice-bg);
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+
+    .thank-you-box p {
+      margin: 0 0 8px;
+    }
+
+    .thank-you-box p:last-child {
+      margin-bottom: 0;
+    }
+
+    .reload-note {
+      font-weight: 400;
+      color: var(--muted);
+    }
+
+    .owner-section {
+      margin-top: 32px;
+      padding-top: 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    .text-link-btn {
+      background: none;
+      border: none;
+      padding: 12px 0;
+      min-height: 48px;
+      font-family: inherit;
+      font-size: 16px;
+      color: var(--accent);
+      text-decoration: underline;
+      cursor: pointer;
+      text-align: left;
+      display: inline-block;
+    }
+
+    .owner-form-wrap {
+      margin-top: 16px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+    }
+
+    footer {
+      margin-top: 36px;
+      padding-top: 16px;
+      border-top: 1px solid var(--border);
+      font-size: 15px;
+      color: var(--muted);
+    }
+
+    footer p {
+      margin: 0 0 6px;
+    }
+
+    footer p:last-child {
+      margin-bottom: 0;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- First-visit full-screen language selection -->
+  <div id="language-gate" class="lang-gate hidden" role="dialog" aria-labelledby="gate-heading">
+    <p id="gate-heading" class="lang-gate-title">Choose your language / भाषा चुनें / भाषा निवडा</p>
+    <div class="lang-gate-list">
+      <button type="button" class="lang-choice-btn" data-choose-lang="en">English</button>
+      <button type="button" class="lang-choice-btn" data-choose-lang="hi">हिन्दी</button>
+      <button type="button" class="lang-choice-btn" data-choose-lang="mr">मराठी</button>
+    </div>
+  </div>
+
+  <!-- Main notice & booking page -->
+  <main id="main-page" class="container hidden">
+    <div class="top-bar">
+      <label for="lang-select" id="lbl-language">Language</label>
+      <select id="lang-select" aria-label="Language">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+        <option value="mr">मराठी</option>
+      </select>
+    </div>
+
+    <h1 id="page-headline">Reserved parking near Mumbai's busy places</h1>
+    <p id="page-subtitle" class="subtitle">Pick your area. Get a reserved space within about 400 m, by the day or month.</p>
+
+    <!-- Driver request form -->
+    <form id="driver-form" novalidate>
+      <div class="field">
+        <label class="field-label" for="driver-area" id="lbl-driver-area">Where do you need to park?</label>
+        <select id="driver-area" name="area" required></select>
+        <div class="field-error hidden" id="err-driver-area"></div>
+      </div>
+
+      <div class="field hidden" id="driver-custom-area-wrap">
+        <label class="field-label" for="driver-custom-area" id="lbl-driver-custom-area">Where do you need to park?</label>
+        <input type="text" id="driver-custom-area" name="custom_area" autocomplete="street-address" />
+        <div class="field-error hidden" id="err-driver-custom-area"></div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="driver-vehicle" id="lbl-driver-vehicle">Vehicle type</label>
+        <select id="driver-vehicle" name="vehicle_type" required></select>
+        <div class="field-error hidden" id="err-driver-vehicle"></div>
+      </div>
+
+      <div class="field">
+        <span class="field-label" id="lbl-driver-duration">How long</span>
+        <div class="radio-group" role="radiogroup" aria-labelledby="lbl-driver-duration">
+          <label class="radio-option" for="dur-day">
+            <input type="radio" id="dur-day" name="duration" value="day" checked />
+            <span id="txt-dur-day">Per day</span>
+          </label>
+          <label class="radio-option" for="dur-month">
+            <input type="radio" id="dur-month" name="duration" value="month" />
+            <span id="txt-dur-month">Per month</span>
+          </label>
+        </div>
+        <div class="field-error hidden" id="err-driver-duration"></div>
+      </div>
+
+      <div id="price-box" class="price-box hidden" aria-live="polite"></div>
+
+      <div class="field">
+        <label class="field-label" for="driver-date" id="lbl-driver-date">Start date</label>
+        <input type="date" id="driver-date" name="start_date" required />
+        <div class="field-error hidden" id="err-driver-date"></div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="driver-name" id="lbl-driver-name">Name</label>
+        <input type="text" id="driver-name" name="name" autocomplete="name" required />
+        <div class="field-error hidden" id="err-driver-name"></div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="driver-phone" id="lbl-driver-phone">Phone number</label>
+        <input type="tel" id="driver-phone" name="phone" inputmode="numeric" autocomplete="tel-national" maxlength="15" required />
+        <div class="field-error hidden" id="err-driver-phone"></div>
+      </div>
+
+      <div class="field">
+        <label class="field-label" for="driver-vehicle-no" id="lbl-driver-vehicle-no">Vehicle number</label>
+        <input type="text" id="driver-vehicle-no" name="vehicle_number" autocomplete="off" autocapitalize="characters" required />
+        <div class="field-error hidden" id="err-driver-vehicle-no"></div>
+      </div>
+
+      <div id="driver-submit-error" class="form-error-banner hidden" role="alert"></div>
+
+      <button type="submit" id="driver-submit-btn" class="submit-btn">Request a space</button>
+    </form>
+
+    <div id="driver-confirm-box" class="confirm-box hidden" role="region" aria-live="polite">
+      <p id="driver-confirm-text" class="confirm-summary"></p>
+      <label class="checkbox-option" for="driver-confirm-check">
+        <input type="checkbox" id="driver-confirm-check" />
+        <span id="lbl-driver-confirm-check">I understand a space is confirmed on WhatsApp within 24 hours, and I will not be charged anything on this page.</span>
+      </label>
+      <div class="field-error hidden" id="err-driver-confirm-check"></div>
+      <div id="driver-confirm-submit-error" class="form-error-banner hidden" role="alert"></div>
+      <div class="confirm-actions">
+        <button type="button" id="driver-confirm-yes-btn" class="submit-btn">Yes, request this space</button>
+        <button type="button" id="driver-confirm-back-btn" class="secondary-btn">Go back and edit</button>
+      </div>
+    </div>
+
+    <div id="driver-thank-you" class="thank-you-box hidden" role="status" aria-live="polite">
+      <p id="driver-thank-you-text"></p>
+      <p id="driver-reload-note" class="reload-note"></p>
+    </div>
+
+    <!-- Owner listing section -->
+    <section class="owner-section">
+      <button type="button" id="toggle-owner-btn" class="text-link-btn" aria-expanded="false" aria-controls="owner-form-wrap">
+        Own a space nearby? List it
+      </button>
+
+      <div id="owner-form-wrap" class="owner-form-wrap hidden">
+        <h2 id="owner-heading">List your space</h2>
+
+        <form id="owner-form" novalidate>
+          <div class="field">
+            <label class="field-label" for="owner-name" id="lbl-owner-name">Name</label>
+            <input type="text" id="owner-name" name="name" autocomplete="name" required />
+            <div class="field-error hidden" id="err-owner-name"></div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="owner-phone" id="lbl-owner-phone">Phone number</label>
+            <input type="tel" id="owner-phone" name="phone" inputmode="numeric" autocomplete="tel-national" maxlength="15" required />
+            <div class="field-error hidden" id="err-owner-phone"></div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="owner-area" id="lbl-owner-area">Area</label>
+            <select id="owner-area" name="area" required></select>
+            <div class="field-error hidden" id="err-owner-area"></div>
+          </div>
+
+          <div class="field hidden" id="owner-custom-area-wrap">
+            <label class="field-label" for="owner-custom-area" id="lbl-owner-custom-area">Where is the space?</label>
+            <input type="text" id="owner-custom-area" name="custom_area" autocomplete="street-address" />
+            <div class="field-error hidden" id="err-owner-custom-area"></div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="owner-space-type" id="lbl-owner-space-type">Type of space</label>
+            <select id="owner-space-type" name="space_type" required></select>
+            <div class="field-error hidden" id="err-owner-space-type"></div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="owner-hours" id="lbl-owner-hours">Hours it is free</label>
+            <input type="text" id="owner-hours" name="hours_free" autocomplete="off" required />
+            <div class="field-error hidden" id="err-owner-hours"></div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="owner-capacity" id="lbl-owner-capacity">Number of vehicles it fits</label>
+            <input type="number" id="owner-capacity" name="capacity" inputmode="numeric" min="1" step="1" required />
+            <div class="field-error hidden" id="err-owner-capacity"></div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="owner-manager" id="lbl-owner-manager">Who owns or manages the property</label>
+            <input type="text" id="owner-manager" name="property_manager" autocomplete="off" required />
+            <div class="field-error hidden" id="err-owner-manager"></div>
+          </div>
+
+          <div class="field">
+            <label class="field-label" for="owner-amount" id="lbl-owner-amount">Monthly amount you would want (optional)</label>
+            <input type="text" id="owner-amount" name="monthly_amount" inputmode="numeric" autocomplete="off" />
+          </div>
+
+          <div id="owner-submit-error" class="form-error-banner hidden" role="alert"></div>
+
+          <button type="submit" id="owner-submit-btn" class="submit-btn">Submit space details</button>
+        </form>
+
+        <div id="owner-confirm-box" class="confirm-box hidden" role="region" aria-live="polite">
+          <p id="owner-confirm-text" class="confirm-summary"></p>
+          <label class="checkbox-option" for="owner-confirm-check">
+            <input type="checkbox" id="owner-confirm-check" />
+            <span id="lbl-owner-confirm-check">I confirm I have the right to let this space out, or I manage it for the owner.</span>
+          </label>
+          <div class="field-error hidden" id="err-owner-confirm-check"></div>
+          <div id="owner-confirm-submit-error" class="form-error-banner hidden" role="alert"></div>
+          <div class="confirm-actions">
+            <button type="button" id="owner-confirm-yes-btn" class="submit-btn">Yes, list this space</button>
+            <button type="button" id="owner-confirm-back-btn" class="secondary-btn">Go back and edit</button>
+          </div>
+        </div>
+
+        <div id="owner-thank-you" class="thank-you-box hidden" role="status" aria-live="polite">
+          <p id="owner-thank-you-text"></p>
+          <p id="owner-reload-note" class="reload-note"></p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <p id="footer-translated" class="hidden"></p>
+      <p id="footer-english">Launching soon. Any money paid is fully refundable.</p>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      "use strict";
+
+      /* =====================================================================
+         1. FORMSPREE ENDPOINTS — PASTE YOUR FORMSPREE URLs BELOW
+         ===================================================================== */
+      var DRIVER_ENDPOINT = "[PASTE DRIVER FORMSPREE URL]";
+      var OWNER_ENDPOINT  = "[PASTE OWNER FORMSPREE URL]";
+
+      /* =====================================================================
+         2. AREAS AND PRICES — EDIT NUMBERS HERE (in INR)
+         vehicleGroup:
+           - "car_taxi"    -> Car and Taxi
+           - "two_auto"    -> Two-wheeler and Auto (monthly only; day: null)
+         ===================================================================== */
+      var AREAS_AND_PRICES = {
+        colaba: {
+          car_taxi: { day: 150, month: 3000 },
+          two_auto: { day: null, month: 1200 }
+        },
+        fort: {
+          car_taxi: { day: 150, month: 3000 },
+          two_auto: { day: null, month: 1200 }
+        },
+        churchgate: {
+          car_taxi: { day: 150, month: 3000 },
+          two_auto: { day: null, month: 1200 }
+        },
+        bandra: {
+          car_taxi: { day: 120, month: 2500 },
+          two_auto: { day: null, month: 1000 }
+        },
+        juhu: {
+          car_taxi: { day: 100, month: 2000 },
+          two_auto: { day: null, month: 800 }
+        },
+        other: null
+      };
+
+      /* =====================================================================
+         3. TRANSLATIONS (English, Hindi, Marathi) — EDIT STRINGS HERE
+         ===================================================================== */
+      // Native speaker review needed for hi and mr before sharing the link.
+      var STRINGS = {
+        en: {
+          pageTitle: "Reserved parking near Mumbai's busy places",
+          languageLabel: "Language",
+          headline: "Reserved parking near Mumbai's busy places",
+          subtitle: "Pick your area. Get a reserved space within about 400 m, by the day or month.",
+          driverAreaLabel: "Where do you need to park?",
+          driverAreaPlaceholder: "Select an area",
+          driverCustomAreaLabel: "Where do you need to park?",
+          vehicleLabel: "Vehicle type",
+          vehicles: {
+            car: "Car",
+            taxi: "Taxi",
+            auto: "Auto",
+            two_wheeler: "Two-wheeler"
+          },
+          durationLabel: "How long",
+          durationDay: "Per day",
+          durationMonth: "Per month",
+          pricePerDay: "Price: Rs {amount} per day",
+          pricePerMonth: "Price: Rs {amount} per month",
+          dailyUnavailable: "Daily booking is not available for this vehicle. Please choose per month.",
+          startDateLabel: "Start date",
+          nameLabel: "Name",
+          phoneLabel: "Phone number",
+          vehicleNoLabel: "Vehicle number",
+          driverSubmit: "Request a space",
+          submitting: "Sending...",
+          driverConfirmSentence: "You are requesting a {vehicle} space in {area}, {duration}, starting {date}, for {name}, phone {phone}.",
+          driverConfirmCheck: "I understand a space is confirmed on WhatsApp within 24 hours, and I will not be charged anything on this page.",
+          driverConfirmYes: "Yes, request this space",
+          confirmBack: "Go back and edit",
+          thankYou: "Thank you. We will confirm on WhatsApp within 24 hours.",
+          ownerThankYou: "Thank you. We will call you to verify the space before any driver is shown it.",
+          reloadNote: "To send another request, reload this page.",
+          ownerLink: "Own a space nearby? List it",
+          ownerHeading: "List your space",
+          ownerAreaLabel: "Area",
+          ownerCustomAreaLabel: "Where is the space?",
+          ownerSpaceTypeLabel: "Type of space",
+          ownerSpaceTypePlaceholder: "Select type of space",
+          spaceTypes: {
+            shop_front: "Shop front",
+            office: "Office",
+            garage: "Garage",
+            other: "Other"
+          },
+          ownerHoursLabel: "Hours it is free",
+          ownerCapacityLabel: "Number of vehicles it fits",
+          ownerManagerLabel: "Who owns or manages the property",
+          ownerAmountLabel: "Monthly amount you would want (optional)",
+          ownerSubmit: "Submit space details",
+          ownerConfirmSentence: "You are offering {spaceType} in {area}, free {hours}, for up to {vehicles} vehicles. We will call you on {phone} to verify it before any driver is shown the space.",
+          ownerConfirmCheck: "I confirm I have the right to let this space out, or I manage it for the owner.",
+          ownerConfirmYes: "Yes, list this space",
+          areas: {
+            colaba: "Colaba (Colaba Causeway / Gateway of India)",
+            fort: "Fort (CSMT / Flora Fountain)",
+            churchgate: "Churchgate and Marine Drive (Marine Drive promenade)",
+            bandra: "Bandra (Bandstand / Linking Road)",
+            juhu: "Juhu (Juhu Beach)",
+            other: "Somewhere else"
+          },
+          errors: {
+            areaRequired: "Please select an area.",
+            customAreaRequired: "Please enter where you need to park.",
+            ownerCustomAreaRequired: "Please enter where the space is located.",
+            dailyUnavailable: "Daily booking is not available for this vehicle. Please choose per month.",
+            dateRequired: "Please choose a start date.",
+            nameRequired: "Please enter your name.",
+            phoneInvalid: "Please enter a 10-digit phone number.",
+            vehicleNoRequired: "Please enter your vehicle number.",
+            spaceTypeRequired: "Please select the type of space.",
+            hoursRequired: "Please enter the hours the space is free.",
+            capacityRequired: "Please enter how many vehicles it fits.",
+            managerRequired: "Please enter who owns or manages the property.",
+            confirmCheckRequired: "Please tick the box above to confirm.",
+            submitFailed: "Could not send your request. Please check your connection and try again."
+          },
+          footerTranslated: ""
+        },
+
+        hi: {
+          pageTitle: "मुंबई के व्यस्त इलाकों के पास आरक्षित पार्किंग",
+          languageLabel: "भाषा",
+          headline: "मुंबई के व्यस्त इलाकों के पास आरक्षित पार्किंग",
+          subtitle: "अपना इलाका चुनें। करीब 400 मीटर के दायरे में, दिन या महीने के हिसाब से आरक्षित पार्किंग पाएं।",
+          driverAreaLabel: "आपको कहाँ पार्किंग चाहिए?",
+          driverAreaPlaceholder: "इलाका चुनें",
+          driverCustomAreaLabel: "आपको कहाँ पार्किंग चाहिए?",
+          vehicleLabel: "वाहन का प्रकार",
+          vehicles: {
+            car: "कार",
+            taxi: "टैक्सी",
+            auto: "ऑटो",
+            two_wheeler: "दोपहिया वाहन"
+          },
+          durationLabel: "कितने समय के लिए",
+          durationDay: "प्रति दिन",
+          durationMonth: "प्रति माह",
+          pricePerDay: "किराया: रु. {amount} प्रति दिन",
+          pricePerMonth: "किराया: रु. {amount} प्रति माह",
+          dailyUnavailable: "इस वाहन के लिए दैनिक बुकिंग उपलब्ध नहीं है। कृपया प्रति माह चुनें।",
+          startDateLabel: "शुरुआती तारीख",
+          nameLabel: "नाम",
+          phoneLabel: "फ़ोन नंबर",
+          vehicleNoLabel: "वाहन नंबर",
+          driverSubmit: "पार्किंग के लिए अनुरोध करें",
+          submitting: "भेजा जा रहा है...",
+          driverConfirmSentence: "आप {area} में {vehicle} के लिए पार्किंग की जगह, {duration}, {date} से, {name}, फ़ोन {phone} के लिए अनुरोध कर रहे हैं।",
+          driverConfirmCheck: "मैं समझता/समझती हूँ कि जगह की पुष्टि 24 घंटे के भीतर व्हाट्सएप पर की जाएगी, और मुझसे इस पेज पर कोई शुल्क नहीं लिया जाएगा।",
+          driverConfirmYes: "हाँ, यह जगह अनुरोध करें",
+          confirmBack: "वापस जाकर बदलें",
+          thankYou: "धन्यवाद। हम 24 घंटे के भीतर व्हाट्सएप पर पुष्टि करेंगे।",
+          ownerThankYou: "धन्यवाद। किसी भी ड्राइवर को जगह दिखाने से पहले हम पुष्टि के लिए आपको कॉल करेंगे।",
+          reloadNote: "एक और अनुरोध भेजने के लिए इस पेज को रीलोड करें।",
+          ownerLink: "आस-पास आपकी कोई जगह है? यहाँ दर्ज करें",
+          ownerHeading: "अपनी पार्किंग जगह दर्ज करें",
+          ownerAreaLabel: "इलाका",
+          ownerCustomAreaLabel: "जगह कहाँ स्थित है?",
+          ownerSpaceTypeLabel: "जगह का प्रकार",
+          ownerSpaceTypePlaceholder: "जगह का प्रकार चुनें",
+          spaceTypes: {
+            shop_front: "दुकान के सामने",
+            office: "ऑफ़िस",
+            garage: "गैरेज",
+            other: "अन्य"
+          },
+          ownerHoursLabel: "यह जगह किस समय खाली रहती है",
+          ownerCapacityLabel: "इसमें कितने वाहन आ सकते हैं",
+          ownerManagerLabel: "इस संपत्ति के मालिक या प्रबंधक कौन हैं",
+          ownerAmountLabel: "आप कितना मासिक किराया चाहेंगे (वैकल्पिक)",
+          ownerSubmit: "जगह की जानकारी भेजें",
+          ownerConfirmSentence: "आप {area} में {spaceType} दे रहे हैं, जो {hours} खाली रहता है और जिसमें {vehicles} वाहन आ सकते हैं। किसी भी ड्राइवर को जगह दिखाने से पहले हम पुष्टि के लिए आपको {phone} पर कॉल करेंगे।",
+          ownerConfirmCheck: "मैं पुष्टि करता/करती हूँ कि मुझे यह जगह किराए पर देने का अधिकार है, या मैं मालिक की ओर से इसका प्रबंधन करता/करती हूँ।",
+          ownerConfirmYes: "हाँ, यह जगह दर्ज करें",
+          areas: {
+            colaba: "कोलाबा (कोलाबा कॉज़वे / गेटवे ऑफ इंडिया)",
+            fort: "फोर्ट (सीएसएमटी / फ्लोरा फाउंटेन)",
+            churchgate: "चर्चगेट और मरीन ड्राइव (मरीन ड्राइव प्रोमेनेड)",
+            bandra: "बांद्रा (बैंडस्टैंड / लिंकिंग रोड)",
+            juhu: "जुहू (जुहू बीच)",
+            other: "कोई और जगह"
+          },
+          errors: {
+            areaRequired: "कृपया एक इलाका चुनें।",
+            customAreaRequired: "कृपया लिखें कि आपको कहाँ पार्किंग चाहिए।",
+            ownerCustomAreaRequired: "कृपया लिखें कि जगह कहाँ स्थित है।",
+            dailyUnavailable: "इस वाहन के लिए दैनिक बुकिंग उपलब्ध नहीं है। कृपया प्रति माह चुनें।",
+            dateRequired: "कृपया शुरुआती तारीख चुनें।",
+            nameRequired: "कृपया अपना नाम लिखें।",
+            phoneInvalid: "कृपया 10 अंकों का फ़ोन नंबर लिखें।",
+            vehicleNoRequired: "कृपया अपना वाहन नंबर लिखें।",
+            spaceTypeRequired: "कृपया जगह का प्रकार चुनें।",
+            hoursRequired: "कृपया बताएं कि जगह किस समय खाली रहती है।",
+            capacityRequired: "कृपया बताएं कि इसमें कितने वाहन आ सकते हैं।",
+            managerRequired: "कृपया लिखें कि संपत्ति के मालिक या प्रबंधक कौन हैं।",
+            confirmCheckRequired: "पुष्टि करने के लिए कृपया ऊपर दिए गए बॉक्स पर टिक करें।",
+            submitFailed: "आपका अनुरोध भेजा नहीं जा सका। कृपया अपना इंटरनेट जांचें और फिर से कोशिश करें।"
+          },
+          footerTranslated: "जल्द शुरू हो रहा है। दिया गया कोई भी पैसा पूरी तरह वापस किया जा सकता है।"
+        },
+
+        mr: {
+          pageTitle: "मुंबईच्या गर्दीच्या ठिकाणांजवळ आरक्षित पार्किंग",
+          languageLabel: "भाषा",
+          headline: "मुंबईच्या गर्दीच्या ठिकाणांजवळ आरक्षित पार्किंग",
+          subtitle: "तुमचा परिसर निवडा. सुमारे 400 मीटरच्या आत, दिवसासाठी किंवा महिन्यासाठी आरक्षित जागा मिळवा.",
+          driverAreaLabel: "तुम्हाला कुठे पार्किंग हवी आहे?",
+          driverAreaPlaceholder: "परिसर निवडा",
+          driverCustomAreaLabel: "तुम्हाला कुठे पार्किंग हवी आहे?",
+          vehicleLabel: "वाहनाचा प्रकार",
+          vehicles: {
+            car: "कार",
+            taxi: "टॅक्सी",
+            auto: "ऑटो",
+            two_wheeler: "दुचाकी"
+          },
+          durationLabel: "किती कालावधीसाठी",
+          durationDay: "दररोज",
+          durationMonth: "दरमहा",
+          pricePerDay: "दर: रु. {amount} दररोज",
+          pricePerMonth: "दर: रु. {amount} दरमहा",
+          dailyUnavailable: "या वाहनासाठी दररोजची बुकिंग उपलब्ध नाही. कृपया दरमहा निवडा.",
+          startDateLabel: "सुरुवातीची तारीख",
+          nameLabel: "नाव",
+          phoneLabel: "फोन नंबर",
+          vehicleNoLabel: "वाहनाचा नंबर",
+          driverSubmit: "जागेसाठी विनंती करा",
+          submitting: "पाठवत आहे...",
+          driverConfirmSentence: "तुम्ही {area} मध्ये {vehicle} साठी पार्किंगची जागा, {duration}, {date} पासून, {name}, फोन {phone} साठी विनंती करत आहात.",
+          driverConfirmCheck: "मला समजले आहे की जागा 24 तासांत WhatsApp वर निश्चित केली जाईल, आणि या पानावर माझ्याकडून कोणतेही शुल्क घेतले जाणार नाही.",
+          driverConfirmYes: "होय, या जागेची विनंती करा",
+          confirmBack: "मागे जाऊन बदला",
+          thankYou: "धन्यवाद. आम्ही 24 तासांत WhatsApp वर खात्री करू.",
+          ownerThankYou: "धन्यवाद. कोणत्याही चालकाला जागा दाखवण्यापूर्वी आम्ही खात्रीसाठी तुम्हाला कॉल करू.",
+          reloadNote: "दुसरी विनंती पाठवण्यासाठी हे पान पुन्हा लोड करा.",
+          ownerLink: "जवळपास तुमची जागा आहे का? येथे नोंदवा",
+          ownerHeading: "तुमची जागा नोंदवा",
+          ownerAreaLabel: "परिसर",
+          ownerCustomAreaLabel: "जागा कुठे आहे?",
+          ownerSpaceTypeLabel: "जागेचा प्रकार",
+          ownerSpaceTypePlaceholder: "जागेचा प्रकार निवडा",
+          spaceTypes: {
+            shop_front: "दुकानासमोर",
+            office: "ऑफिस",
+            garage: "गॅरेज",
+            other: "इतर"
+          },
+          ownerHoursLabel: "ही जागा कोणत्या वेळेत मोकळी असते",
+          ownerCapacityLabel: "यात किती वाहने बसू शकतात",
+          ownerManagerLabel: "या जागेचे मालक किंवा व्यवस्थापक कोण आहेत",
+          ownerAmountLabel: "तुम्हाला किती मासिक भाडे हवे आहे (ऐच्छिक)",
+          ownerSubmit: "जागेची माहिती पाठवा",
+          ownerConfirmSentence: "तुम्ही {area} मध्ये {spaceType} देत आहात, जी {hours} मोकळी असते आणि ज्यात {vehicles} वाहने बसू शकतात. कोणत्याही चालकाला जागा दाखवण्यापूर्वी आम्ही खात्रीसाठी तुम्हाला {phone} वर कॉल करू.",
+          ownerConfirmCheck: "मी खात्री देतो/देते की मला ही जागा भाड्याने देण्याचा अधिकार आहे, किंवा मी मालकासाठी तिचे व्यवस्थापन करतो/करते.",
+          ownerConfirmYes: "होय, ही जागा नोंदवा",
+          areas: {
+            colaba: "कुलाबा (कुलाबा कॉजवे / गेटवे ऑफ इंडिया)",
+            fort: "फोर्ट (सीएसएमटी / फ्लोरा फाउंटेन)",
+            churchgate: "चर्चगेट आणि मरीन ड्राइव्ह (मरीन ड्राइव्ह प्रोमेनेड)",
+            bandra: "वांद्रे (बँडस्टँड / लिंकिंग रोड)",
+            juhu: "जुहू (जुहू बीच)",
+            other: "इतर ठिकाण"
+          },
+          errors: {
+            areaRequired: "कृपया एक परिसर निवडा.",
+            customAreaRequired: "कृपया तुम्हाला कुठे पार्किंग हवी आहे ते लिहा.",
+            ownerCustomAreaRequired: "कृपया जागा कुठे आहे ते लिहा.",
+            dailyUnavailable: "या वाहनासाठी दररोजची बुकिंग उपलब्ध नाही. कृपया दरमहा निवडा.",
+            dateRequired: "कृपया सुरुवातीची तारीख निवडा.",
+            nameRequired: "कृपया तुमचे नाव लिहा.",
+            phoneInvalid: "कृपया 10 अंकी फोन नंबर टाका.",
+            vehicleNoRequired: "कृपया तुमच्या वाहनाचा नंबर लिहा.",
+            spaceTypeRequired: "कृपया जागेचा प्रकार निवडा.",
+            hoursRequired: "कृपया जागा कोणत्या वेळेत मोकळी असते ते लिहा.",
+            capacityRequired: "कृपया यात किती वाहने बसू शकतात ते लिहा.",
+            managerRequired: "कृपया या जागेचे मालक किंवा व्यवस्थापक कोण आहेत ते लिहा.",
+            confirmCheckRequired: "खात्री करण्यासाठी कृपया वरील बॉक्सवर टिक करा.",
+            submitFailed: "तुमची विनंती पाठवता आली नाही. कृपया तुमचे कनेक्शन तपासा आणि पुन्हा प्रयत्न करा."
+          },
+          footerTranslated: "लवकरच सुरू होत आहे. दिलेले कोणतेही पैसे पूर्णपणे परत मिळण्यायोग्य आहेत."
+        }
+      };
+
+      /* =====================================================================
+         4. STATE & STORAGE HELPERS
+         ===================================================================== */
+      var STORAGE_KEY = "mumbai_parking_lang";
+      var AREA_KEYS = ["colaba", "fort", "churchgate", "bandra", "juhu", "other"];
+      var VEHICLE_KEYS = ["car", "taxi", "auto", "two_wheeler"];
+      var SPACE_TYPE_KEYS = ["shop_front", "office", "garage", "other"];
+      var currentLang = "en";
+      var driverConfirming = false;
+      var ownerConfirming = false;
+      var driverSubmitted = false;
+      var ownerSubmitted = false;
+      var driverSubmitting = false;
+      var ownerSubmitting = false;
+
+      function readStoredLanguage() {
+        try {
+          var saved = window.localStorage.getItem(STORAGE_KEY);
+          if (saved && STRINGS[saved]) {
+            return saved;
+          }
+        } catch (e) {
+          /* Ignore storage errors */
+        }
+        return null;
+      }
+
+      function saveStoredLanguage(lang) {
+        try {
+          window.localStorage.setItem(STORAGE_KEY, lang);
+        } catch (e) {
+          /* Ignore storage errors */
+        }
+      }
+
+      function getUrlSource() {
+        try {
+          var params = new URLSearchParams(window.location.search);
+          return params.get("src") || params.get("source") || "direct";
+        } catch (e) {
+          return "direct";
+        }
+      }
+
+      function formatIndianRupees(num) {
+        return Number(num).toLocaleString("en-IN");
+      }
+
+      function getTodayLocalISO() {
+        var now = new Date();
+        var y = now.getFullYear();
+        var m = String(now.getMonth() + 1).padStart(2, "0");
+        var d = String(now.getDate()).padStart(2, "0");
+        return y + "-" + m + "-" + d;
+      }
+
+      function formatLocalIsoWithOffset(date) {
+        var y = date.getFullYear();
+        var mo = String(date.getMonth() + 1).padStart(2, "0");
+        var d = String(date.getDate()).padStart(2, "0");
+        var h = String(date.getHours()).padStart(2, "0");
+        var mi = String(date.getMinutes()).padStart(2, "0");
+        var sc = String(date.getSeconds()).padStart(2, "0");
+        var offsetMin = -date.getTimezoneOffset();
+        var sign = offsetMin >= 0 ? "+" : "-";
+        var absMin = Math.abs(offsetMin);
+        var offH = String(Math.floor(absMin / 60)).padStart(2, "0");
+        var offM = String(absMin % 60).padStart(2, "0");
+        return y + "-" + mo + "-" + d + "T" + h + ":" + mi + ":" + sc + sign + offH + ":" + offM;
+      }
+
+      function cleanTenDigitPhone(raw) {
+        var cleaned = String(raw || "").replace(/[\s\-()]/g, "");
+        return /^[0-9]{10}$/.test(cleaned) ? cleaned : null;
+      }
+
+      /* =====================================================================
+         5. DOM REFERENCES
+         ===================================================================== */
+      var elGate = document.getElementById("language-gate");
+      var elMain = document.getElementById("main-page");
+      var elLangSelect = document.getElementById("lang-select");
+
+      var elDriverForm = document.getElementById("driver-form");
+      var elDriverArea = document.getElementById("driver-area");
+      var elDriverCustomAreaWrap = document.getElementById("driver-custom-area-wrap");
+      var elDriverCustomArea = document.getElementById("driver-custom-area");
+      var elDriverVehicle = document.getElementById("driver-vehicle");
+      var elDurDay = document.getElementById("dur-day");
+      var elDurMonth = document.getElementById("dur-month");
+      var elPriceBox = document.getElementById("price-box");
+      var elDriverDate = document.getElementById("driver-date");
+      var elDriverName = document.getElementById("driver-name");
+      var elDriverPhone = document.getElementById("driver-phone");
+      var elDriverVehicleNo = document.getElementById("driver-vehicle-no");
+      var elDriverSubmitBtn = document.getElementById("driver-submit-btn");
+      var elDriverSubmitErr = document.getElementById("driver-submit-error");
+      var elDriverConfirmBox = document.getElementById("driver-confirm-box");
+      var elDriverConfirmText = document.getElementById("driver-confirm-text");
+      var elDriverConfirmCheck = document.getElementById("driver-confirm-check");
+      var elDriverConfirmYesBtn = document.getElementById("driver-confirm-yes-btn");
+      var elDriverConfirmBackBtn = document.getElementById("driver-confirm-back-btn");
+      var elDriverConfirmSubmitErr = document.getElementById("driver-confirm-submit-error");
+      var elDriverThankYou = document.getElementById("driver-thank-you");
+      var elDriverThankYouText = document.getElementById("driver-thank-you-text");
+      var elDriverReloadNote = document.getElementById("driver-reload-note");
+
+      var elToggleOwnerBtn = document.getElementById("toggle-owner-btn");
+      var elOwnerFormWrap = document.getElementById("owner-form-wrap");
+      var elOwnerForm = document.getElementById("owner-form");
+      var elOwnerName = document.getElementById("owner-name");
+      var elOwnerPhone = document.getElementById("owner-phone");
+      var elOwnerArea = document.getElementById("owner-area");
+      var elOwnerCustomAreaWrap = document.getElementById("owner-custom-area-wrap");
+      var elOwnerCustomArea = document.getElementById("owner-custom-area");
+      var elOwnerSpaceType = document.getElementById("owner-space-type");
+      var elOwnerHours = document.getElementById("owner-hours");
+      var elOwnerCapacity = document.getElementById("owner-capacity");
+      var elOwnerManager = document.getElementById("owner-manager");
+      var elOwnerAmount = document.getElementById("owner-amount");
+      var elOwnerSubmitBtn = document.getElementById("owner-submit-btn");
+      var elOwnerSubmitErr = document.getElementById("owner-submit-error");
+      var elOwnerConfirmBox = document.getElementById("owner-confirm-box");
+      var elOwnerConfirmText = document.getElementById("owner-confirm-text");
+      var elOwnerConfirmCheck = document.getElementById("owner-confirm-check");
+      var elOwnerConfirmYesBtn = document.getElementById("owner-confirm-yes-btn");
+      var elOwnerConfirmBackBtn = document.getElementById("owner-confirm-back-btn");
+      var elOwnerConfirmSubmitErr = document.getElementById("owner-confirm-submit-error");
+      var elOwnerThankYou = document.getElementById("owner-thank-you");
+      var elOwnerThankYouText = document.getElementById("owner-thank-you-text");
+      var elOwnerReloadNote = document.getElementById("owner-reload-note");
+
+      var elFooterTranslated = document.getElementById("footer-translated");
+
+      /* =====================================================================
+         6. RENDERING & TRANSLATION
+         ===================================================================== */
+      function populateSelectOptions(selectEl, keys, labelsMap, placeholderText, preserveValue) {
+        var currentVal = preserveValue ? selectEl.value : "";
+        selectEl.innerHTML = "";
+
+        if (placeholderText) {
+          var ph = document.createElement("option");
+          ph.value = "";
+          ph.textContent = placeholderText;
+          selectEl.appendChild(ph);
+        }
+
+        for (var i = 0; i < keys.length; i++) {
+          var key = keys[i];
+          var opt = document.createElement("option");
+          opt.value = key;
+          opt.textContent = labelsMap[key];
+          selectEl.appendChild(opt);
+        }
+
+        if (currentVal && (labelsMap[currentVal] || currentVal === "")) {
+          selectEl.value = currentVal;
+        }
+      }
+
+      function getSelectedDuration() {
+        return elDurMonth.checked ? "month" : "day";
+      }
+
+      function getVehicleGroup(vehicleKey) {
+        if (vehicleKey === "car" || vehicleKey === "taxi") {
+          return "car_taxi";
+        }
+        return "two_auto";
+      }
+
+      function updateDriverAreaVisibility() {
+        if (elDriverArea.value === "other") {
+          elDriverCustomAreaWrap.classList.remove("hidden");
+        } else {
+          elDriverCustomAreaWrap.classList.add("hidden");
+          setFieldError("err-driver-custom-area", "");
+        }
+      }
+
+      function updateOwnerAreaVisibility() {
+        if (elOwnerArea.value === "other") {
+          elOwnerCustomAreaWrap.classList.remove("hidden");
+        } else {
+          elOwnerCustomAreaWrap.classList.add("hidden");
+          setFieldError("err-owner-custom-area", "");
+        }
+      }
+
+      function updateLivePrice() {
+        var s = STRINGS[currentLang];
+        var areaKey = elDriverArea.value;
+        var vehicleKey = elDriverVehicle.value;
+        var duration = getSelectedDuration();
+        var group = getVehicleGroup(vehicleKey);
+
+        elPriceBox.classList.remove("is-warning");
+
+        if (group === "two_auto" && duration === "day") {
+          elPriceBox.textContent = s.dailyUnavailable;
+          elPriceBox.classList.add("is-warning");
+          elPriceBox.classList.remove("hidden");
+          return;
+        }
+
+        if (!areaKey || areaKey === "other") {
+          elPriceBox.textContent = "";
+          elPriceBox.classList.add("hidden");
+          return;
+        }
+
+        var areaPrices = AREAS_AND_PRICES[areaKey];
+        if (!areaPrices || !areaPrices[group]) {
+          elPriceBox.textContent = "";
+          elPriceBox.classList.add("hidden");
+          return;
+        }
+
+        var amount = areaPrices[group][duration];
+        if (amount === null || amount === undefined) {
+          elPriceBox.textContent = s.dailyUnavailable;
+          elPriceBox.classList.add("is-warning");
+          elPriceBox.classList.remove("hidden");
+          return;
+        }
+
+        var formatted = formatIndianRupees(amount);
+        var template = duration === "day" ? s.pricePerDay : s.pricePerMonth;
+        elPriceBox.textContent = template.replace("{amount}", formatted);
+        elPriceBox.classList.remove("hidden");
+      }
+
+      function applyLanguage(lang) {
+        if (!STRINGS[lang]) {
+          lang = "en";
+        }
+        currentLang = lang;
+        var s = STRINGS[lang];
+
+        document.documentElement.lang = lang;
+        document.title = s.pageTitle;
+        elLangSelect.value = lang;
+
+        document.getElementById("lbl-language").textContent = s.languageLabel;
+        elLangSelect.setAttribute("aria-label", s.languageLabel);
+
+        document.getElementById("page-headline").textContent = s.headline;
+        document.getElementById("page-subtitle").textContent = s.subtitle;
+
+        // Driver form labels & selects
+        document.getElementById("lbl-driver-area").textContent = s.driverAreaLabel;
+        populateSelectOptions(elDriverArea, AREA_KEYS, s.areas, s.driverAreaPlaceholder, true);
+
+        document.getElementById("lbl-driver-custom-area").textContent = s.driverCustomAreaLabel;
+        document.getElementById("lbl-driver-vehicle").textContent = s.vehicleLabel;
+        populateSelectOptions(elDriverVehicle, VEHICLE_KEYS, s.vehicles, null, true);
+
+        document.getElementById("lbl-driver-duration").textContent = s.durationLabel;
+        document.getElementById("txt-dur-day").textContent = s.durationDay;
+        document.getElementById("txt-dur-month").textContent = s.durationMonth;
+
+        document.getElementById("lbl-driver-date").textContent = s.startDateLabel;
+        document.getElementById("lbl-driver-name").textContent = s.nameLabel;
+        document.getElementById("lbl-driver-phone").textContent = s.phoneLabel;
+        document.getElementById("lbl-driver-vehicle-no").textContent = s.vehicleNoLabel;
+
+        elDriverSubmitBtn.textContent = s.driverSubmit;
+        document.getElementById("lbl-driver-confirm-check").textContent = s.driverConfirmCheck;
+        elDriverConfirmYesBtn.textContent = driverSubmitting ? s.submitting : s.driverConfirmYes;
+        elDriverConfirmBackBtn.textContent = s.confirmBack;
+        if (driverConfirming) {
+          elDriverConfirmText.textContent = buildDriverConfirmSentence();
+        }
+        if (driverSubmitted) {
+          elDriverThankYouText.textContent = s.thankYou;
+          elDriverReloadNote.textContent = s.reloadNote;
+        }
+
+        // Owner section labels & selects
+        elToggleOwnerBtn.textContent = s.ownerLink;
+        document.getElementById("owner-heading").textContent = s.ownerHeading;
+        document.getElementById("lbl-owner-name").textContent = s.nameLabel;
+        document.getElementById("lbl-owner-phone").textContent = s.phoneLabel;
+        document.getElementById("lbl-owner-area").textContent = s.ownerAreaLabel;
+        populateSelectOptions(elOwnerArea, AREA_KEYS, s.areas, s.driverAreaPlaceholder, true);
+
+        document.getElementById("lbl-owner-custom-area").textContent = s.ownerCustomAreaLabel;
+        document.getElementById("lbl-owner-space-type").textContent = s.ownerSpaceTypeLabel;
+        populateSelectOptions(elOwnerSpaceType, SPACE_TYPE_KEYS, s.spaceTypes, s.ownerSpaceTypePlaceholder, true);
+
+        document.getElementById("lbl-owner-hours").textContent = s.ownerHoursLabel;
+        document.getElementById("lbl-owner-capacity").textContent = s.ownerCapacityLabel;
+        document.getElementById("lbl-owner-manager").textContent = s.ownerManagerLabel;
+        document.getElementById("lbl-owner-amount").textContent = s.ownerAmountLabel;
+
+        elOwnerSubmitBtn.textContent = s.ownerSubmit;
+        document.getElementById("lbl-owner-confirm-check").textContent = s.ownerConfirmCheck;
+        elOwnerConfirmYesBtn.textContent = ownerSubmitting ? s.submitting : s.ownerConfirmYes;
+        elOwnerConfirmBackBtn.textContent = s.confirmBack;
+        if (ownerConfirming) {
+          elOwnerConfirmText.textContent = buildOwnerConfirmSentence();
+        }
+        if (ownerSubmitted) {
+          elOwnerThankYouText.textContent = s.ownerThankYou;
+          elOwnerReloadNote.textContent = s.reloadNote;
+        }
+
+        // Footer translated copy (English line always stays below)
+        if (s.footerTranslated) {
+          elFooterTranslated.textContent = s.footerTranslated;
+          elFooterTranslated.classList.remove("hidden");
+        } else {
+          elFooterTranslated.textContent = "";
+          elFooterTranslated.classList.add("hidden");
+        }
+
+        updateDriverAreaVisibility();
+        updateOwnerAreaVisibility();
+        updateLivePrice();
+        clearAllInlineErrors();
+      }
+
+      function getDisplayAreaLabel(areaKey, customText) {
+        if (areaKey === "other") {
+          return customText.trim();
+        }
+        return STRINGS[currentLang].areas[areaKey] || areaKey;
+      }
+
+      function buildDriverConfirmSentence() {
+        var s = STRINGS[currentLang];
+        var areaLabel = getDisplayAreaLabel(elDriverArea.value, elDriverCustomArea.value);
+        var vehicleLabel = s.vehicles[elDriverVehicle.value] || elDriverVehicle.value;
+        var durLabel = getSelectedDuration() === "day" ? s.durationDay : s.durationMonth;
+        if (currentLang === "en") {
+          durLabel = durLabel.toLowerCase();
+        }
+        var sentence = s.driverConfirmSentence
+          .replace("{vehicle}", vehicleLabel)
+          .replace("{area}", areaLabel)
+          .replace("{duration}", durLabel)
+          .replace("{date}", elDriverDate.value)
+          .replace("{name}", elDriverName.value.trim())
+          .replace("{phone}", cleanTenDigitPhone(elDriverPhone.value) || elDriverPhone.value.trim());
+        if (currentLang === "en" && elDriverVehicle.value === "auto") {
+          sentence = sentence.replace("a " + vehicleLabel, "an " + vehicleLabel);
+        }
+        return sentence;
+      }
+
+      function buildOwnerConfirmSentence() {
+        var s = STRINGS[currentLang];
+        var areaLabel = getDisplayAreaLabel(elOwnerArea.value, elOwnerCustomArea.value);
+        var spaceLabel = s.spaceTypes[elOwnerSpaceType.value] || elOwnerSpaceType.value;
+        var capNum = parseInt(elOwnerCapacity.value, 10);
+        if (currentLang === "en") {
+          spaceLabel = spaceLabel.toLowerCase();
+        }
+        var sentence = s.ownerConfirmSentence
+          .replace("{spaceType}", spaceLabel)
+          .replace("{area}", areaLabel)
+          .replace("{hours}", elOwnerHours.value.trim())
+          .replace("{vehicles}", String(capNum))
+          .replace("{phone}", cleanTenDigitPhone(elOwnerPhone.value) || elOwnerPhone.value.trim());
+        if (currentLang === "en" && capNum === 1) {
+          sentence = sentence.replace("1 vehicles", "1 vehicle");
+        }
+        return sentence;
+      }
+
+      /* =====================================================================
+         7. VALIDATION & ERROR HELPERS
+         ===================================================================== */
+      function setFieldError(id, message) {
+        var el = document.getElementById(id);
+        if (!el) return;
+        if (message) {
+          el.textContent = message;
+          el.classList.remove("hidden");
+        } else {
+          el.textContent = "";
+          el.classList.add("hidden");
+        }
+      }
+
+      function clearAllInlineErrors() {
+        var ids = [
+          "err-driver-area",
+          "err-driver-custom-area",
+          "err-driver-vehicle",
+          "err-driver-duration",
+          "err-driver-date",
+          "err-driver-name",
+          "err-driver-phone",
+          "err-driver-vehicle-no",
+          "err-driver-confirm-check",
+          "err-owner-name",
+          "err-owner-phone",
+          "err-owner-area",
+          "err-owner-custom-area",
+          "err-owner-space-type",
+          "err-owner-hours",
+          "err-owner-capacity",
+          "err-owner-manager",
+          "err-owner-confirm-check"
+        ];
+        for (var i = 0; i < ids.length; i++) {
+          setFieldError(ids[i], "");
+        }
+        elDriverSubmitErr.classList.add("hidden");
+        elDriverSubmitErr.textContent = "";
+        elDriverConfirmSubmitErr.classList.add("hidden");
+        elDriverConfirmSubmitErr.textContent = "";
+        elOwnerSubmitErr.classList.add("hidden");
+        elOwnerSubmitErr.textContent = "";
+        elOwnerConfirmSubmitErr.classList.add("hidden");
+        elOwnerConfirmSubmitErr.textContent = "";
+      }
+
+      function validateDriverForm() {
+        var e = STRINGS[currentLang].errors;
+        var valid = true;
+        var firstBadEl = null;
+
+        function fail(errId, msg, inputEl) {
+          setFieldError(errId, msg);
+          valid = false;
+          if (!firstBadEl && inputEl) {
+            firstBadEl = inputEl;
+          }
+        }
+
+        setFieldError("err-driver-area", "");
+        setFieldError("err-driver-custom-area", "");
+        setFieldError("err-driver-duration", "");
+        setFieldError("err-driver-date", "");
+        setFieldError("err-driver-name", "");
+        setFieldError("err-driver-phone", "");
+        setFieldError("err-driver-vehicle-no", "");
+        elDriverSubmitErr.classList.add("hidden");
+
+        var areaKey = elDriverArea.value;
+        if (!areaKey) {
+          fail("err-driver-area", e.areaRequired, elDriverArea);
+        }
+
+        if (areaKey === "other" && !elDriverCustomArea.value.trim()) {
+          fail("err-driver-custom-area", e.customAreaRequired, elDriverCustomArea);
+        }
+
+        var group = getVehicleGroup(elDriverVehicle.value);
+        var duration = getSelectedDuration();
+        if (group === "two_auto" && duration === "day") {
+          fail("err-driver-duration", e.dailyUnavailable, elDurMonth);
+        }
+
+        if (!elDriverDate.value) {
+          fail("err-driver-date", e.dateRequired, elDriverDate);
+        }
+
+        if (!elDriverName.value.trim()) {
+          fail("err-driver-name", e.nameRequired, elDriverName);
+        }
+
+        if (!cleanTenDigitPhone(elDriverPhone.value)) {
+          fail("err-driver-phone", e.phoneInvalid, elDriverPhone);
+        }
+
+        if (!elDriverVehicleNo.value.trim()) {
+          fail("err-driver-vehicle-no", e.vehicleNoRequired, elDriverVehicleNo);
+        }
+
+        if (firstBadEl) {
+          firstBadEl.focus();
+        }
+
+        return valid;
+      }
+
+      function validateOwnerForm() {
+        var e = STRINGS[currentLang].errors;
+        var valid = true;
+        var firstBadEl = null;
+
+        function fail(errId, msg, inputEl) {
+          setFieldError(errId, msg);
+          valid = false;
+          if (!firstBadEl && inputEl) {
+            firstBadEl = inputEl;
+          }
+        }
+
+        setFieldError("err-owner-name", "");
+        setFieldError("err-owner-phone", "");
+        setFieldError("err-owner-area", "");
+        setFieldError("err-owner-custom-area", "");
+        setFieldError("err-owner-space-type", "");
+        setFieldError("err-owner-hours", "");
+        setFieldError("err-owner-capacity", "");
+        setFieldError("err-owner-manager", "");
+        elOwnerSubmitErr.classList.add("hidden");
+
+        if (!elOwnerName.value.trim()) {
+          fail("err-owner-name", e.nameRequired, elOwnerName);
+        }
+
+        if (!cleanTenDigitPhone(elOwnerPhone.value)) {
+          fail("err-owner-phone", e.phoneInvalid, elOwnerPhone);
+        }
+
+        var areaKey = elOwnerArea.value;
+        if (!areaKey) {
+          fail("err-owner-area", e.areaRequired, elOwnerArea);
+        }
+
+        if (areaKey === "other" && !elOwnerCustomArea.value.trim()) {
+          fail("err-owner-custom-area", e.ownerCustomAreaRequired, elOwnerCustomArea);
+        }
+
+        if (!elOwnerSpaceType.value) {
+          fail("err-owner-space-type", e.spaceTypeRequired, elOwnerSpaceType);
+        }
+
+        if (!elOwnerHours.value.trim()) {
+          fail("err-owner-hours", e.hoursRequired, elOwnerHours);
+        }
+
+        var capVal = parseInt(elOwnerCapacity.value, 10);
+        if (!elOwnerCapacity.value || isNaN(capVal) || capVal < 1) {
+          fail("err-owner-capacity", e.capacityRequired, elOwnerCapacity);
+        }
+
+        if (!elOwnerManager.value.trim()) {
+          fail("err-owner-manager", e.managerRequired, elOwnerManager);
+        }
+
+        if (firstBadEl) {
+          firstBadEl.focus();
+        }
+
+        return valid;
+      }
+
+      /* =====================================================================
+         8. SUBMISSION HANDLERS
+         ===================================================================== */
+      function postJson(url, payload) {
+        if (!url || url.indexOf("[PASTE") === 0) {
+          console.warn("Formspree endpoint is not set. Completing submission in preview mode.");
+          return Promise.resolve({ ok: true, preview: true });
+        }
+        return fetch(url, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: JSON.stringify(payload)
+        }).then(function (response) {
+          if (!response.ok) {
+            throw new Error("HTTP " + response.status);
+          }
+          return response.json().catch(function () {
+            return {};
+          });
+        });
+      }
+
+      function buildAreaPayloadValue(areaKey, customText) {
+        if (areaKey === "other") {
+          return "Somewhere else: " + customText.trim();
+        }
+        return STRINGS.en.areas[areaKey] || areaKey;
+      }
+
+      elDriverForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        if (driverSubmitting || driverSubmitted || driverConfirming) {
+          return;
+        }
+        if (!validateDriverForm()) {
+          return;
+        }
+
+        driverConfirming = true;
+        elDriverConfirmText.textContent = buildDriverConfirmSentence();
+        elDriverConfirmCheck.checked = false;
+        setFieldError("err-driver-confirm-check", "");
+        elDriverConfirmSubmitErr.classList.add("hidden");
+        elDriverConfirmSubmitErr.textContent = "";
+        elDriverConfirmYesBtn.disabled = false;
+        elDriverConfirmBackBtn.disabled = false;
+        elDriverConfirmYesBtn.textContent = STRINGS[currentLang].driverConfirmYes;
+
+        elDriverForm.classList.add("hidden");
+        elDriverConfirmBox.classList.remove("hidden");
+        elDriverConfirmBox.scrollIntoView({ block: "nearest" });
+      });
+
+      elDriverConfirmBackBtn.addEventListener("click", function () {
+        if (driverSubmitting || driverSubmitted) {
+          return;
+        }
+        driverConfirming = false;
+        elDriverConfirmCheck.checked = false;
+        setFieldError("err-driver-confirm-check", "");
+        elDriverConfirmSubmitErr.classList.add("hidden");
+        elDriverConfirmBox.classList.add("hidden");
+        elDriverForm.classList.remove("hidden");
+      });
+
+      elDriverConfirmCheck.addEventListener("change", function () {
+        if (elDriverConfirmCheck.checked) {
+          setFieldError("err-driver-confirm-check", "");
+        }
+      });
+
+      elDriverConfirmYesBtn.addEventListener("click", function () {
+        if (driverSubmitting || driverSubmitted) {
+          return;
+        }
+        if (!elDriverConfirmCheck.checked) {
+          setFieldError("err-driver-confirm-check", STRINGS[currentLang].errors.confirmCheckRequired);
+          elDriverConfirmCheck.focus();
+          return;
+        }
+
+        var s = STRINGS[currentLang];
+        driverSubmitting = true;
+        elDriverConfirmYesBtn.disabled = true;
+        elDriverConfirmBackBtn.disabled = true;
+        elDriverConfirmYesBtn.textContent = s.submitting;
+        elDriverConfirmSubmitErr.classList.add("hidden");
+
+        var areaKey = elDriverArea.value;
+        var vehicleKey = elDriverVehicle.value;
+        var duration = getSelectedDuration();
+        var group = getVehicleGroup(vehicleKey);
+        var quotedPrice = null;
+        if (areaKey !== "other" && AREAS_AND_PRICES[areaKey] && AREAS_AND_PRICES[areaKey][group]) {
+          quotedPrice = AREAS_AND_PRICES[areaKey][group][duration];
+        }
+
+        var confirmationSentence = buildDriverConfirmSentence();
+        var now = new Date();
+        var payload = {
+          form_type: "driver",
+          source: getUrlSource(),
+          page_url: window.location.href,
+          language: currentLang,
+          area: buildAreaPayloadValue(areaKey, elDriverCustomArea.value),
+          area_key: areaKey,
+          vehicle_type: vehicleKey,
+          duration: duration === "day" ? "per_day" : "per_month",
+          quoted_price_inr: quotedPrice,
+          start_date: elDriverDate.value,
+          name: elDriverName.value.trim(),
+          phone: cleanTenDigitPhone(elDriverPhone.value),
+          vehicle_number: elDriverVehicleNo.value.trim(),
+          commitment_confirmed: "yes",
+          commitment_time: formatLocalIsoWithOffset(now),
+          confirmation_text: confirmationSentence
+        };
+
+        postJson(DRIVER_ENDPOINT, payload)
+          .then(function () {
+            driverSubmitting = false;
+            driverConfirming = false;
+            driverSubmitted = true;
+            elDriverConfirmBox.classList.add("hidden");
+            elDriverThankYouText.textContent = STRINGS[currentLang].thankYou;
+            elDriverReloadNote.textContent = STRINGS[currentLang].reloadNote;
+            elDriverThankYou.classList.remove("hidden");
+          })
+          .catch(function () {
+            driverSubmitting = false;
+            elDriverConfirmYesBtn.disabled = false;
+            elDriverConfirmBackBtn.disabled = false;
+            elDriverConfirmYesBtn.textContent = STRINGS[currentLang].driverConfirmYes;
+            elDriverConfirmSubmitErr.textContent = STRINGS[currentLang].errors.submitFailed;
+            elDriverConfirmSubmitErr.classList.remove("hidden");
+          });
+      });
+
+      elOwnerForm.addEventListener("submit", function (event) {
+        event.preventDefault();
+        if (ownerSubmitting || ownerSubmitted || ownerConfirming) {
+          return;
+        }
+        if (!validateOwnerForm()) {
+          return;
+        }
+
+        ownerConfirming = true;
+        elOwnerConfirmText.textContent = buildOwnerConfirmSentence();
+        elOwnerConfirmCheck.checked = false;
+        setFieldError("err-owner-confirm-check", "");
+        elOwnerConfirmSubmitErr.classList.add("hidden");
+        elOwnerConfirmSubmitErr.textContent = "";
+        elOwnerConfirmYesBtn.disabled = false;
+        elOwnerConfirmBackBtn.disabled = false;
+        elOwnerConfirmYesBtn.textContent = STRINGS[currentLang].ownerConfirmYes;
+
+        elOwnerForm.classList.add("hidden");
+        elOwnerConfirmBox.classList.remove("hidden");
+        elOwnerConfirmBox.scrollIntoView({ block: "nearest" });
+      });
+
+      elOwnerConfirmBackBtn.addEventListener("click", function () {
+        if (ownerSubmitting || ownerSubmitted) {
+          return;
+        }
+        ownerConfirming = false;
+        elOwnerConfirmCheck.checked = false;
+        setFieldError("err-owner-confirm-check", "");
+        elOwnerConfirmSubmitErr.classList.add("hidden");
+        elOwnerConfirmBox.classList.add("hidden");
+        elOwnerForm.classList.remove("hidden");
+      });
+
+      elOwnerConfirmCheck.addEventListener("change", function () {
+        if (elOwnerConfirmCheck.checked) {
+          setFieldError("err-owner-confirm-check", "");
+        }
+      });
+
+      elOwnerConfirmYesBtn.addEventListener("click", function () {
+        if (ownerSubmitting || ownerSubmitted) {
+          return;
+        }
+        if (!elOwnerConfirmCheck.checked) {
+          setFieldError("err-owner-confirm-check", STRINGS[currentLang].errors.confirmCheckRequired);
+          elOwnerConfirmCheck.focus();
+          return;
+        }
+
+        var s = STRINGS[currentLang];
+        ownerSubmitting = true;
+        elOwnerConfirmYesBtn.disabled = true;
+        elOwnerConfirmBackBtn.disabled = true;
+        elOwnerConfirmYesBtn.textContent = s.submitting;
+        elOwnerConfirmSubmitErr.classList.add("hidden");
+
+        var areaKey = elOwnerArea.value;
+        var confirmationSentence = buildOwnerConfirmSentence();
+        var now = new Date();
+        var payload = {
+          form_type: "owner",
+          source: getUrlSource(),
+          page_url: window.location.href,
+          language: currentLang,
+          area: buildAreaPayloadValue(areaKey, elOwnerCustomArea.value),
+          area_key: areaKey,
+          name: elOwnerName.value.trim(),
+          phone: cleanTenDigitPhone(elOwnerPhone.value),
+          space_type: elOwnerSpaceType.value,
+          hours_free: elOwnerHours.value.trim(),
+          vehicles_fit: parseInt(elOwnerCapacity.value, 10),
+          property_owner_or_manager: elOwnerManager.value.trim(),
+          desired_monthly_amount: elOwnerAmount.value.trim() || null,
+          commitment_confirmed: "yes",
+          commitment_time: formatLocalIsoWithOffset(now),
+          confirmation_text: confirmationSentence
+        };
+
+        postJson(OWNER_ENDPOINT, payload)
+          .then(function () {
+            ownerSubmitting = false;
+            ownerConfirming = false;
+            ownerSubmitted = true;
+            elOwnerConfirmBox.classList.add("hidden");
+            elOwnerThankYouText.textContent = STRINGS[currentLang].ownerThankYou;
+            elOwnerReloadNote.textContent = STRINGS[currentLang].reloadNote;
+            elOwnerThankYou.classList.remove("hidden");
+          })
+          .catch(function () {
+            ownerSubmitting = false;
+            elOwnerConfirmYesBtn.disabled = false;
+            elOwnerConfirmBackBtn.disabled = false;
+            elOwnerConfirmYesBtn.textContent = STRINGS[currentLang].ownerConfirmYes;
+            elOwnerConfirmSubmitErr.textContent = STRINGS[currentLang].errors.submitFailed;
+            elOwnerConfirmSubmitErr.classList.remove("hidden");
+          });
+      });
+
+      /* =====================================================================
+         9. INTERACTIVE EVENTS & INITIALIZATION
+         ===================================================================== */
+      var gateButtons = elGate.querySelectorAll("[data-choose-lang]");
+      for (var i = 0; i < gateButtons.length; i++) {
+        gateButtons[i].addEventListener("click", function () {
+          var chosen = this.getAttribute("data-choose-lang");
+          saveStoredLanguage(chosen);
+          applyLanguage(chosen);
+          elGate.classList.add("hidden");
+          elMain.classList.remove("hidden");
+        });
+      }
+
+      elLangSelect.addEventListener("change", function () {
+        var chosen = elLangSelect.value;
+        saveStoredLanguage(chosen);
+        applyLanguage(chosen);
+      });
+
+      elDriverArea.addEventListener("change", function () {
+        setFieldError("err-driver-area", "");
+        updateDriverAreaVisibility();
+        updateLivePrice();
+      });
+
+      elDriverVehicle.addEventListener("change", function () {
+        setFieldError("err-driver-duration", "");
+        updateLivePrice();
+      });
+
+      elDurDay.addEventListener("change", function () {
+        setFieldError("err-driver-duration", "");
+        updateLivePrice();
+      });
+
+      elDurMonth.addEventListener("change", function () {
+        setFieldError("err-driver-duration", "");
+        updateLivePrice();
+      });
+
+      elOwnerArea.addEventListener("change", function () {
+        setFieldError("err-owner-area", "");
+        updateOwnerAreaVisibility();
+      });
+
+      elToggleOwnerBtn.addEventListener("click", function () {
+        var isHidden = elOwnerFormWrap.classList.contains("hidden");
+        if (isHidden) {
+          elOwnerFormWrap.classList.remove("hidden");
+          elToggleOwnerBtn.setAttribute("aria-expanded", "true");
+        } else {
+          elOwnerFormWrap.classList.add("hidden");
+          elToggleOwnerBtn.setAttribute("aria-expanded", "false");
+        }
+      });
+
+      // Set today's date as minimum on the native date picker
+      elDriverDate.setAttribute("min", getTodayLocalISO());
+
+      // Check stored language on initial load
+      var savedLang = readStoredLanguage();
+      if (savedLang) {
+        applyLanguage(savedLang);
+        elGate.classList.add("hidden");
+        elMain.classList.remove("hidden");
+      } else {
+        applyLanguage("en");
+        elGate.classList.remove("hidden");
+        elMain.classList.add("hidden");
+      }
+    })();
+  </script>
+</body>
+</html>
