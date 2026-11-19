@@ -1,0 +1,353 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Global safety net: deny everything by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Startup connection check document
+    match /test/{docId} {
+      allow get: if docId == 'connection';
+      allow list, write: if false;
+    }
+
+    // Admin collection managed only out-of-band in Firebase Console
+    match /admins/{adminId} {
+      allow read, write: if false;
+    }
+
+    // --- Shared Primitives ---
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && request.auth.token.email_verified == true;
+    }
+
+    function isAdminList() {
+      return isVerifiedUser() && request.auth.token.email == 'aayaansingh404@gmail.com';
+    }
+
+    function isAdmin() {
+      return isVerifiedUser() && (
+        request.auth.token.email == 'aayaansingh404@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isStr(val, minLen, maxLen) {
+      return val is string && val.size() >= minLen && val.size() <= maxLen;
+    }
+
+    function isValidCity(city) {
+      return city is string && city in ['Mumbai', 'Pune'];
+    }
+
+    function isValidAreaKey(key) {
+      return key is string && key in [
+        'colaba', 'fort', 'churchgate', 'bandra', 'juhu', 'dadar',
+        'hadapsar', 'koregaon_park', 'camp', 'wakad', 'karvenagar', 'other'
+      ];
+    }
+
+    function isValidSpaceType(st) {
+      return st is string && st in ['shop_front', 'office', 'garage', 'other'];
+    }
+
+    function isValidVehicleType(vt) {
+      return vt is string && vt in ['car', 'taxi', 'auto', 'two_wheeler'];
+    }
+
+    function isValidLang(lang) {
+      return lang is string && lang in ['en', 'hi', 'mr'];
+    }
+
+    function isValidPhone(phone) {
+      return phone is string && phone.size() == 10 && phone.matches('^[0-9]{10}$');
+    }
+
+    // --- Entity Validation Blueprints ---
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['uid', 'displayName', 'email', 'photoUrl', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly(['uid', 'displayName', 'email', 'photoUrl', 'createdAt', 'updatedAt'])
+        && isValidId(data.uid)
+        && data.uid == request.auth.uid
+        && isStr(data.displayName, 1, 120)
+        && isStr(data.email, 3, 160)
+        && data.email == request.auth.token.email
+        && isStr(data.photoUrl, 0, 500)
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidPublicSpace(data) {
+      return data.keys().hasAll([
+          'ownerUid', 'refId', 'area', 'areaKey', 'customArea',
+          'spaceType', 'hoursFree', 'vehiclesFit', 'desiredMonthlyAmount',
+          'status', 'createdAt'
+        ])
+        && data.keys().hasOnly([
+          'ownerUid', 'refId', 'city', 'area', 'areaKey', 'customArea',
+          'spaceType', 'hoursFree', 'vehiclesFit', 'desiredMonthlyAmount',
+          'status', 'createdAt'
+        ])
+        && isValidId(data.ownerUid)
+        && isStr(data.refId, 6, 32)
+        && data.refId.matches('^IS-SPC-[A-Z0-9\\-]+$')
+        && (!('city' in data) || data.city == null || isValidCity(data.city))
+        && isStr(data.area, 1, 200)
+        && isValidAreaKey(data.areaKey)
+        && isStr(data.customArea, 0, 160)
+        && isValidSpaceType(data.spaceType)
+        && isStr(data.hoursFree, 1, 120)
+        && data.vehiclesFit is int
+        && data.vehiclesFit >= 1
+        && data.vehiclesFit <= 500
+        && isStr(data.desiredMonthlyAmount, 0, 60)
+        && data.status is string
+        && data.status in ['active', 'paused']
+        && data.createdAt is timestamp;
+    }
+
+    function isValidSpacePrivate(data) {
+      return data.keys().hasAll([
+          'ownerUid', 'refId', 'ownerName', 'phone', 'email',
+          'propertyOwnerOrManager', 'confirmationText', 'commitmentConfirmed',
+          'commitmentTime', 'source', 'referrer', 'language', 'createdAt'
+        ])
+        && data.keys().hasOnly([
+          'ownerUid', 'refId', 'city', 'areaKey', 'ownerName', 'phone', 'email',
+          'locationLink', 'propertyOwnerOrManager', 'confirmationText', 'commitmentConfirmed',
+          'commitmentTime', 'source', 'referrer', 'pageUrl', 'language', 'createdAt'
+        ])
+        && isValidId(data.ownerUid)
+        && isStr(data.refId, 6, 32)
+        && data.refId.matches('^IS-SPC-[A-Z0-9\\-]+$')
+        && (!('city' in data) || data.city == null || isValidCity(data.city))
+        && (!('areaKey' in data) || data.areaKey == null || isValidAreaKey(data.areaKey))
+        && isStr(data.ownerName, 1, 120)
+        && isValidPhone(data.phone)
+        && isStr(data.email, 0, 160)
+        && (!('locationLink' in data) || data.locationLink == null || isStr(data.locationLink, 0, 500))
+        && isStr(data.propertyOwnerOrManager, 1, 160)
+        && isStr(data.confirmationText, 1, 600)
+        && data.commitmentConfirmed == 'yes'
+        && isStr(data.commitmentTime, 1, 64)
+        && isStr(data.source, 1, 80)
+        && isStr(data.referrer, 1, 300)
+        && (!('pageUrl' in data) || data.pageUrl == null || isStr(data.pageUrl, 0, 500))
+        && isValidLang(data.language)
+        && data.createdAt is timestamp;
+    }
+
+    function isValidParkingRequest(data) {
+      return data.keys().hasAll([
+          'driverUid', 'refId', 'matchedSpaceId', 'matchedSpaceSummary',
+          'area', 'areaKey', 'vehicleType', 'duration', 'quotedPriceInr',
+          'startDate', 'hoursNeeded', 'driverName', 'phone', 'email',
+          'vehicleNumber', 'confirmationText', 'commitmentConfirmed',
+          'commitmentTime', 'status', 'source', 'referrer', 'language', 'createdAt'
+        ])
+        && data.keys().hasOnly([
+          'driverUid', 'refId', 'matchedSpaceId', 'matchedSpaceSummary',
+          'city', 'area', 'areaKey', 'vehicleType', 'duration', 'quotedPriceInr',
+          'startDate', 'hoursNeeded', 'driverName', 'phone', 'email',
+          'vehicleNumber', 'confirmationText', 'commitmentConfirmed',
+          'commitmentTime', 'status', 'source', 'referrer', 'pageUrl', 'language', 'createdAt'
+        ])
+        && isValidId(data.driverUid)
+        && isStr(data.refId, 6, 32)
+        && data.refId.matches('^IS-REQ-[A-Z0-9\\-]+$')
+        && (data.matchedSpaceId == '' || isValidId(data.matchedSpaceId))
+        && isStr(data.matchedSpaceSummary, 0, 240)
+        && (!('city' in data) || data.city == null || isValidCity(data.city))
+        && isStr(data.area, 1, 200)
+        && isValidAreaKey(data.areaKey)
+        && isValidVehicleType(data.vehicleType)
+        && data.duration is string
+        && data.duration in ['per_day', 'per_month']
+        && (data.quotedPriceInr == null || (data.quotedPriceInr is number && data.quotedPriceInr >= 0 && data.quotedPriceInr <= 1000000))
+        && isStr(data.startDate, 10, 30)
+        && isStr(data.hoursNeeded, 1, 120)
+        && isStr(data.driverName, 1, 120)
+        && isValidPhone(data.phone)
+        && isStr(data.email, 0, 160)
+        && isStr(data.vehicleNumber, 1, 40)
+        && isStr(data.confirmationText, 1, 600)
+        && data.commitmentConfirmed == 'yes'
+        && isStr(data.commitmentTime, 1, 64)
+        && data.status is string
+        && data.status in ['pending', 'confirmed', 'cancelled']
+        && isStr(data.source, 1, 80)
+        && isStr(data.referrer, 1, 300)
+        && (!('pageUrl' in data) || data.pageUrl == null || isStr(data.pageUrl, 0, 500))
+        && isValidLang(data.language)
+        && data.createdAt is timestamp;
+    }
+
+    function isValidSurveyResponse(data) {
+      return data.keys().hasAll([
+          'respondentUid', 'refId', 'respondentName', 'phone', 'email',
+          'area', 'ownsSpotStatus', 'facedParkingProblem', 'wouldUseApp',
+          'willingToPay3Hrs', 'additionalNotes', 'source', 'language', 'createdAt'
+        ])
+        && data.keys().hasOnly([
+          'respondentUid', 'refId', 'respondentName', 'phone', 'email',
+          'area', 'ownsSpotStatus', 'facedParkingProblem', 'wouldUseApp',
+          'willingToPay3Hrs', 'additionalNotes', 'source', 'language', 'createdAt'
+        ])
+        && isValidId(data.respondentUid)
+        && isStr(data.refId, 6, 32)
+        && data.refId.matches('^IS-SRV-[A-Z0-9\\-]+$')
+        && isStr(data.respondentName, 1, 120)
+        && (data.phone == '' || isValidPhone(data.phone))
+        && isStr(data.email, 0, 160)
+        && isStr(data.area, 1, 160)
+        && data.ownsSpotStatus is string
+        && data.ownsSpotStatus in ['yes_available', 'yes_unavailable', 'no']
+        && data.facedParkingProblem is string
+        && data.facedParkingProblem in ['yes_often', 'yes_sometimes', 'no']
+        && data.wouldUseApp is string
+        && data.wouldUseApp in ['yes', 'maybe', 'no']
+        && data.willingToPay3Hrs is string
+        && data.willingToPay3Hrs in ['free_only', 'under_50', '50_100', '100_150', '150_250', 'above_250']
+        && isStr(data.additionalNotes, 0, 400)
+        && isStr(data.source, 1, 80)
+        && isValidLang(data.language)
+        && data.createdAt is timestamp;
+    }
+
+    // --- Collection Rules ---
+
+    match /users/{userId} {
+      allow get: if isValidId(userId) && isVerifiedUser() && (request.auth.uid == userId || isAdmin());
+      allow list: if false;
+      allow create: if isValidId(userId)
+        && isVerifiedUser()
+        && request.auth.uid == userId
+        && isValidUserProfile(incoming())
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(userId)
+        && isVerifiedUser()
+        && request.auth.uid == userId
+        && isValidUserProfile(incoming())
+        && incoming().uid == existing().uid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time
+        && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'email', 'photoUrl', 'updatedAt']);
+      allow delete: if false;
+    }
+
+    match /spaces/{spaceId} {
+      allow get: if isValidId(spaceId) && isVerifiedUser() && (
+        existing().status == 'active' ||
+        existing().ownerUid == request.auth.uid ||
+        isAdmin()
+      );
+      allow list: if isVerifiedUser() && (
+        resource.data.status == 'active' ||
+        resource.data.ownerUid == request.auth.uid ||
+        isAdminList()
+      );
+      allow create: if isValidId(spaceId)
+        && isVerifiedUser()
+        && isValidPublicSpace(incoming())
+        && incoming().ownerUid == request.auth.uid
+        && incoming().status == 'active'
+        && incoming().createdAt == request.time
+        && existsAfter(/databases/$(database)/documents/spacePrivateDetails/$(spaceId));
+      allow update: if isValidId(spaceId)
+        && isVerifiedUser()
+        && isValidPublicSpace(incoming())
+        && incoming().ownerUid == existing().ownerUid
+        && incoming().refId == existing().refId
+        && incoming().createdAt == existing().createdAt
+        && (
+          isAdmin() ||
+          (existing().ownerUid == request.auth.uid && incoming().diff(existing()).affectedKeys().hasOnly(['status']))
+        );
+      allow delete: if isValidId(spaceId)
+        && isVerifiedUser()
+        && (existing().ownerUid == request.auth.uid || isAdmin());
+    }
+
+    match /spacePrivateDetails/{spaceId} {
+      allow get: if isValidId(spaceId)
+        && isVerifiedUser()
+        && (existing().ownerUid == request.auth.uid || isAdmin());
+      allow list: if (isVerifiedUser() && resource.data.ownerUid == request.auth.uid)
+        || isAdminList();
+      allow create: if isValidId(spaceId)
+        && isVerifiedUser()
+        && isValidSpacePrivate(incoming())
+        && incoming().ownerUid == request.auth.uid
+        && incoming().createdAt == request.time
+        && existsAfter(/databases/$(database)/documents/spaces/$(spaceId));
+      allow update: if false;
+      allow delete: if isValidId(spaceId)
+        && isVerifiedUser()
+        && (existing().ownerUid == request.auth.uid || isAdmin());
+    }
+
+    match /parkingRequests/{requestId} {
+      allow get: if isValidId(requestId)
+        && isVerifiedUser()
+        && (existing().driverUid == request.auth.uid || isAdmin());
+      allow list: if (isVerifiedUser() && resource.data.driverUid == request.auth.uid)
+        || isAdminList();
+      allow create: if isValidId(requestId)
+        && isVerifiedUser()
+        && isValidParkingRequest(incoming())
+        && incoming().driverUid == request.auth.uid
+        && incoming().status == 'pending'
+        && incoming().createdAt == request.time
+        && (incoming().matchedSpaceId == '' || exists(/databases/$(database)/documents/spaces/$(incoming().matchedSpaceId)));
+      allow update: if isValidId(requestId)
+        && isVerifiedUser()
+        && isValidParkingRequest(incoming())
+        && incoming().driverUid == existing().driverUid
+        && incoming().refId == existing().refId
+        && incoming().createdAt == existing().createdAt
+        && (
+          isAdmin() ||
+          (
+            existing().status != 'cancelled'
+            && existing().driverUid == request.auth.uid
+            && incoming().status == 'cancelled'
+            && incoming().diff(existing()).affectedKeys().hasOnly(['status'])
+          )
+        );
+      allow delete: if false;
+    }
+
+    match /surveyResponses/{responseId} {
+      allow get: if isValidId(responseId)
+        && isVerifiedUser()
+        && (existing().respondentUid == request.auth.uid || isAdmin());
+      allow list: if (isVerifiedUser() && resource.data.respondentUid == request.auth.uid)
+        || isAdminList();
+      allow create: if isValidId(responseId)
+        && isVerifiedUser()
+        && isValidSurveyResponse(incoming())
+        && incoming().respondentUid == request.auth.uid
+        && incoming().createdAt == request.time;
+      allow update, delete: if false;
+    }
+  }
+}

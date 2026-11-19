@@ -1,0 +1,478 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Minimal authenticated Google account profile for a signed-in Idle Spot user.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "displayName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "maxLength": 160
+        },
+        "photoUrl": {
+          "type": "string",
+          "maxLength": 500
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": ["uid", "displayName", "email", "photoUrl", "createdAt", "updatedAt"]
+    },
+    "PublicSpace": {
+      "title": "PublicSpace",
+      "description": "Publicly visible parking space listing without owner PII.",
+      "type": "object",
+      "properties": {
+        "ownerUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "refId": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 32,
+          "pattern": "^IS-SPC-[A-Z0-9\\-]+$"
+        },
+        "city": {
+          "type": "string",
+          "description": "Nullable for legacy records; Mumbai or Pune.",
+          "enum": ["Mumbai", "Pune", null]
+        },
+        "area": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "areaKey": {
+          "type": "string",
+          "enum": ["colaba", "fort", "churchgate", "bandra", "juhu", "dadar", "hadapsar", "koregaon_park", "camp", "wakad", "karvenagar", "other"]
+        },
+        "customArea": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "spaceType": {
+          "type": "string",
+          "enum": ["shop_front", "office", "garage", "other"]
+        },
+        "hoursFree": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "vehiclesFit": {
+          "type": "integer"
+        },
+        "desiredMonthlyAmount": {
+          "type": "string",
+          "maxLength": 60
+        },
+        "status": {
+          "type": "string",
+          "enum": ["active", "paused"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "ownerUid",
+        "refId",
+        "area",
+        "areaKey",
+        "customArea",
+        "spaceType",
+        "hoursFree",
+        "vehiclesFit",
+        "desiredMonthlyAmount",
+        "status",
+        "createdAt"
+      ]
+    },
+    "SpacePrivateDetail": {
+      "title": "SpacePrivateDetail",
+      "description": "Private owner contact, exact location link, and verification metadata isolated from public listings.",
+      "type": "object",
+      "properties": {
+        "ownerUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "refId": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 32,
+          "pattern": "^IS-SPC-[A-Z0-9\\-]+$"
+        },
+        "city": {
+          "type": "string",
+          "description": "Nullable for legacy records; Mumbai or Pune.",
+          "enum": ["Mumbai", "Pune", null]
+        },
+        "areaKey": {
+          "type": "string",
+          "description": "Nullable for legacy records; city area key.",
+          "enum": ["colaba", "fort", "churchgate", "bandra", "juhu", "dadar", "hadapsar", "koregaon_park", "camp", "wakad", "karvenagar", "other", null]
+        },
+        "ownerName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 10,
+          "pattern": "^[0-9]{10}$"
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "locationLink": {
+          "type": "string",
+          "description": "Nullable optional Google Maps or location link for owner listing verification.",
+          "maxLength": 500
+        },
+        "propertyOwnerOrManager": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "confirmationText": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 600
+        },
+        "commitmentConfirmed": {
+          "type": "string",
+          "enum": ["yes"]
+        },
+        "commitmentTime": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "referrer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "pageUrl": {
+          "type": "string",
+          "description": "Nullable submission page URL for legacy compatibility.",
+          "maxLength": 500
+        },
+        "language": {
+          "type": "string",
+          "enum": ["en", "hi", "mr"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "ownerUid",
+        "refId",
+        "ownerName",
+        "phone",
+        "email",
+        "propertyOwnerOrManager",
+        "confirmationText",
+        "commitmentConfirmed",
+        "commitmentTime",
+        "source",
+        "referrer",
+        "language",
+        "createdAt"
+      ]
+    },
+    "ParkingRequest": {
+      "title": "ParkingRequest",
+      "description": "Private parking reservation request and confirmation receipt owned by the requesting driver.",
+      "type": "object",
+      "properties": {
+        "driverUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "refId": {
+          "type": "string",
+          "minLength": 4,
+          "maxLength": 32,
+          "pattern": "^IS-REQ-[A-Z0-9\\-]+$"
+        },
+        "matchedSpaceId": {
+          "type": "string",
+          "maxLength": 128
+        },
+        "matchedSpaceSummary": {
+          "type": "string",
+          "maxLength": 240
+        },
+        "city": {
+          "type": "string",
+          "description": "Nullable for legacy records; Mumbai or Pune.",
+          "enum": ["Mumbai", "Pune", null]
+        },
+        "area": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 200
+        },
+        "areaKey": {
+          "type": "string",
+          "enum": ["colaba", "fort", "churchgate", "bandra", "juhu", "dadar", "hadapsar", "koregaon_park", "camp", "wakad", "karvenagar", "other"]
+        },
+        "vehicleType": {
+          "type": "string",
+          "enum": ["car", "taxi", "auto", "two_wheeler"]
+        },
+        "duration": {
+          "type": "string",
+          "enum": ["per_day", "per_month"]
+        },
+        "quotedPriceInr": {
+          "type": "number",
+          "description": "Quoted INR price, or null when area pricing is not yet confirmed (e.g. Pune or custom area)."
+        },
+        "startDate": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 30
+        },
+        "hoursNeeded": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "driverName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "phone": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 10,
+          "pattern": "^[0-9]{10}$"
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "vehicleNumber": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 40
+        },
+        "confirmationText": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 600
+        },
+        "commitmentConfirmed": {
+          "type": "string",
+          "enum": ["yes"]
+        },
+        "commitmentTime": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "status": {
+          "type": "string",
+          "enum": ["pending", "confirmed", "cancelled"]
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "referrer": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 300
+        },
+        "pageUrl": {
+          "type": "string",
+          "description": "Nullable submission page URL for legacy compatibility.",
+          "maxLength": 500
+        },
+        "language": {
+          "type": "string",
+          "enum": ["en", "hi", "mr"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "driverUid",
+        "refId",
+        "matchedSpaceId",
+        "matchedSpaceSummary",
+        "area",
+        "areaKey",
+        "vehicleType",
+        "duration",
+        "quotedPriceInr",
+        "startDate",
+        "hoursNeeded",
+        "driverName",
+        "phone",
+        "email",
+        "vehicleNumber",
+        "confirmationText",
+        "commitmentConfirmed",
+        "commitmentTime",
+        "status",
+        "source",
+        "referrer",
+        "language",
+        "createdAt"
+      ]
+    },
+    "SurveyResponse": {
+      "title": "SurveyResponse",
+      "description": "Parking experience and willingness-to-pay survey response owned by a signed-in user.",
+      "type": "object",
+      "properties": {
+        "respondentUid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "refId": {
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 32,
+          "pattern": "^IS-SRV-[A-Z0-9\\-]+$"
+        },
+        "respondentName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 120
+        },
+        "phone": {
+          "type": "string",
+          "maxLength": 10,
+          "pattern": "^([0-9]{10})?$"
+        },
+        "email": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "area": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "ownsSpotStatus": {
+          "type": "string",
+          "enum": ["yes_available", "yes_unavailable", "no"]
+        },
+        "facedParkingProblem": {
+          "type": "string",
+          "enum": ["yes_often", "yes_sometimes", "no"]
+        },
+        "wouldUseApp": {
+          "type": "string",
+          "enum": ["yes", "maybe", "no"]
+        },
+        "willingToPay3Hrs": {
+          "type": "string",
+          "enum": ["free_only", "under_50", "50_100", "100_150", "150_250", "above_250"]
+        },
+        "additionalNotes": {
+          "type": "string",
+          "maxLength": 400
+        },
+        "source": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 80
+        },
+        "language": {
+          "type": "string",
+          "enum": ["en", "hi", "mr"]
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "respondentUid",
+        "refId",
+        "respondentName",
+        "phone",
+        "email",
+        "area",
+        "ownsSpotStatus",
+        "facedParkingProblem",
+        "wouldUseApp",
+        "willingToPay3Hrs",
+        "additionalNotes",
+        "source",
+        "language",
+        "createdAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/UserProfile" },
+      "description": "Authenticated Google account profiles keyed by Firebase Auth UID."
+    },
+    "/spaces/{spaceId}": {
+      "schema": { "$ref": "#/entities/PublicSpace" },
+      "description": "Publicly browsable parking listings with zero owner PII."
+    },
+    "/spacePrivateDetails/{spaceId}": {
+      "schema": { "$ref": "#/entities/SpacePrivateDetail" },
+      "description": "Owner contact details isolated 1:1 from public /spaces listings."
+    },
+    "/parkingRequests/{requestId}": {
+      "schema": { "$ref": "#/entities/ParkingRequest" },
+      "description": "Private parking reservation requests and confirmation receipts."
+    },
+    "/surveyResponses/{responseId}": {
+      "schema": { "$ref": "#/entities/SurveyResponse" },
+      "description": "Private user survey responses readable only by the respondent or verified admin."
+    }
+  }
+}

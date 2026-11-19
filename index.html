@@ -3,8 +3,11 @@
 <head>
  <meta charset="UTF-8" />
  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
- <title>Reserved parking near Mumbai's busy places</title>
+ <title>Idle Spot — Reserved parking near Mumbai's busy places</title>
  <meta name="description" content="Pick your area. Get a reserved parking space within about 400 m in Mumbai, by the day or month." />
+ <meta property="og:title" content="Idle Spot — Reserved parking near Mumbai's busy places" />
+ <meta property="og:description" content="Pick your area. Get a reserved parking space within about 400 m in Mumbai, by the day or month." />
+ <link rel="icon" href="/favicon.ico" />
  <link rel="preconnect" href="https://fonts.googleapis.com" />
  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans:wght@600;700&display=swap" rel="stylesheet" />
@@ -63,6 +66,26 @@
 
   .top-bar-label { font-size: 14px; font-weight: 600; color: var(--muted); }
 
+  .brand-name {
+   font-family: var(--font-heading);
+   font-size: 18px;
+   font-weight: 700;
+   letter-spacing: -0.01em;
+   color: var(--accent);
+  }
+
+  .sr-only {
+   position: absolute;
+   width: 1px;
+   height: 1px;
+   padding: 0;
+   margin: -1px;
+   overflow: hidden;
+   clip: rect(0, 0, 0, 0);
+   white-space: nowrap;
+   border: 0;
+  }
+
   .lang-switch {
    display: grid;
    grid-template-columns: repeat(3, auto);
@@ -74,9 +97,9 @@
 
   .lang-btn {
    min-height: 44px;
-   padding: 8px 14px;
+   padding: 8px 11px;
    font-family: inherit;
-   font-size: 15px;
+   font-size: 14px;
    font-weight: 600;
    color: var(--text);
    background-color: var(--surface);
@@ -142,7 +165,7 @@
 
   .mode-tabs {
    display: grid;
-   grid-template-columns: 1fr 1fr;
+   grid-template-columns: repeat(3, 1fr);
    border: 1px solid var(--border);
    border-radius: var(--radius);
    background-color: var(--surface);
@@ -152,14 +175,16 @@
 
   .mode-tab-btn {
    min-height: 50px;
-   padding: 10px 12px;
+   padding: 10px 8px;
    font-family: inherit;
-   font-size: 15px;
+   font-size: 14px;
+   line-height: 1.25;
    font-weight: 600;
    color: var(--text);
    background-color: var(--surface);
    border: none;
    cursor: pointer;
+   text-align: center;
    transition: background-color var(--transition-fast), color var(--transition-fast);
   }
 
@@ -300,8 +325,11 @@
 
   input[type="text"],
   input[type="tel"],
+  input[type="email"],
+  input[type="url"],
   input[type="date"],
   input[type="number"],
+  textarea,
   select {
    display: block;
    width: 100%;
@@ -317,7 +345,10 @@
    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
   }
 
+  textarea { min-height: 88px; resize: vertical; }
+
   input:focus-visible,
+  textarea:focus-visible,
   select:focus-visible,
   button:focus-visible,
   a:focus-visible {
@@ -327,10 +358,28 @@
 
   input[type="text"]:focus-visible,
   input[type="tel"]:focus-visible,
+  input[type="email"]:focus-visible,
+  input[type="url"]:focus-visible,
   input[type="date"]:focus-visible,
   input[type="number"]:focus-visible,
+  textarea:focus-visible,
   select:focus-visible {
    border-color: var(--accent);
+  }
+
+  .hours-pair {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 10px;
+  }
+
+  .hours-sub-label {
+   display: block;
+   font-size: 13px;
+   font-weight: 600;
+   line-height: 1.3;
+   margin-bottom: 6px;
+   color: var(--muted);
   }
 
   .preset-row {
@@ -415,6 +464,54 @@
   }
 
   .helper-note { margin-top: 8px; font-size: 14px; color: var(--muted); }
+
+  .survey-intro {
+   margin: 0 0 20px;
+   font-size: 15px;
+   line-height: 1.5;
+   color: var(--muted);
+  }
+  .choice-stack {
+   display: flex;
+   flex-direction: column;
+   gap: 8px;
+  }
+  .choice-grid {
+   display: grid;
+   grid-template-columns: 1fr 1fr;
+   gap: 8px;
+  }
+  .choice-option {
+   position: relative;
+   display: flex;
+   align-items: center;
+   gap: 10px;
+   min-height: 48px;
+   padding: 11px 14px;
+   border: 1px solid var(--border);
+   border-radius: var(--radius);
+   background-color: var(--surface);
+   color: var(--text);
+   font-size: 15px;
+   font-weight: 500;
+   line-height: 1.35;
+   cursor: pointer;
+   transition: background-color var(--transition-fast), border-color var(--transition-fast), color var(--transition-fast);
+  }
+  .choice-option:hover { background-color: var(--surface-tinted); }
+  .choice-option input[type="radio"] {
+   width: 18px;
+   height: 18px;
+   margin: 0;
+   accent-color: var(--accent);
+   flex-shrink: 0;
+  }
+  .choice-option.is-selected,
+  .choice-option:has(input[type="radio"]:checked) {
+   border-color: var(--accent);
+   background-color: var(--surface-tinted);
+   font-weight: 600;
+  }
 
   .price-box {
    padding: 16px;
@@ -563,8 +660,236 @@
   .thank-you-content p:last-child { margin-bottom: 0; }
   .thank-you-actions { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
   .reload-note { font-weight: 400; font-size: 15px; color: var(--muted); }
+  .receipt-card {
+   margin-top: 16px;
+   padding: 16px;
+   background-color: var(--surface);
+   border: 1px solid var(--border);
+   border-radius: var(--radius);
+  }
+  .receipt-top {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   flex-wrap: wrap;
+   gap: 8px;
+   padding-bottom: 12px;
+   margin-bottom: 12px;
+   border-bottom: 1px solid var(--border);
+  }
+  .receipt-title { font-size: 14px; font-weight: 700; color: var(--text); }
+  .receipt-ref-id {
+   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+   font-size: 14px;
+   font-weight: 700;
+   color: var(--accent);
+   font-variant-numeric: tabular-nums;
+  }
+  .receipt-rows { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; }
+  .receipt-row { display: flex; justify-content: space-between; gap: 12px; font-size: 14px; line-height: 1.4; }
+  .receipt-key { color: var(--muted); flex-shrink: 0; }
+  .receipt-val { color: var(--text); font-weight: 600; text-align: right; word-break: break-word; }
+  .receipt-email-status {
+   margin: 12px 0 0;
+   padding-top: 10px;
+   border-top: 1px solid var(--border);
+   font-size: 13px;
+   color: var(--muted);
+  }
+  .receipt-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  .receipt-action-btn {
+   min-height: 44px;
+   padding: 8px 10px;
+   font-family: inherit;
+   font-size: 14px;
+   font-weight: 600;
+   color: var(--accent);
+   background-color: var(--surface-tinted);
+   border: 1px solid var(--border);
+   border-radius: var(--radius);
+   cursor: pointer;
+   transition: background-color var(--transition-fast);
+  }
+  .receipt-action-btn:hover { background-color: var(--bg); }
   .consent-note { margin: 0 0 16px; font-size: 14px; line-height: 1.45; color: var(--muted); }
   .switch-hint { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+
+  /* Sign-In Gate & Google Account Bar & My Receipts Activity Panel */
+  .auth-loading-note {
+   margin: 0 0 22px;
+   padding: 16px;
+   border: 1px solid var(--border);
+   background-color: var(--surface);
+   border-radius: var(--radius);
+   font-size: 14px;
+   color: var(--muted);
+  }
+  .auth-gate-card {
+   padding: 22px 20px;
+   margin-bottom: 24px;
+   border: 1px solid var(--border);
+   background-color: var(--surface);
+   border-radius: var(--radius);
+  }
+  .auth-gate-heading {
+   margin: 0 0 8px;
+   font-family: var(--font-heading);
+   font-size: 20px;
+   font-weight: 700;
+   line-height: 1.3;
+   color: var(--text);
+  }
+  .auth-gate-desc {
+   margin: 0 0 16px;
+   font-size: 15px;
+   line-height: 1.5;
+   color: var(--muted);
+  }
+  .account-bar {
+   padding: 14px 16px;
+   margin-bottom: 22px;
+   border: 1px solid var(--border);
+   background-color: var(--surface);
+   border-radius: var(--radius);
+  }
+  .account-row {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   flex-wrap: wrap;
+   gap: 10px 12px;
+  }
+  .account-info {
+   min-width: 0;
+   flex: 1 1 220px;
+  }
+  .account-title {
+   margin: 0;
+   font-size: 14px;
+   font-weight: 600;
+   color: var(--text);
+   word-break: break-word;
+  }
+  .account-sub {
+   margin: 2px 0 0;
+   font-size: 13px;
+   color: var(--muted);
+   word-break: break-word;
+  }
+  .account-actions {
+   display: flex;
+   flex-wrap: wrap;
+   align-items: center;
+   gap: 8px;
+  }
+  .google-btn {
+   display: inline-flex;
+   align-items: center;
+   gap: 8px;
+   min-height: 44px;
+   padding: 8px 14px;
+   font-family: inherit;
+   font-size: 14px;
+   font-weight: 600;
+   color: var(--text);
+   background-color: var(--surface);
+   border: 1px solid var(--border);
+   border-radius: var(--radius);
+   cursor: pointer;
+   transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  }
+  .google-btn:hover { background-color: var(--surface-tinted); border-color: var(--accent); }
+  .small-btn {
+   min-height: 40px;
+   padding: 6px 12px;
+   font-family: inherit;
+   font-size: 14px;
+   font-weight: 600;
+   color: var(--text);
+   background-color: var(--surface-tinted);
+   border: 1px solid var(--border);
+   border-radius: var(--radius);
+   cursor: pointer;
+   transition: background-color var(--transition-fast), border-color var(--transition-fast);
+  }
+  .small-btn:hover { background-color: var(--bg); border-color: var(--accent); }
+  .small-btn.is-primary {
+   color: var(--accent);
+   border-color: var(--accent);
+   background-color: var(--surface);
+  }
+  .small-btn.is-danger {
+   color: var(--error);
+   border-color: var(--border);
+   background-color: var(--surface);
+  }
+  .activity-panel {
+   margin-bottom: 24px;
+   padding: 16px;
+   border: 1px solid var(--border);
+   background-color: var(--surface-tinted);
+   border-radius: var(--radius);
+  }
+  .activity-panel h2 {
+   margin: 0 0 12px;
+   font-size: 18px;
+  }
+  .activity-panel h3 {
+   margin: 18px 0 10px;
+   font-size: 16px;
+   font-family: var(--font-heading);
+   color: var(--text);
+  }
+  .activity-list {
+   display: flex;
+   flex-direction: column;
+   gap: 10px;
+  }
+  .activity-card {
+   padding: 14px;
+   border: 1px solid var(--border);
+   background-color: var(--surface);
+   border-radius: var(--radius);
+  }
+  .activity-card-head {
+   display: flex;
+   align-items: center;
+   justify-content: space-between;
+   flex-wrap: wrap;
+   gap: 6px 10px;
+   margin-bottom: 6px;
+  }
+  .activity-ref {
+   font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+   font-size: 13px;
+   font-weight: 700;
+   color: var(--accent);
+  }
+  .activity-status {
+   font-size: 13px;
+   font-weight: 600;
+   padding: 2px 8px;
+   border: 1px solid var(--border);
+   border-radius: var(--radius);
+   background-color: var(--surface-tinted);
+   color: var(--text);
+  }
+  .activity-meta {
+   margin: 0 0 10px;
+   font-size: 14px;
+   line-height: 1.45;
+   color: var(--muted);
+  }
+  .activity-card-actions {
+   display: flex;
+   flex-wrap: wrap;
+   gap: 8px;
+  }
+  .operator-inbox {
+   margin-top: 16px;
+   padding-top: 14px;
+   border-top: 1px solid var(--border);
+  }
 
   .text-link-btn {
    background: none;
@@ -606,7 +931,8 @@
 <body>
  <main id="main-page" class="container">
   <div class="top-bar">
-   <span id="lbl-language" class="top-bar-label">Language</span>
+   <span class="brand-name">Idle Spot</span>
+   <span id="lbl-language" class="sr-only">Language</span>
    <div class="lang-switch" role="group" aria-labelledby="lbl-language">
     <button type="button" class="lang-btn is-active" data-choose-lang="en" aria-pressed="true">English</button>
     <button type="button" class="lang-btn" data-choose-lang="hi" aria-pressed="false">हिन्दी</button>
@@ -616,6 +942,55 @@
 
   <h1 id="page-headline">Reserved parking near Mumbai's busy places</h1>
   <p id="page-subtitle" class="subtitle">Pick your area. Get a reserved space within about 400 m, by the day or month.</p>
+
+  <p id="auth-loading-note" class="auth-loading-note" aria-live="polite">Checking sign-in status...</p>
+
+  <section id="auth-gate-card" class="auth-gate-card hidden" aria-live="polite">
+   <h2 id="auth-gate-heading" class="auth-gate-heading">Sign in required</h2>
+   <p id="auth-gate-desc" class="auth-gate-desc">Please sign in with your Google account to view available parking spaces, request a spot, or list your space.</p>
+   <button type="button" id="gate-google-signin-btn" class="google-btn">
+    <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+     <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+     <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+     <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+     <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+    </svg>
+    <span id="gate-google-signin-label">Continue with Google</span>
+   </button>
+   <div id="gate-auth-error" class="field-error hidden"></div>
+  </section>
+
+  <div id="account-bar" class="account-bar hidden" aria-live="polite">
+   <div class="account-row">
+    <div class="account-info">
+     <p id="account-title" class="account-title">Sign in with Google to save confirmation receipts across devices</p>
+     <p id="account-sub" class="account-sub hidden"></p>
+    </div>
+    <div class="account-actions">
+     <button type="button" id="google-signin-btn" class="google-btn hidden">
+      <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+       <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+       <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+       <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+       <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+      </svg>
+      <span id="google-signin-label">Continue with Google</span>
+     </button>
+     <button type="button" id="toggle-activity-btn" class="small-btn is-primary hidden">My Receipts (0)</button>
+     <button type="button" id="google-signout-btn" class="small-btn hidden">Sign out</button>
+    </div>
+   </div>
+   <div id="account-auth-error" class="field-error hidden"></div>
+  </div>
+
+  <section id="my-activity-panel" class="activity-panel hidden" aria-live="polite">
+   <h2 id="activity-heading">My Receipts &amp; Activity</h2>
+   <div id="activity-list" class="activity-list"></div>
+   <div id="operator-inbox-wrap" class="operator-inbox hidden">
+    <h3 id="operator-inbox-heading">Operator Inbox (All Requests &amp; Owner Contacts)</h3>
+    <div id="operator-inbox-list" class="activity-list"></div>
+   </div>
+  </section>
 
   <div class="trust-strip" aria-label="Service guarantees">
    <ul class="trust-list">
@@ -634,10 +1009,152 @@
    </ul>
   </div>
 
+  <div id="app-workspace" class="hidden">
   <div class="mode-tabs" role="tablist" aria-label="Choose form">
+   <button type="button" id="tab-survey" class="mode-tab-btn" role="tab" aria-selected="false" aria-controls="survey-section">Survey</button>
    <button type="button" id="tab-driver" class="mode-tab-btn is-active" role="tab" aria-selected="true" aria-controls="driver-section">Need parking</button>
    <button type="button" id="tab-owner" class="mode-tab-btn" role="tab" aria-selected="false" aria-controls="owner-section">Have a space? List it</button>
   </div>
+
+  <section id="survey-section" class="hidden" role="tabpanel" aria-labelledby="tab-survey">
+   <h2 id="survey-heading">Parking Survey</h2>
+   <p id="survey-intro" class="survey-intro">Share quick basic info and answer 4 short questions about parking in your area.</p>
+
+   <form id="survey-form" novalidate>
+    <div class="field">
+     <label class="field-label" for="survey-name" id="lbl-survey-name">Name</label>
+     <input type="text" id="survey-name" name="name" autocomplete="name" required />
+     <div class="field-error hidden" id="err-survey-name"></div>
+    </div>
+
+    <div class="field">
+     <label class="field-label" for="survey-area" id="lbl-survey-area">Your area or neighbourhood</label>
+     <input type="text" id="survey-area" name="area" autocomplete="address-level2" placeholder="e.g. Bandra, Fort, Andheri" required />
+     <div class="field-error hidden" id="err-survey-area"></div>
+    </div>
+
+    <div class="field">
+     <label class="field-label" for="survey-phone" id="lbl-survey-phone">Phone number (optional)</label>
+     <input type="tel" id="survey-phone" name="phone" inputmode="numeric" autocomplete="tel-national" maxlength="15" />
+     <div class="field-error hidden" id="err-survey-phone"></div>
+    </div>
+
+    <div class="field">
+     <label class="field-label" for="survey-email" id="lbl-survey-email">Email (optional)</label>
+     <input type="email" id="survey-email" name="email" inputmode="email" autocomplete="email" placeholder="name@example.com" />
+     <div class="field-error hidden" id="err-survey-email"></div>
+    </div>
+
+    <div class="field">
+     <span class="field-label" id="lbl-survey-q1">1) Do you own a parking spot near or in a crowded area? If yes, is it available to use?</span>
+     <div class="choice-stack" role="radiogroup" aria-labelledby="lbl-survey-q1">
+      <label class="choice-option" for="srv-q1-avail">
+       <input type="radio" id="srv-q1-avail" name="survey_owns_spot" value="yes_available" />
+       <span id="txt-srv-q1-avail">Yes, and it is available to use</span>
+      </label>
+      <label class="choice-option" for="srv-q1-unavail">
+       <input type="radio" id="srv-q1-unavail" name="survey_owns_spot" value="yes_unavailable" />
+       <span id="txt-srv-q1-unavail">Yes, but it is not available right now</span>
+      </label>
+      <label class="choice-option" for="srv-q1-no">
+       <input type="radio" id="srv-q1-no" name="survey_owns_spot" value="no" />
+       <span id="txt-srv-q1-no">No, I do not own one</span>
+      </label>
+     </div>
+     <div class="field-error hidden" id="err-survey-q1"></div>
+    </div>
+
+    <div class="field">
+     <span class="field-label" id="lbl-survey-q2">2) Have you ever faced the problem of not being able to find a parking spot, or had difficulty in taking your vehicle out?</span>
+     <div class="choice-stack" role="radiogroup" aria-labelledby="lbl-survey-q2">
+      <label class="choice-option" for="srv-q2-often">
+       <input type="radio" id="srv-q2-often" name="survey_problem" value="yes_often" />
+       <span id="txt-srv-q2-often">Yes, frequently</span>
+      </label>
+      <label class="choice-option" for="srv-q2-sometimes">
+       <input type="radio" id="srv-q2-sometimes" name="survey_problem" value="yes_sometimes" />
+       <span id="txt-srv-q2-sometimes">Yes, sometimes</span>
+      </label>
+      <label class="choice-option" for="srv-q2-no">
+       <input type="radio" id="srv-q2-no" name="survey_problem" value="no" />
+       <span id="txt-srv-q2-no">No, rarely or never</span>
+      </label>
+     </div>
+     <div class="field-error hidden" id="err-survey-q2"></div>
+    </div>
+
+    <div class="field">
+     <span class="field-label" id="lbl-survey-q3">3) If there exists an app which helps you to find empty parking spots near your location, would you use it?</span>
+     <div class="choice-stack" role="radiogroup" aria-labelledby="lbl-survey-q3">
+      <label class="choice-option" for="srv-q3-yes">
+       <input type="radio" id="srv-q3-yes" name="survey_use_app" value="yes" />
+       <span id="txt-srv-q3-yes">Yes, definitely</span>
+      </label>
+      <label class="choice-option" for="srv-q3-maybe">
+       <input type="radio" id="srv-q3-maybe" name="survey_use_app" value="maybe" />
+       <span id="txt-srv-q3-maybe">Maybe (depends on price &amp; area)</span>
+      </label>
+      <label class="choice-option" for="srv-q3-no">
+       <input type="radio" id="srv-q3-no" name="survey_use_app" value="no" />
+       <span id="txt-srv-q3-no">No</span>
+      </label>
+     </div>
+     <div class="field-error hidden" id="err-survey-q3"></div>
+    </div>
+
+    <div class="field">
+     <span class="field-label" id="lbl-survey-q4">4) How much would you be willing to pay for 3 hours at a prime location?</span>
+     <div class="choice-grid" role="radiogroup" aria-labelledby="lbl-survey-q4">
+      <label class="choice-option" for="srv-q4-free">
+       <input type="radio" id="srv-q4-free" name="survey_pay" value="free_only" />
+       <span id="txt-srv-q4-free">Rs 0 (Free only)</span>
+      </label>
+      <label class="choice-option" for="srv-q4-u50">
+       <input type="radio" id="srv-q4-u50" name="survey_pay" value="under_50" />
+       <span id="txt-srv-q4-u50">Up to Rs 50</span>
+      </label>
+      <label class="choice-option" for="srv-q4-50-100">
+       <input type="radio" id="srv-q4-50-100" name="survey_pay" value="50_100" />
+       <span id="txt-srv-q4-50-100">Rs 50 - Rs 100</span>
+      </label>
+      <label class="choice-option" for="srv-q4-100-150">
+       <input type="radio" id="srv-q4-100-150" name="survey_pay" value="100_150" />
+       <span id="txt-srv-q4-100-150">Rs 100 - Rs 150</span>
+      </label>
+      <label class="choice-option" for="srv-q4-150-250">
+       <input type="radio" id="srv-q4-150-250" name="survey_pay" value="150_250" />
+       <span id="txt-srv-q4-150-250">Rs 150 - Rs 250</span>
+      </label>
+      <label class="choice-option" for="srv-q4-a250">
+       <input type="radio" id="srv-q4-a250" name="survey_pay" value="above_250" />
+       <span id="txt-srv-q4-a250">Above Rs 250</span>
+      </label>
+     </div>
+     <div class="field-error hidden" id="err-survey-q4"></div>
+    </div>
+
+    <div class="field">
+     <label class="field-label" for="survey-notes" id="lbl-survey-notes">Any extra feedback (optional)</label>
+     <textarea id="survey-notes" name="additional_notes" maxlength="400"></textarea>
+    </div>
+
+    <div id="survey-submit-error" class="form-error-banner hidden" role="alert"></div>
+    <button type="submit" id="survey-submit-btn" class="submit-btn">Submit survey</button>
+   </form>
+
+   <div id="survey-thank-you" class="thank-you-box hidden" role="status" aria-live="polite">
+    <div class="thank-you-header">
+     <svg class="thank-you-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+     <div class="thank-you-content">
+      <p id="survey-thank-you-text">Thank you for completing the Idle Spot parking survey.</p>
+      <p id="survey-thank-you-ref" class="reload-note"></p>
+     </div>
+    </div>
+    <div class="thank-you-actions">
+     <button type="button" id="survey-go-driver-btn" class="secondary-btn">Need parking now</button>
+    </div>
+   </div>
+  </section>
 
   <section id="driver-section" role="tabpanel" aria-labelledby="tab-driver">
    <!-- Shared live listed spaces from other devices -->
@@ -659,6 +1176,12 @@
    </div>
 
    <form id="driver-form" novalidate>
+    <div class="field">
+     <label class="field-label" for="driver-city" id="lbl-driver-city">City</label>
+     <select id="driver-city" name="city" required></select>
+     <div class="field-error hidden" id="err-driver-city"></div>
+    </div>
+
     <div class="field">
      <label class="field-label" for="driver-area" id="lbl-driver-area">Where do you need to park?</label>
      <select id="driver-area" name="area" required></select>
@@ -707,13 +1230,17 @@
     </div>
 
     <div class="field">
-     <label class="field-label" for="driver-hours" id="lbl-driver-hours">Hours needed</label>
-     <div class="preset-row" id="driver-hour-presets" role="group" aria-label="Quick hours">
-      <button type="button" class="preset-btn" data-hour-target="driver" data-hour-value="9 am - 7 pm" id="preset-d-hr-1">9 am - 7 pm</button>
-      <button type="button" class="preset-btn" data-hour-target="driver" data-hour-value="10 am - 6 pm" id="preset-d-hr-2">10 am - 6 pm</button>
-      <button type="button" class="preset-btn" data-hour-target="driver" data-hour-value="24 hours" id="preset-d-hr-3">24 hours</button>
+     <span class="field-label" id="lbl-driver-hours">Hours needed</span>
+     <div class="hours-pair">
+      <div>
+       <label class="hours-sub-label" for="driver-start-hour" id="lbl-driver-start-hour">Start hour</label>
+       <select id="driver-start-hour" name="start_hour" required></select>
+      </div>
+      <div>
+       <label class="hours-sub-label" for="driver-end-hour" id="lbl-driver-end-hour">End hour</label>
+       <select id="driver-end-hour" name="end_hour" required></select>
+      </div>
      </div>
-     <input type="text" id="driver-hours" name="hours_needed" autocomplete="off" placeholder="e.g. 9 am - 7 pm" required />
      <div class="field-error hidden" id="err-driver-hours"></div>
     </div>
 
@@ -733,6 +1260,12 @@
      <label class="field-label" for="driver-vehicle-no" id="lbl-driver-vehicle-no">Vehicle number</label>
      <input type="text" id="driver-vehicle-no" name="vehicle_number" autocomplete="off" autocapitalize="characters" required />
      <div class="field-error hidden" id="err-driver-vehicle-no"></div>
+    </div>
+
+    <div class="field">
+     <label class="field-label" for="driver-email" id="lbl-driver-email">Email for instant receipt (optional)</label>
+     <input type="email" id="driver-email" name="email" inputmode="email" autocomplete="email" placeholder="name@example.com" />
+     <div class="field-error hidden" id="err-driver-email"></div>
     </div>
 
     <p id="driver-consent-note" class="consent-note">Your phone and vehicle details are used only to coordinate this parking request.</p>
@@ -762,6 +1295,18 @@
       <p id="driver-reload-note" class="reload-note"></p>
      </div>
     </div>
+    <div id="driver-receipt-card" class="receipt-card hidden">
+     <div class="receipt-top">
+      <span id="driver-receipt-title" class="receipt-title">Idle Spot Confirmation Receipt</span>
+      <span id="driver-receipt-ref" class="receipt-ref-id"></span>
+     </div>
+     <ul id="driver-receipt-rows" class="receipt-rows"></ul>
+     <p id="driver-receipt-email-status" class="receipt-email-status"></p>
+     <div class="receipt-actions">
+      <button type="button" id="driver-receipt-copy-btn" class="receipt-action-btn">Copy receipt</button>
+      <button type="button" id="driver-receipt-save-btn" class="receipt-action-btn">Save receipt</button>
+     </div>
+    </div>
     <div id="driver-wa-wrap" class="thank-you-actions hidden">
      <a id="driver-wa-link" class="secondary-btn" href="#" target="_blank" rel="noopener noreferrer">Send details on WhatsApp now</a>
     </div>
@@ -786,6 +1331,12 @@
      <label class="field-label" for="owner-phone" id="lbl-owner-phone">Phone number</label>
      <input type="tel" id="owner-phone" name="phone" inputmode="numeric" autocomplete="tel-national" maxlength="15" required />
      <div class="field-error hidden" id="err-owner-phone"></div>
+    </div>
+
+    <div class="field">
+     <label class="field-label" for="owner-city" id="lbl-owner-city">City</label>
+     <select id="owner-city" name="city" required></select>
+     <div class="field-error hidden" id="err-owner-city"></div>
     </div>
 
     <div class="field">
@@ -834,6 +1385,18 @@
      <input type="text" id="owner-amount" name="monthly_amount" inputmode="numeric" autocomplete="off" />
     </div>
 
+    <div class="field">
+     <label class="field-label" for="owner-location-link" id="lbl-owner-location-link">Location link (optional)</label>
+     <input type="url" id="owner-location-link" name="location_link" autocomplete="off" placeholder="https://maps.google.com/..." maxlength="500" />
+     <div class="field-error hidden" id="err-owner-location-link"></div>
+    </div>
+
+    <div class="field">
+     <label class="field-label" for="owner-email" id="lbl-owner-email">Email for instant receipt (optional)</label>
+     <input type="email" id="owner-email" name="email" inputmode="email" autocomplete="email" placeholder="name@example.com" />
+     <div class="field-error hidden" id="err-owner-email"></div>
+    </div>
+
     <p id="owner-consent-note" class="consent-note">Your phone and property details are used only to verify and coordinate this space.</p>
     <div id="owner-submit-error" class="form-error-banner hidden" role="alert"></div>
     <button type="submit" id="owner-submit-btn" class="submit-btn">Submit space details</button>
@@ -862,6 +1425,18 @@
       <p id="owner-reload-note" class="reload-note"></p>
      </div>
     </div>
+    <div id="owner-receipt-card" class="receipt-card hidden">
+     <div class="receipt-top">
+      <span id="owner-receipt-title" class="receipt-title">Idle Spot Confirmation Receipt</span>
+      <span id="owner-receipt-ref" class="receipt-ref-id"></span>
+     </div>
+     <ul id="owner-receipt-rows" class="receipt-rows"></ul>
+     <p id="owner-receipt-email-status" class="receipt-email-status"></p>
+     <div class="receipt-actions">
+      <button type="button" id="owner-receipt-copy-btn" class="receipt-action-btn">Copy receipt</button>
+      <button type="button" id="owner-receipt-save-btn" class="receipt-action-btn">Save receipt</button>
+     </div>
+    </div>
     <div class="thank-you-actions">
      <button type="button" id="owner-view-listed-btn" class="secondary-btn">View listed spaces</button>
      <a id="owner-wa-link" class="secondary-btn hidden" href="#" target="_blank" rel="noopener noreferrer">Send details on WhatsApp now</a>
@@ -872,6 +1447,7 @@
     <button type="button" id="switch-to-driver-btn" class="text-link-btn">Need to park a vehicle? Request a space</button>
    </div>
   </section>
+  </div>
 
   <footer>
    <p id="footer-translated" class="hidden"></p>
@@ -879,6 +1455,7 @@
   </footer>
  </main>
 
+ <script type="module" src="/src/firebaseClient.ts"></script>
  <script>
   (function () {
    "use strict";
@@ -890,27 +1467,72 @@
 
    // 2. AREAS AND PRICES — EDIT NUMBERS HERE (in INR)
    var AREAS_AND_PRICES = {
-    colaba: { car_taxi: { day: 150, month: 3000 }, two_auto: { day: null, month: 1200 } },
-    fort: { car_taxi: { day: 150, month: 3000 }, two_auto: { day: null, month: 1200 } },
-    churchgate: { car_taxi: { day: 150, month: 3000 }, two_auto: { day: null, month: 1200 } },
-    bandra: { car_taxi: { day: 120, month: 2500 }, two_auto: { day: null, month: 1000 } },
-    juhu: { car_taxi: { day: 100, month: 2000 }, two_auto: { day: null, month: 800 } },
-    other: null
+    Mumbai: {
+     colaba: { car_taxi: { day: 150, month: 3000 }, two_auto: { day: null, month: 1200 } },
+     fort: { car_taxi: { day: 150, month: 3000 }, two_auto: { day: null, month: 1200 } },
+     churchgate: { car_taxi: { day: 150, month: 3000 }, two_auto: { day: null, month: 1200 } },
+     bandra: { car_taxi: { day: 120, month: 2500 }, two_auto: { day: null, month: 1000 } },
+     juhu: { car_taxi: { day: 100, month: 2000 }, two_auto: { day: null, month: 800 } },
+     dadar: { car_taxi: { day: 120, month: 2500 }, two_auto: { day: null, month: 1000 } },
+     other: null
+    },
+    Pune: {
+     hadapsar: { car_taxi: { day: null, month: null }, two_auto: { day: null, month: null } },
+     koregaon_park: { car_taxi: { day: null, month: null }, two_auto: { day: null, month: null } },
+     camp: { car_taxi: { day: null, month: null }, two_auto: { day: null, month: null } },
+     wakad: { car_taxi: { day: null, month: null }, two_auto: { day: null, month: null } },
+     karvenagar: { car_taxi: { day: null, month: null }, two_auto: { day: null, month: null } },
+     other: null
+    }
    };
 
    // 3. TRANSLATIONS (English, Hindi, Marathi)
    // Native speaker review needed for hi and mr before sharing the link.
    var STRINGS = {
     en: {
-     pageTitle: "Reserved parking near Mumbai's busy places",
+     pageTitle: "Idle Spot — Reserved parking near Mumbai's busy places",
      languageLabel: "Language",
      headline: "Reserved parking near Mumbai's busy places",
      subtitle: "Pick your area. Get a reserved space within about 400 m, by the day or month.",
      trust1: "Spaces verified directly with the property owner or manager.",
      trust2: "Exact location, gate access, and owner contact sent on WhatsApp before you arrive.",
      trust3: "Zero payment on this page — confirm availability first.",
+     tabSurvey: "Survey",
      tabDriver: "Need parking",
      tabOwner: "Have a space? List it",
+     surveyHeading: "Parking Survey",
+     surveyIntro: "Share quick basic info and answer 4 short questions about parking in your area.",
+     surveyAreaLabel: "Your area or neighbourhood",
+     surveyAreaPlaceholder: "e.g. Bandra, Fort, Andheri",
+     surveyPhoneOptional: "Phone number (optional)",
+     surveyEmailOptional: "Email (optional)",
+     surveyQ1Label: "1) Do you own a parking spot near or in a crowded area? If yes, is it available to use?",
+     surveyQ1Avail: "Yes, and it is available to use",
+     surveyQ1Unavail: "Yes, but it is not available right now",
+     surveyQ1No: "No, I do not own one",
+     surveyQ2Label: "2) Have you ever faced the problem of not being able to find a parking spot, or had difficulty in taking your vehicle out?",
+     surveyQ2Often: "Yes, frequently",
+     surveyQ2Sometimes: "Yes, sometimes",
+     surveyQ2No: "No, rarely or never",
+     surveyQ3Label: "3) If there exists an app which helps you to find empty parking spots near your location, would you use it?",
+     surveyQ3Yes: "Yes, definitely",
+     surveyQ3Maybe: "Maybe (depends on price & area)",
+     surveyQ3No: "No",
+     surveyQ4Label: "4) How much would you be willing to pay for 3 hours at a prime location?",
+     surveyPayOpts: {
+      free_only: "Rs 0 (Free only)",
+      under_50: "Up to Rs 50",
+      "50_100": "Rs 50 - Rs 100",
+      "100_150": "Rs 100 - Rs 150",
+      "150_250": "Rs 150 - Rs 250",
+      above_250: "Above Rs 250"
+     },
+     surveyNotesLabel: "Any extra feedback (optional)",
+     surveySubmitBtn: "Submit survey",
+     surveyThankYou: "Thank you for completing the Idle Spot parking survey. Your feedback has been saved.",
+     surveyRefNote: "Saved to your account · Reference ID: {refId}",
+     surveyGoDriverBtn: "Need parking now",
+     mySurveyKind: "Parking Survey",
      switchToDriverLink: "Need to park a vehicle? Request a space",
      spacesHeading: "Available spaces listed by owners",
      filterAllAreas: "All areas",
@@ -928,6 +1550,8 @@
      spaceRateStandard: "Confirmed on WhatsApp",
      viewListedBtn: "View listed spaces",
      ownerSpaceLiveNote: "Your space is now visible to drivers browsing this site (your phone stays private).",
+     cityLabel: "City",
+     cities: { Mumbai: "Mumbai", Pune: "Pune" },
      driverAreaLabel: "Where do you need to park?",
      driverAreaPlaceholder: "Select an area",
      driverCustomAreaLabel: "Where do you need to park?",
@@ -939,16 +1563,23 @@
      monthlyOnlyNote: "Auto and two-wheeler bookings are monthly only.",
      pricePerDay: "Price: Rs {amount} per day",
      pricePerMonth: "Price: Rs {amount} per month",
+     priceUnconfirmed: "Pricing for this area is not yet confirmed. Submit your request and we will tell you the price on WhatsApp.",
      dailyUnavailable: "Daily booking is not available for this vehicle. Please choose per month.",
      startDateLabel: "Start date",
      presetToday: "Today",
      presetTomorrow: "Tomorrow",
      presetMonday: "Next Monday",
      hoursNeededLabel: "Hours needed",
+     startHourLabel: "Start hour",
+     endHourLabel: "End hour",
+     startHourPlaceholder: "Select start",
+     endHourPlaceholder: "Select end",
      hoursNeededPlaceholder: "e.g. 9 am - 7 pm",
      presetHoursFull: "24 hours",
      nameLabel: "Name",
      phoneLabel: "Phone number",
+     emailLabel: "Email for instant receipt (optional)",
+     emailPlaceholder: "name@example.com",
      vehicleNoLabel: "Vehicle number",
      driverConsentNote: "Your phone and vehicle details are used only to coordinate this parking request.",
      ownerConsentNote: "Your phone and property details are used only to verify and coordinate this space.",
@@ -961,6 +1592,34 @@
      thankYou: "Thank you. We will confirm on WhatsApp within 24 hours.",
      ownerThankYou: "Thank you. We will call you to verify the space before any driver is shown it.",
      reloadNote: "To send another request, reload this page.",
+     receiptTitle: "Idle Spot Receipt",
+     receiptCopyBtn: "Copy receipt",
+     receiptCopiedBtn: "Copied",
+     receiptSaveBtn: "Save receipt",
+     receiptEmailSentNote: "Saved to your Google account and emailed to {email}.",
+     receiptEmailNotSentNote: "Saved to your Google account. Keep this Reference ID for your records.",
+     receiptNoEmailNote: "Saved to your Google account. Keep this Reference ID for your records.",
+     receiptRowsLabels: { area: "Area", item: "Details", when: "Schedule", phone: "Phone", time: "Submitted" },
+     googleSignInPrompt: "Sign in with Google to save confirmation receipts across devices.",
+     authGateChecking: "Checking sign-in status...",
+     authGateHeading: "Sign in required",
+     authGateDesc: "Please sign in with your Google account to view available parking spaces, request a spot, or list your space.",
+     googleSignInBtn: "Continue with Google",
+     googleSignOutBtn: "Sign out",
+     signedInAs: "Signed in as {name}",
+     myActivityBtn: "My Receipts ({count})",
+     myActivityHideBtn: "Hide Receipts",
+     myActivityHeading: "My Receipts & Activity",
+     myActivityEmpty: "No saved parking requests or space listings on this account yet.",
+     myReqKind: "Parking Request",
+     mySpaceKind: "Listed Space",
+     statusLabels: { pending: "Pending", confirmed: "Confirmed", cancelled: "Cancelled", active: "Active", paused: "Paused" },
+     cancelReqBtn: "Cancel request",
+     pauseSpaceBtn: "Pause listing",
+     activateSpaceBtn: "Make active",
+     operatorInboxHeading: "Operator Inbox (All Requests & Owner Contacts)",
+     confirmBtn: "Mark confirmed",
+     authCancelledError: "Google sign-in was cancelled or blocked by popup settings. Please allow popups and try again.",
      whatsappButton: "Send details on WhatsApp now",
      ownerLink: "Own a space nearby? List it",
      ownerHeading: "List your space",
@@ -973,47 +1632,99 @@
      ownerCapacityLabel: "Number of vehicles it fits",
      ownerManagerLabel: "Who owns or manages the property",
      ownerAmountLabel: "Monthly amount you would want (optional)",
+     ownerLocationLinkLabel: "Location link (optional)",
+     locationLinkPlaceholder: "https://maps.app.goo.gl/...",
      ownerSubmit: "Submit space details",
      ownerConfirmSentence: "You are offering {spaceType} in {area}, free {hours}, for up to {vehicles} vehicles. We will call you on {phone} to verify it before any driver is shown the space.",
      ownerConfirmCheck: "I confirm I have the right to let this space out, or I manage it for the owner.",
      ownerConfirmYes: "Yes, list this space",
      areas: {
-      colaba: "Colaba (Colaba Causeway / Gateway of India)",
-      fort: "Fort (CSMT / Flora Fountain)",
-      churchgate: "Churchgate and Marine Drive (Marine Drive promenade)",
-      bandra: "Bandra (Bandstand / Linking Road)",
-      juhu: "Juhu (Juhu Beach)",
+      colaba: "Colaba Causeway / Gateway of India",
+      fort: "CSMT / Flora Fountain",
+      churchgate: "Churchgate and Marine Drive",
+      bandra: "Bandra West, Bandstand / Linking Road",
+      juhu: "Juhu Beach",
+      dadar: "Dadar station and Shivaji Park market",
+      hadapsar: "Hadapsar, Magarpatta Road",
+      koregaon_park: "Koregaon Park",
+      camp: "Camp, FC Road / JM Road",
+      wakad: "Wakad, near metro station",
+      karvenagar: "Karvenagar",
       other: "Somewhere else"
      },
      errors: {
+      cityRequired: "Please select a city.",
       areaRequired: "Please select an area.",
       customAreaRequired: "Please enter where you need to park.",
       ownerCustomAreaRequired: "Please enter where the space is located.",
       dailyUnavailable: "Daily booking is not available for this vehicle. Please choose per month.",
       dateRequired: "Please choose a start date.",
-      hoursNeededRequired: "Please enter the hours you need to park.",
+      hoursNeededRequired: "Please select both a start hour and an end hour.",
+      hoursNeededSame: "End hour must be different from start hour.",
       nameRequired: "Please enter your name.",
       phoneInvalid: "Please enter a 10-digit phone number.",
+      emailInvalid: "Please enter a valid email address, or leave it blank.",
+      locationLinkInvalid: "Please enter a valid http/https location link, or leave it blank.",
       vehicleNoRequired: "Please enter your vehicle number.",
       spaceTypeRequired: "Please select the type of space.",
       hoursRequired: "Please enter the hours the space is free.",
       capacityRequired: "Please enter how many vehicles it fits.",
       managerRequired: "Please enter who owns or manages the property.",
       confirmCheckRequired: "Please tick the box above to confirm.",
+      surveyAreaRequired: "Please enter your area or neighbourhood.",
+      surveyPhoneInvalid: "Please enter a 10-digit phone number, or leave it blank.",
+      surveyQ1Required: "Please select an option for question 1.",
+      surveyQ2Required: "Please select an option for question 2.",
+      surveyQ3Required: "Please select an option for question 3.",
+      surveyQ4Required: "Please select an amount for question 4.",
       submitFailed: "Could not send your request. Please check your connection and try again."
      },
      footerTranslated: ""
     },
     hi: {
-     pageTitle: "मुंबई के व्यस्त इलाकों के पास आरक्षित पार्किंग",
+     pageTitle: "Idle Spot — मुंबई के व्यस्त इलाकों के पास आरक्षित पार्किंग",
      languageLabel: "भाषा",
      headline: "मुंबई के व्यस्त इलाकों के पास आरक्षित पार्किंग",
      subtitle: "अपना इलाका चुनें। करीब 400 मीटर के दायरे में, दिन या महीने के हिसाब से आरक्षित पार्किंग पाएं।",
      trust1: "जगह के मालिक या प्रबंधक से सीधे अनुमति की पुष्टि की जाती है।",
      trust2: "आने से पहले सटीक पता, गेट एंट्री और संपर्क व्हाट्सएप पर भेजा जाता है।",
      trust3: "इस पेज पर कोई भुगतान नहीं — पहले जगह पक्की करें।",
+     tabSurvey: "सर्वे",
      tabDriver: "पार्किंग चाहिए",
      tabOwner: "जगह दर्ज करें",
+     surveyHeading: "पार्किंग सर्वेक्षण",
+     surveyIntro: "थोड़ी बुनियादी जानकारी दें और अपने इलाके की पार्किंग से जुड़े 4 छोटे सवालों के जवाब दें।",
+     surveyAreaLabel: "आपका इलाका / मोहल्ला",
+     surveyAreaPlaceholder: "उदा. बांद्रा, फोर्ट, अंधेरी",
+     surveyPhoneOptional: "फ़ोन नंबर (वैकल्पिक)",
+     surveyEmailOptional: "ईमेल (वैकल्पिक)",
+     surveyQ1Label: "1) क्या आपके पास भीड़भाड़ वाले इलाके के पास पार्किंग की जगह है? यदि हाँ, तो क्या वह उपयोग के लिए उपलब्ध है?",
+     surveyQ1Avail: "हाँ, और वह उपयोग के लिए उपलब्ध है",
+     surveyQ1Unavail: "हाँ, लेकिन अभी उपलब्ध नहीं है",
+     surveyQ1No: "नहीं, मेरे पास नहीं है",
+     surveyQ2Label: "2) क्या आपको कभी पार्किंग की जगह न मिलने या अपनी गाड़ी बाहर निकालने में कठिनाई का सामना करना पड़ा है?",
+     surveyQ2Often: "हाँ, अक्सर",
+     surveyQ2Sometimes: "हाँ, कभी-कभी",
+     surveyQ2No: "नहीं, शायद ही कभी",
+     surveyQ3Label: "3) यदि कोई ऐसा ऐप हो जो आपके पास खाली पार्किंग की जगह ढूंढने में मदद करे, तो क्या आप उसका उपयोग करेंगे?",
+     surveyQ3Yes: "हाँ, बिल्कुल",
+     surveyQ3Maybe: "शायद (कीमत और इलाके पर निर्भर)",
+     surveyQ3No: "नहीं",
+     surveyQ4Label: "4) किसी प्रमुख (प्राइम) स्थान पर 3 घंटे पार्किंग के लिए आप कितना भुगतान करने को तैयार होंगे?",
+     surveyPayOpts: {
+      free_only: "रु. 0 (केवल मुफ्त)",
+      under_50: "रु. 50 तक",
+      "50_100": "रु. 50 - रु. 100",
+      "100_150": "रु. 100 - रु. 150",
+      "150_250": "रु. 150 - रु. 250",
+      above_250: "रु. 250 से अधिक"
+     },
+     surveyNotesLabel: "कोई अन्य सुझाव (वैकल्पिक)",
+     surveySubmitBtn: "सर्वे भेजें",
+     surveyThankYou: "Idle Spot पार्किंग सर्वे भरने के लिए धन्यवाद। आपकी प्रतिक्रिया सुरक्षित कर ली गई है।",
+     surveyRefNote: "आपके खाते में सुरक्षित · रेफ़रेंस आईडी: {refId}",
+     surveyGoDriverBtn: "अभी पार्किंग चाहिए",
+     mySurveyKind: "पार्किंग सर्वे",
      switchToDriverLink: "गाड़ी पार्क करनी है? जगह का अनुरोध करें",
      spacesHeading: "मालिकों द्वारा दर्ज उपलब्ध जगहें",
      filterAllAreas: "सभी इलाके",
@@ -1031,6 +1742,8 @@
      spaceRateStandard: "व्हाट्सएप पर पुष्टि होगी",
      viewListedBtn: "दर्ज जगहें देखें",
      ownerSpaceLiveNote: "आपकी जगह अब इस साइट पर ड्राइवरों को दिखाई दे रही है (आपका फ़ोन नंबर निजी रहता है)।",
+     cityLabel: "शहर",
+     cities: { Mumbai: "मुंबई", Pune: "पुणे" },
      driverAreaLabel: "आपको कहाँ पार्किंग चाहिए?",
      driverAreaPlaceholder: "इलाका चुनें",
      driverCustomAreaLabel: "आपको कहाँ पार्किंग चाहिए?",
@@ -1042,16 +1755,23 @@
      monthlyOnlyNote: "ऑटो और दोपहिया वाहन के लिए केवल मासिक बुकिंग उपलब्ध है।",
      pricePerDay: "किराया: रु. {amount} प्रति दिन",
      pricePerMonth: "किराया: रु. {amount} प्रति माह",
+     priceUnconfirmed: "इस इलाके के लिए कीमत अभी तय नहीं है। अपना अनुरोध भेजें और हम आपको व्हाट्सएप पर कीमत बताएंगे।",
      dailyUnavailable: "इस वाहन के लिए दैनिक बुकिंग उपलब्ध नहीं है। कृपया प्रति माह चुनें।",
      startDateLabel: "शुरुआती तारीख",
      presetToday: "आज",
      presetTomorrow: "कल",
      presetMonday: "अगला सोमवार",
      hoursNeededLabel: "किस समय के लिए चाहिए",
+     startHourLabel: "शुरुआती समय",
+     endHourLabel: "अंतिम समय",
+     startHourPlaceholder: "शुरुआती समय चुनें",
+     endHourPlaceholder: "अंतिम समय चुनें",
      hoursNeededPlaceholder: "उदा. सुबह 9 - शाम 7 बजे",
      presetHoursFull: "24 घंटे",
      nameLabel: "नाम",
      phoneLabel: "फ़ोन नंबर",
+     emailLabel: "रसीद के लिए ईमेल (वैकल्पिक)",
+     emailPlaceholder: "name@example.com",
      vehicleNoLabel: "वाहन नंबर",
      driverConsentNote: "आपका फ़ोन नंबर और वाहन विवरण केवल इस पार्किंग अनुरोध के समन्वय के लिए उपयोग किया जाएगा।",
      ownerConsentNote: "आपका फ़ोन नंबर और जगह का विवरण केवल जगह की पुष्टि और समन्वय के लिए उपयोग किया जाएगा।",
@@ -1064,6 +1784,34 @@
      thankYou: "धन्यवाद। हम 24 घंटे के भीतर व्हाट्सएप पर पुष्टि करेंगे।",
      ownerThankYou: "धन्यवाद। किसी भी ड्राइवर को जगह दिखाने से पहले हम पुष्टि के लिए आपको कॉल करेंगे।",
      reloadNote: "एक और अनुरोध भेजने के लिए इस पेज को रीलोड करें।",
+     receiptTitle: "Idle Spot रसीद",
+     receiptCopyBtn: "रसीद कॉपी करें",
+     receiptCopiedBtn: "कॉपी हो गया",
+     receiptSaveBtn: "रसीद सेव करें",
+     receiptEmailSentNote: "आपके Google खाते में सुरक्षित और {email} पर ईमेल भेजा गया।",
+     receiptEmailNotSentNote: "आपके Google खाते में सुरक्षित। कृपया यह रेफ़रेंस आईडी संभाल कर रखें।",
+     receiptNoEmailNote: "आपके Google खाते में सुरक्षित। कृपया यह रेफ़रेंस आईडी संभाल कर रखें।",
+     receiptRowsLabels: { area: "इलाका", item: "विवरण", when: "समय", phone: "फ़ोन", time: "भेजे जाने का समय" },
+     googleSignInPrompt: "रसीदें सेव करने और अपने अनुरोध देखने के लिए Google से साइन इन करें।",
+     authGateChecking: "साइन-इन स्थिति जांची जा रही है...",
+     authGateHeading: "साइन इन आवश्यक है",
+     authGateDesc: "उपलब्ध पार्किंग जगहें देखने, पार्किंग का अनुरोध करने या अपनी जगह दर्ज करने के लिए कृपया अपने Google खाते से साइन इन करें।",
+     googleSignInBtn: "Google से जारी रखें",
+     googleSignOutBtn: "साइन आउट",
+     signedInAs: "{name} के रूप में साइन इन",
+     myActivityBtn: "मेरी रसीदें ({count})",
+     myActivityHideBtn: "रसीदें छुपाएं",
+     myActivityHeading: "मेरी रसीदें और गतिविधि",
+     myActivityEmpty: "इस खाते में अभी तक कोई पार्किंग अनुरोध या जगह दर्ज नहीं है।",
+     myReqKind: "पार्किंग अनुरोध",
+     mySpaceKind: "दर्ज जगह",
+     statusLabels: { pending: "लंबित", confirmed: "पुष्ट", cancelled: "रद्द", active: "सक्रिय", paused: "रुका हुआ" },
+     cancelReqBtn: "अनुरोध रद्द करें",
+     pauseSpaceBtn: "लिस्टिंग रोकें",
+     activateSpaceBtn: "सक्रिय करें",
+     operatorInboxHeading: "ऑपरेटर इनबॉक्स (सभी अनुरोध और संपर्क)",
+     confirmBtn: "पुष्ट चिह्नित करें",
+     authCancelledError: "Google साइन-इन रद्द कर दिया गया या पॉपअप ब्लॉक था। कृपया पॉपअप अनुमति देकर फिर प्रयास करें।",
      whatsappButton: "अभी व्हाट्सएप पर विवरण भेजें",
      ownerLink: "आस-पास आपकी कोई जगह है? यहाँ दर्ज करें",
      ownerHeading: "अपनी पार्किंग जगह दर्ज करें",
@@ -1076,47 +1824,99 @@
      ownerCapacityLabel: "इसमें कितने वाहन आ सकते हैं",
      ownerManagerLabel: "इस संपत्ति के मालिक या प्रबंधक कौन हैं",
      ownerAmountLabel: "आप कितना मासिक किराया चाहेंगे (वैकल्पिक)",
+     ownerLocationLinkLabel: "लोकेशन लिंक (वैकल्पिक)",
+     locationLinkPlaceholder: "https://maps.app.goo.gl/...",
      ownerSubmit: "जगह की जानकारी भेजें",
      ownerConfirmSentence: "आप {area} में {spaceType} दे रहे हैं, जो {hours} खाली रहता है और जिसमें {vehicles} वाहन आ सकते हैं। किसी भी ड्राइवर को जगह दिखाने से पहले हम पुष्टि के लिए आपको {phone} पर कॉल करेंगे।",
      ownerConfirmCheck: "मैं पुष्टि करता/करती हूँ कि मुझे यह जगह किराए पर देने का अधिकार है, या मैं मालिक की ओर से इसका प्रबंधन करता/करती हूँ।",
      ownerConfirmYes: "हाँ, यह जगह दर्ज करें",
      areas: {
-      colaba: "कोलाबा (कोलाबा कॉज़वे / गेटवे ऑफ इंडिया)",
-      fort: "फोर्ट (सीएसएमटी / फ्लोरा फाउंटेन)",
-      churchgate: "चर्चगेट और मरीन ड्राइव (मरीन ड्राइव प्रोमेनेड)",
-      bandra: "बांद्रा (बैंडस्टैंड / लिंकिंग रोड)",
-      juhu: "जुहू (जुहू बीच)",
+      colaba: "कोलाबा कॉज़वे / गेटवे ऑफ इंडिया",
+      fort: "सीएसएमटी / फ्लोरा फाउंटेन",
+      churchgate: "चर्चगेट और मरीन ड्राइव",
+      bandra: "बांद्रा वेस्ट, बैंडस्टैंड / लिंकिंग रोड",
+      juhu: "जुहू बीच",
+      dadar: "दादर स्टेशन और शिवाजी पार्क मार्केट",
+      hadapsar: "हडपसर, मगरपट्टा रोड",
+      koregaon_park: "कोरेगांव पार्क",
+      camp: "कैंप, एफसी रोड / जेएम रोड",
+      wakad: "वाकड, मेट्रो स्टेशन के पास",
+      karvenagar: "कर्वेनगर",
       other: "कोई और जगह"
      },
      errors: {
+      cityRequired: "कृपया एक शहर चुनें।",
       areaRequired: "कृपया एक इलाका चुनें।",
       customAreaRequired: "कृपया लिखें कि आपको कहाँ पार्किंग चाहिए।",
       ownerCustomAreaRequired: "कृपया लिखें कि जगह कहाँ स्थित है।",
       dailyUnavailable: "इस वाहन के लिए दैनिक बुकिंग उपलब्ध नहीं है। कृपया प्रति माह चुनें।",
       dateRequired: "कृपया शुरुआती तारीख चुनें।",
-      hoursNeededRequired: "कृपया लिखें कि आपको किस समय पार्किंग चाहिए।",
+      hoursNeededRequired: "कृपया शुरुआती और अंतिम दोनों समय चुनें।",
+      hoursNeededSame: "अंतिम समय शुरुआती समय से अलग होना चाहिए।",
       nameRequired: "कृपया अपना नाम लिखें।",
       phoneInvalid: "कृपया 10 अंकों का फ़ोन नंबर लिखें।",
+      emailInvalid: "कृपया सही ईमेल लिखें, या इसे खाली छोड़ दें।",
+      locationLinkInvalid: "कृपया सही http/https लोकेशन लिंक लिखें, या खाली छोड़ दें।",
       vehicleNoRequired: "कृपया अपना वाहन नंबर लिखें।",
       spaceTypeRequired: "कृपया जगह का प्रकार चुनें।",
       hoursRequired: "कृपया बताएं कि जगह किस समय खाली रहती है।",
       capacityRequired: "कृपया बताएं कि इसमें कितने वाहन आ सकते हैं।",
       managerRequired: "कृपया लिखें कि संपत्ति के मालिक या प्रबंधक कौन हैं।",
       confirmCheckRequired: "पुष्टि करने के लिए कृपया ऊपर दिए गए बॉक्स पर टिक करें।",
+      surveyAreaRequired: "कृपया अपना इलाका लिखें।",
+      surveyPhoneInvalid: "कृपया 10 अंकों का फ़ोन नंबर लिखें, या खाली छोड़ दें।",
+      surveyQ1Required: "कृपया प्रश्न 1 के लिए एक विकल्प चुनें।",
+      surveyQ2Required: "कृपया प्रश्न 2 के लिए एक विकल्प चुनें।",
+      surveyQ3Required: "कृपया प्रश्न 3 के लिए एक विकल्प चुनें।",
+      surveyQ4Required: "कृपया प्रश्न 4 के लिए एक विकल्प चुनें।",
       submitFailed: "आपका अनुरोध भेजा नहीं जा सका। कृपया अपना इंटरनेट जांचें और फिर से कोशिश करें।"
      },
      footerTranslated: "जल्द शुरू हो रहा है। दिया गया कोई भी पैसा पूरी तरह वापस किया जा सकता है।"
     },
     mr: {
-     pageTitle: "मुंबईच्या गर्दीच्या ठिकाणांजवळ आरक्षित पार्किंग",
+     pageTitle: "Idle Spot — मुंबईच्या गर्दीच्या ठिकाणांजवळ आरक्षित पार्किंग",
      languageLabel: "भाषा",
      headline: "मुंबईच्या गर्दीच्या ठिकाणांजवळ आरक्षित पार्किंग",
      subtitle: "तुमचा परिसर निवडा. सुमारे 400 मीटरच्या आत, दिवसासाठी किंवा महिन्यासाठी आरक्षित जागा मिळवा.",
      trust1: "जागेच्या मालकाची किंवा व्यवस्थापकाची थेट परवानगी तपासली जाते.",
      trust2: "येण्यापूर्वी अचूक ठिकाण, गेट प्रवेश आणि संपर्क WhatsApp वर पाठवला जातो.",
      trust3: "या पानावर कोणतेही पैसे घेतले जात नाहीत — आधी उपलब्धता निश्चित करा.",
+     tabSurvey: "सर्वेक्षण",
      tabDriver: "पार्किंग हवी आहे",
      tabOwner: "जागा नोंदवा",
+     surveyHeading: "पार्किंग सर्वेक्षण",
+     surveyIntro: "थोडी प्राथमिक माहिती द्या आणि तुमच्या परिसरातील पार्किंगबद्दल 4 लहान प्रश्नांची उत्तरे द्या.",
+     surveyAreaLabel: "तुमचा परिसर / भाग",
+     surveyAreaPlaceholder: "उदा. वांद्रे, फोर्ट, अंधेरी",
+     surveyPhoneOptional: "फोन नंबर (ऐच्छिक)",
+     surveyEmailOptional: "ईमेल (ऐच्छिक)",
+     surveyQ1Label: "1) तुमच्याकडे गर्दीच्या परिसरात किंवा जवळ पार्किंगची जागा आहे का? असल्यास, ती वापरण्यासाठी उपलब्ध आहे का?",
+     surveyQ1Avail: "होय, आणि ती वापरण्यासाठी उपलब्ध आहे",
+     surveyQ1Unavail: "होय, पण ती सध्या उपलब्ध नाही",
+     surveyQ1No: "नाही, माझ्याकडे नाही",
+     surveyQ2Label: "2) तुम्हाला कधी पार्किंगची जागा न मिळण्याची किंवा तुमची गाडी बाहेर काढताना अडचणीची समस्या आली आहे का?",
+     surveyQ2Often: "होय, अनेकदा",
+     surveyQ2Sometimes: "होय, कधीकधी",
+     surveyQ2No: "नाही, क्वचितच किंवा कधीच नाही",
+     surveyQ3Label: "3) तुमच्या ठिकाणाजवळ रिकामी पार्किंग जागा शोधण्यात मदत करणारे अ‍ॅप असेल, तर तुम्ही ते वापराल का?",
+     surveyQ3Yes: "होय, नक्कीच",
+     surveyQ3Maybe: "कदाचित (दर आणि ठिकाणावर अवलंबून)",
+     surveyQ3No: "नाही",
+     surveyQ4Label: "4) एखाद्या प्रमुख (प्राइम) ठिकाणी 3 तासांसाठी तुम्ही किती पैसे देण्यास तयार असाल?",
+     surveyPayOpts: {
+      free_only: "रु. 0 (फक्त मोफत)",
+      under_50: "रु. 50 पर्यंत",
+      "50_100": "रु. 50 - रु. 100",
+      "100_150": "रु. 100 - रु. 150",
+      "150_250": "रु. 150 - रु. 250",
+      above_250: "रु. 250 पेक्षा जास्त"
+     },
+     surveyNotesLabel: "इतर काही अभिप्राय (ऐच्छिक)",
+     surveySubmitBtn: "सर्वेक्षण पाठवा",
+     surveyThankYou: "Idle Spot पार्किंग सर्वेक्षण पूर्ण केल्याबद्दल धन्यवाद. तुमचा प्रतिसाद जतन केला आहे.",
+     surveyRefNote: "तुमच्या खात्यात जतन केले · संदर्भ क्रमांक: {refId}",
+     surveyGoDriverBtn: "आता पार्किंग हवी आहे",
+     mySurveyKind: "पार्किंग सर्वेक्षण",
      switchToDriverLink: "गाडी पार्क करायची आहे? जागेची विनंती करा",
      spacesHeading: "मालकांनी नोंदवलेल्या उपलब्ध जागा",
      filterAllAreas: "सर्व परिसर",
@@ -1134,6 +1934,8 @@
      spaceRateStandard: "WhatsApp वर दर निश्चित होईल",
      viewListedBtn: "नोंदवलेल्या जागा पहा",
      ownerSpaceLiveNote: "तुमची जागा आता या साइटवर चालकांना दिसत आहे (तुमचा फोन नंबर खाजगी ठेवला आहे).",
+     cityLabel: "शहर",
+     cities: { Mumbai: "मुंबई", Pune: "पुणे" },
      driverAreaLabel: "तुम्हाला कुठे पार्किंग हवी आहे?",
      driverAreaPlaceholder: "परिसर निवडा",
      driverCustomAreaLabel: "तुम्हाला कुठे पार्किंग हवी आहे?",
@@ -1145,16 +1947,23 @@
      monthlyOnlyNote: "ऑटो आणि दुचाकीसाठी फक्त मासिक बुकिंग उपलब्ध आहे.",
      pricePerDay: "दर: रु. {amount} दररोज",
      pricePerMonth: "दर: रु. {amount} दरमहा",
+     priceUnconfirmed: "या परिसरासाठी दर अद्याप निश्चित झालेले नाहीत. तुमची विनंती पाठवा आणि आम्ही तुम्हाला WhatsApp वर दर कळवू.",
      dailyUnavailable: "या वाहनासाठी दररोजची बुकिंग उपलब्ध नाही. कृपया दरमहा निवडा.",
      startDateLabel: "सुरुवातीची तारीख",
      presetToday: "आज",
      presetTomorrow: "उद्या",
      presetMonday: "पुढचा सोमवार",
      hoursNeededLabel: "कोणत्या वेळेत हवी आहे",
+     startHourLabel: "सुरुवातीची वेळ",
+     endHourLabel: "शेवटची वेळ",
+     startHourPlaceholder: "सुरुवातीची वेळ निवडा",
+     endHourPlaceholder: "शेवटची वेळ निवडा",
      hoursNeededPlaceholder: "उदा. सकाळी 9 - संध्याकाळी 7",
      presetHoursFull: "24 तास",
      nameLabel: "नाव",
      phoneLabel: "फोन नंबर",
+     emailLabel: "पावतीसाठी ईमेल (ऐच्छिक)",
+     emailPlaceholder: "name@example.com",
      vehicleNoLabel: "वाहनाचा नंबर",
      driverConsentNote: "तुमचा फोन नंबर आणि वाहनाचा तपशील फक्त या पार्किंग विनंतीच्या समन्वयासाठी वापरला जाईल.",
      ownerConsentNote: "तुमचा फोन नंबर आणि जागेचा तपशील फक्त जागेची पडताळणी आणि समन्वयासाठी वापरला जाईल.",
@@ -1167,6 +1976,34 @@
      thankYou: "धन्यवाद. आम्ही 24 तासांत WhatsApp वर खात्री करू.",
      ownerThankYou: "धन्यवाद. कोणत्याही चालकाला जागा दाखवण्यापूर्वी आम्ही खात्रीसाठी तुम्हाला कॉल करू.",
      reloadNote: "दुसरी विनंती पाठवण्यासाठी हे पान पुन्हा लोड करा.",
+     receiptTitle: "Idle Spot पावती",
+     receiptCopyBtn: "पावती कॉपी करा",
+     receiptCopiedBtn: "कॉपी केले",
+     receiptSaveBtn: "पावती सेव्ह करा",
+     receiptEmailSentNote: "तुमच्या Google खात्यात जतन केले आणि {email} वर ईमेल पाठवले.",
+     receiptEmailNotSentNote: "तुमच्या Google खात्यात जतन केले. कृपया हा संदर्भ क्रमांक जतन करून ठेवा.",
+     receiptNoEmailNote: "तुमच्या Google खात्यात जतन केले. कृपया हा संदर्भ क्रमांक जतन करून ठेवा.",
+     receiptRowsLabels: { area: "परिसर", item: "तपशील", when: "वेळ", phone: "फोन", time: "नोंदवलेली वेळ" },
+     googleSignInPrompt: "पावत्या सेव्ह करण्यासाठी आणि विनंत्या पाहण्यासाठी Google ने साइन इन करा.",
+     authGateChecking: "साइन-इन स्थिती तपासत आहे...",
+     authGateHeading: "साइन इन आवश्यक आहे",
+     authGateDesc: "उपलब्ध पार्किंग जागा पाहण्यासाठी, जागेची विनंती करण्यासाठी किंवा तुमची जागा नोंदवण्यासाठी कृपया तुमच्या Google खात्याने साइन इन करा.",
+     googleSignInBtn: "Google ने सुरू ठेवा",
+     googleSignOutBtn: "साइन आउट",
+     signedInAs: "{name} म्हणून साइन इन",
+     myActivityBtn: "माझ्या पावत्या ({count})",
+     myActivityHideBtn: "पावत्या लपवा",
+     myActivityHeading: "माझ्या पावत्या आणि नोंदी",
+     myActivityEmpty: "या खात्यावर अद्याप कोणतीही पार्किंग विनंती किंवा जागा नोंदलेली नाही.",
+     myReqKind: "पार्किंग विनंती",
+     mySpaceKind: "नोंदवलेली जागा",
+     statusLabels: { pending: "प्रलंबित", confirmed: "निश्चित", cancelled: "रद्द", active: "सक्रिय", paused: "थांबवलेली" },
+     cancelReqBtn: "विनंती रद्द करा",
+     pauseSpaceBtn: "जागा थांबवा",
+     activateSpaceBtn: "सक्रिय करा",
+     operatorInboxHeading: "ऑपरेटर इनबॉक्स (सर्व विनंत्या आणि संपर्क)",
+     confirmBtn: "निश्चित म्हणून चिन्हांकित करा",
+     authCancelledError: "Google साइन-इन रद्द झाले किंवा पॉपअप ब्लॉक केले आहे. कृपया पॉपअप सुरू करून पुन्हा प्रयत्न करा.",
      whatsappButton: "आता WhatsApp वर तपशील पाठवा",
      ownerLink: "जवळपास तुमची जागा आहे का? येथे नोंदवा",
      ownerHeading: "तुमची जागा नोंदवा",
@@ -1179,33 +2016,51 @@
      ownerCapacityLabel: "यात किती वाहने बसू शकतात",
      ownerManagerLabel: "या जागेचे मालक किंवा व्यवस्थापक कोण आहेत",
      ownerAmountLabel: "तुम्हाला किती मासिक भाडे हवे आहे (ऐच्छिक)",
+     ownerLocationLinkLabel: "लोकेशन लिंक (ऐच्छिक)",
+     locationLinkPlaceholder: "https://maps.app.goo.gl/...",
      ownerSubmit: "जागेची माहिती पाठवा",
      ownerConfirmSentence: "तुम्ही {area} मध्ये {spaceType} देत आहात, जी {hours} मोकळी असते आणि ज्यात {vehicles} वाहने बसू शकतात. कोणत्याही चालकाला जागा दाखवण्यापूर्वी आम्ही खात्रीसाठी तुम्हाला {phone} वर कॉल करू.",
      ownerConfirmCheck: "मी खात्री देतो/देते की मला ही जागा भाड्याने देण्याचा अधिकार आहे, किंवा मी मालकासाठी तिचे व्यवस्थापन करतो/करते.",
      ownerConfirmYes: "होय, ही जागा नोंदवा",
      areas: {
-      colaba: "कुलाबा (कुलाबा कॉजवे / गेटवे ऑफ इंडिया)",
-      fort: "फोर्ट (सीएसएमटी / फ्लोरा फाउंटेन)",
-      churchgate: "चर्चगेट आणि मरीन ड्राइव्ह (मरीन ड्राइव्ह प्रोमेनेड)",
-      bandra: "वांद्रे (बँडस्टँड / लिंकिंग रोड)",
-      juhu: "जुहू (जुहू बीच)",
+      colaba: "कुलाबा कॉजवे / गेटवे ऑफ इंडिया",
+      fort: "सीएसएमटी / फ्लोरा फाउंटेन",
+      churchgate: "चर्चगेट आणि मरीन ड्राइव्ह",
+      bandra: "वांद्रे पश्चिम, बँडस्टँड / लिंकिंग रोड",
+      juhu: "जुहू बीच",
+      dadar: "दादर स्टेशन आणि शिवाजी पार्क मार्केट",
+      hadapsar: "हडपसर, मगरपट्टा रोड",
+      koregaon_park: "कोरेगाव पार्क",
+      camp: "कॅम्प, एफसी रोड / जेएम रोड",
+      wakad: "वाकड, मेट्रो स्टेशनजवळ",
+      karvenagar: "कर्वेनगर",
       other: "इतर ठिकाण"
      },
      errors: {
+      cityRequired: "कृपया एक शहर निवडा.",
       areaRequired: "कृपया एक परिसर निवडा.",
       customAreaRequired: "कृपया तुम्हाला कुठे पार्किंग हवी आहे ते लिहा.",
       ownerCustomAreaRequired: "कृपया जागा कुठे आहे ते लिहा.",
       dailyUnavailable: "या वाहनासाठी दररोजची बुकिंग उपलब्ध नाही. कृपया दरमहा निवडा.",
       dateRequired: "कृपया सुरुवातीची तारीख निवडा.",
-      hoursNeededRequired: "कृपया तुम्हाला कोणत्या वेळेत पार्किंग हवी आहे ते लिहा.",
+      hoursNeededRequired: "कृपया सुरुवातीची आणि शेवटची दोन्ही वेळ निवडा.",
+      hoursNeededSame: "शेवटची वेळ सुरुवातीच्या वेळेपेक्षा वेगळी असावी.",
       nameRequired: "कृपया तुमचे नाव लिहा.",
       phoneInvalid: "कृपया 10 अंकी फोन नंबर टाका.",
+      emailInvalid: "कृपया वैध ईमेल पत्ता टाका किंवा रिकामा सोडा.",
+      locationLinkInvalid: "कृपया वैध http/https लोकेशन लिंक टाका किंवा रिकामे सोडा.",
       vehicleNoRequired: "कृपया तुमच्या वाहनाचा नंबर लिहा.",
       spaceTypeRequired: "कृपया जागेचा प्रकार निवडा.",
       hoursRequired: "कृपया जागा कोणत्या वेळेत मोकळी असते ते लिहा.",
       capacityRequired: "कृपया यात किती वाहने बसू शकतात ते लिहा.",
       managerRequired: "कृपया या जागेचे मालक किंवा व्यवस्थापक कोण आहेत ते लिहा.",
       confirmCheckRequired: "खात्री करण्यासाठी कृपया वरील बॉक्सवर टिक करा.",
+      surveyAreaRequired: "कृपया तुमचा परिसर लिहा.",
+      surveyPhoneInvalid: "कृपया 10 अंकी फोन नंबर टाका किंवा रिकामा सोडा.",
+      surveyQ1Required: "कृपया प्रश्न 1 साठी एक पर्याय निवडा.",
+      surveyQ2Required: "कृपया प्रश्न 2 साठी एक पर्याय निवडा.",
+      surveyQ3Required: "कृपया प्रश्न 3 साठी एक पर्याय निवडा.",
+      surveyQ4Required: "कृपया प्रश्न 4 साठी एक रक्कम निवडा.",
       submitFailed: "तुमची विनंती पाठवता आली नाही. कृपया तुमचे कनेक्शन तपासा आणि पुन्हा प्रयत्न करा."
      },
      footerTranslated: "लवकरच सुरू होत आहे. दिलेले कोणतेही पैसे पूर्णपणे परत मिळण्यायोग्य आहेत."
@@ -1214,9 +2069,27 @@
 
    // 4. STATE & HELPERS
    var STORAGE_KEY = "mumbai_parking_lang";
-   var AREA_KEYS = ["colaba", "fort", "churchgate", "bandra", "juhu", "other"];
+   var CITY_KEYS = ["Mumbai", "Pune"];
+   var CITY_AREA_KEYS = {
+    Mumbai: ["colaba", "fort", "churchgate", "bandra", "juhu", "dadar", "other"],
+    Pune: ["hadapsar", "koregaon_park", "camp", "wakad", "karvenagar", "other"]
+   };
+   var ALL_AREA_KEYS = [
+    "colaba", "fort", "churchgate", "bandra", "juhu", "dadar",
+    "hadapsar", "koregaon_park", "camp", "wakad", "karvenagar",
+    "other"
+   ];
    var VEHICLE_KEYS = ["car", "taxi", "auto", "two_wheeler"];
    var SPACE_TYPE_KEYS = ["shop_front", "office", "garage", "other"];
+   var HOUR_OPTIONS = (function () {
+    var list = [];
+    for (var hr = 0; hr < 24; hr++) {
+     var period = hr < 12 ? "AM" : "PM";
+     var hour12 = hr % 12 === 0 ? 12 : hr % 12;
+     list.push(hour12 + ":00 " + period);
+    }
+    return list;
+   })();
    var currentLang = "en";
    var activeTab = "driver";
    var availableSpaces = [];
@@ -1226,8 +2099,25 @@
    var ownerConfirming = false;
    var driverSubmitted = false;
    var ownerSubmitted = false;
+   var surveySubmitted = false;
    var driverSubmitting = false;
    var ownerSubmitting = false;
+   var surveySubmitting = false;
+   var driverReceiptData = null;
+   var ownerReceiptData = null;
+   var surveyRefSaved = "";
+   var currentUser = null;
+   var authResolved = false;
+   var myRequests = [];
+   var mySpaces = [];
+   var mySurveys = [];
+   var adminInboxData = { requests: [], spaces: [], privateDetailsById: {}, surveys: [] };
+   var activityPanelOpen = false;
+   var unsubPublicSpaces = null;
+   var unsubMyRequests = null;
+   var unsubMySpaces = null;
+   var unsubMySurveys = null;
+   var unsubAdminInbox = null;
 
    function readStoredLanguage() {
     try {
@@ -1304,6 +2194,24 @@
     return /^[0-9]{10}$/.test(cleaned) ? cleaned : null;
    }
 
+   function isValidOptionalEmail(raw) {
+    var trimmed = String(raw || "").trim();
+    if (!trimmed) return true;
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(trimmed) && trimmed.length <= 160;
+   }
+
+   function isValidOptionalUrl(raw) {
+    var trimmed = String(raw || "").trim();
+    if (!trimmed) return true;
+    if (trimmed.length > 500 || !/^https?:\/\//i.test(trimmed)) return false;
+    try {
+     new URL(trimmed);
+     return true;
+    } catch (e) {
+     return false;
+    }
+   }
+
    function getCleanWhatsAppNumber() {
     if (!WHATSAPP_NUMBER || WHATSAPP_NUMBER.indexOf("[PASTE") === 0) return null;
     var digits = String(WHATSAPP_NUMBER).replace(/[^0-9]/g, "");
@@ -1312,12 +2220,50 @@
 
    // 5. DOM REFERENCES
    var langButtons = document.querySelectorAll("[data-choose-lang]");
+   var elTabSurvey = document.getElementById("tab-survey");
    var elTabDriver = document.getElementById("tab-driver");
    var elTabOwner = document.getElementById("tab-owner");
+   var elSurveySection = document.getElementById("survey-section");
    var elDriverSection = document.getElementById("driver-section");
    var elOwnerSection = document.getElementById("owner-section");
    var elSwitchToOwnerBtn = document.getElementById("switch-to-owner-btn");
    var elSwitchToDriverBtn = document.getElementById("switch-to-driver-btn");
+
+   var elSurveyForm = document.getElementById("survey-form");
+   var elSurveyName = document.getElementById("survey-name");
+   var elSurveyArea = document.getElementById("survey-area");
+   var elSurveyPhone = document.getElementById("survey-phone");
+   var elSurveyEmail = document.getElementById("survey-email");
+   var elSurveyNotes = document.getElementById("survey-notes");
+   var elSurveySubmitErr = document.getElementById("survey-submit-error");
+   var elSurveySubmitBtn = document.getElementById("survey-submit-btn");
+   var elSurveyThankYou = document.getElementById("survey-thank-you");
+   var elSurveyThankYouText = document.getElementById("survey-thank-you-text");
+   var elSurveyThankYouRef = document.getElementById("survey-thank-you-ref");
+   var elSurveyGoDriverBtn = document.getElementById("survey-go-driver-btn");
+
+   var elAuthLoadingNote = document.getElementById("auth-loading-note");
+   var elAuthGateCard = document.getElementById("auth-gate-card");
+   var elAuthGateHeading = document.getElementById("auth-gate-heading");
+   var elAuthGateDesc = document.getElementById("auth-gate-desc");
+   var elGateGoogleSignInBtn = document.getElementById("gate-google-signin-btn");
+   var elGateGoogleSignInLabel = document.getElementById("gate-google-signin-label");
+   var elGateAuthErr = document.getElementById("gate-auth-error");
+   var elAppWorkspace = document.getElementById("app-workspace");
+   var elAccountBar = document.getElementById("account-bar");
+   var elAccountTitle = document.getElementById("account-title");
+   var elAccountSub = document.getElementById("account-sub");
+   var elGoogleSignInBtn = document.getElementById("google-signin-btn");
+   var elGoogleSignInLabel = document.getElementById("google-signin-label");
+   var elToggleActivityBtn = document.getElementById("toggle-activity-btn");
+   var elGoogleSignOutBtn = document.getElementById("google-signout-btn");
+   var elAccountAuthErr = document.getElementById("account-auth-error");
+   var elMyActivityPanel = document.getElementById("my-activity-panel");
+   var elActivityHeading = document.getElementById("activity-heading");
+   var elActivityList = document.getElementById("activity-list");
+   var elOperatorInboxWrap = document.getElementById("operator-inbox-wrap");
+   var elOperatorInboxHeading = document.getElementById("operator-inbox-heading");
+   var elOperatorInboxList = document.getElementById("operator-inbox-list");
 
    var elSpacesHeading = document.getElementById("spaces-heading");
    var elSpacesAreaFilter = document.getElementById("spaces-area-filter");
@@ -1328,6 +2274,7 @@
    var elClearSelectedSpaceBtn = document.getElementById("clear-selected-space-btn");
 
    var elDriverForm = document.getElementById("driver-form");
+   var elDriverCity = document.getElementById("driver-city");
    var elDriverArea = document.getElementById("driver-area");
    var elDriverCustomAreaWrap = document.getElementById("driver-custom-area-wrap");
    var elDriverCustomArea = document.getElementById("driver-custom-area");
@@ -1339,10 +2286,12 @@
    var elMonthlyOnlyNote = document.getElementById("duration-monthly-only-note");
    var elPriceBox = document.getElementById("price-box");
    var elDriverDate = document.getElementById("driver-date");
-   var elDriverHours = document.getElementById("driver-hours");
+   var elDriverStartHour = document.getElementById("driver-start-hour");
+   var elDriverEndHour = document.getElementById("driver-end-hour");
    var elDriverName = document.getElementById("driver-name");
    var elDriverPhone = document.getElementById("driver-phone");
    var elDriverVehicleNo = document.getElementById("driver-vehicle-no");
+   var elDriverEmail = document.getElementById("driver-email");
    var elDriverConsentNote = document.getElementById("driver-consent-note");
    var elDriverSubmitErr = document.getElementById("driver-submit-error");
    var elDriverConfirmBox = document.getElementById("driver-confirm-box");
@@ -1354,12 +2303,20 @@
    var elDriverThankYou = document.getElementById("driver-thank-you");
    var elDriverThankYouText = document.getElementById("driver-thank-you-text");
    var elDriverReloadNote = document.getElementById("driver-reload-note");
+   var elDriverReceiptCard = document.getElementById("driver-receipt-card");
+   var elDriverReceiptTitle = document.getElementById("driver-receipt-title");
+   var elDriverReceiptRef = document.getElementById("driver-receipt-ref");
+   var elDriverReceiptRows = document.getElementById("driver-receipt-rows");
+   var elDriverReceiptEmailStatus = document.getElementById("driver-receipt-email-status");
+   var elDriverReceiptCopyBtn = document.getElementById("driver-receipt-copy-btn");
+   var elDriverReceiptSaveBtn = document.getElementById("driver-receipt-save-btn");
    var elDriverWaWrap = document.getElementById("driver-wa-wrap");
    var elDriverWaLink = document.getElementById("driver-wa-link");
 
    var elOwnerForm = document.getElementById("owner-form");
    var elOwnerName = document.getElementById("owner-name");
    var elOwnerPhone = document.getElementById("owner-phone");
+   var elOwnerCity = document.getElementById("owner-city");
    var elOwnerArea = document.getElementById("owner-area");
    var elOwnerCustomAreaWrap = document.getElementById("owner-custom-area-wrap");
    var elOwnerCustomArea = document.getElementById("owner-custom-area");
@@ -1368,6 +2325,8 @@
    var elOwnerCapacity = document.getElementById("owner-capacity");
    var elOwnerManager = document.getElementById("owner-manager");
    var elOwnerAmount = document.getElementById("owner-amount");
+   var elOwnerLocationLink = document.getElementById("owner-location-link");
+   var elOwnerEmail = document.getElementById("owner-email");
    var elOwnerConsentNote = document.getElementById("owner-consent-note");
    var elOwnerSubmitErr = document.getElementById("owner-submit-error");
    var elOwnerConfirmBox = document.getElementById("owner-confirm-box");
@@ -1380,36 +2339,54 @@
    var elOwnerThankYouText = document.getElementById("owner-thank-you-text");
    var elOwnerSpaceLiveNote = document.getElementById("owner-space-live-note");
    var elOwnerReloadNote = document.getElementById("owner-reload-note");
+   var elOwnerReceiptCard = document.getElementById("owner-receipt-card");
+   var elOwnerReceiptTitle = document.getElementById("owner-receipt-title");
+   var elOwnerReceiptRef = document.getElementById("owner-receipt-ref");
+   var elOwnerReceiptRows = document.getElementById("owner-receipt-rows");
+   var elOwnerReceiptEmailStatus = document.getElementById("owner-receipt-email-status");
+   var elOwnerReceiptCopyBtn = document.getElementById("owner-receipt-copy-btn");
+   var elOwnerReceiptSaveBtn = document.getElementById("owner-receipt-save-btn");
    var elOwnerViewListedBtn = document.getElementById("owner-view-listed-btn");
    var elOwnerWaLink = document.getElementById("owner-wa-link");
    var elFooterTranslated = document.getElementById("footer-translated");
 
    // 6. SHARED SPACES LOADING & RENDERING
    function setActiveMode(mode) {
-    activeTab = mode === "owner" ? "owner" : "driver";
-    if (activeTab === "owner") {
-     elTabOwner.classList.add("is-active");
-     elTabOwner.setAttribute("aria-selected", "true");
-     elTabDriver.classList.remove("is-active");
-     elTabDriver.setAttribute("aria-selected", "false");
-     elDriverSection.classList.add("hidden");
-     elOwnerSection.classList.remove("hidden");
-    } else {
-     elTabDriver.classList.add("is-active");
-     elTabDriver.setAttribute("aria-selected", "true");
-     elTabOwner.classList.remove("is-active");
-     elTabOwner.setAttribute("aria-selected", "false");
-     elOwnerSection.classList.add("hidden");
-     elDriverSection.classList.remove("hidden");
+    activeTab = mode === "owner" ? "owner" : mode === "survey" ? "survey" : "driver";
+    elTabSurvey.classList.toggle("is-active", activeTab === "survey");
+    elTabSurvey.setAttribute("aria-selected", activeTab === "survey" ? "true" : "false");
+    elTabDriver.classList.toggle("is-active", activeTab === "driver");
+    elTabDriver.setAttribute("aria-selected", activeTab === "driver" ? "true" : "false");
+    elTabOwner.classList.toggle("is-active", activeTab === "owner");
+    elTabOwner.setAttribute("aria-selected", activeTab === "owner" ? "true" : "false");
+
+    elSurveySection.classList.toggle("hidden", activeTab !== "survey");
+    elDriverSection.classList.toggle("hidden", activeTab !== "driver");
+    elOwnerSection.classList.toggle("hidden", activeTab !== "owner");
+
+    if (activeTab === "driver") {
      loadAvailableSpaces();
     }
    }
 
+   function inferCityForAreaKey(areaKey) {
+    if (CITY_AREA_KEYS.Pune.indexOf(areaKey) !== -1 && areaKey !== "other") return "Pune";
+    return "Mumbai";
+   }
+
+   function inferSpaceCity(space) {
+    if (space && (space.city === "Mumbai" || space.city === "Pune")) return space.city;
+    return inferCityForAreaKey(space ? space.area_key : "");
+   }
+
    function formatSpaceAreaLabel(space) {
-    if (space.area_key === "other") {
-     return space.custom_area || (space.area || "").replace(/^Somewhere else:\s*/i, "");
-    }
-    return STRINGS[currentLang].areas[space.area_key] || space.area;
+    var s = STRINGS[currentLang];
+    var cityKey = inferSpaceCity(space);
+    var cityLabel = (s.cities && s.cities[cityKey]) || cityKey;
+    var areaLabel = space.area_key === "other"
+     ? (space.custom_area || (space.area || "").replace(/^Somewhere else:\s*/i, ""))
+     : (s.areas[space.area_key] || space.area);
+    return cityLabel + " · " + areaLabel;
    }
 
    function formatSpaceSummary(space) {
@@ -1437,7 +2414,13 @@
    function selectListedSpace(space) {
     selectedSpace = space;
     updateSelectedSpaceBanner();
-    if (AREA_KEYS.indexOf(space.area_key) !== -1) {
+    var targetCity = inferSpaceCity(space);
+    if (elDriverCity.value !== targetCity) {
+     elDriverCity.value = targetCity;
+     populateCityAreaSelect(elDriverArea, targetCity, false);
+    }
+    var allowedAreas = CITY_AREA_KEYS[targetCity] || ALL_AREA_KEYS;
+    if (allowedAreas.indexOf(space.area_key) !== -1) {
      elDriverArea.value = space.area_key;
      if (space.area_key === "other") {
       elDriverCustomArea.value = space.custom_area || (space.area || "").replace(/^Somewhere else:\s*/i, "");
@@ -1445,9 +2428,8 @@
      updateDriverAreaVisibility();
      updateLivePrice();
     }
-    if (!elDriverHours.value.trim() && space.hours_free) {
-     elDriverHours.value = space.hours_free;
-     syncHourPresetHighlights("driver");
+    if (!elDriverStartHour.value && !elDriverEndHour.value && space.hours_free) {
+     tryPrefillDriverHoursFromText(space.hours_free);
     }
     renderAvailableSpaces();
     elDriverForm.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -1521,20 +2503,380 @@
    }
 
    function loadAvailableSpaces() {
-    fetch("/api/spaces", { headers: { "Accept": "application/json" } })
-     .then(function (resp) {
-      if (!resp.ok) throw new Error("HTTP " + resp.status);
-      return resp.json();
-     })
-     .then(function (data) {
-      spacesLoadFailed = false;
-      availableSpaces = Array.isArray(data && data.spaces) ? data.spaces : [];
-      renderAvailableSpaces();
-     })
-     .catch(function () {
-      spacesLoadFailed = true;
-      renderAvailableSpaces();
-     });
+    if (window.IdleSpotFirebase && currentUser && currentUser.emailVerified) {
+     startPublicSpacesSubscription();
+    }
+   }
+
+   function syncAuthGateUi() {
+    var s = STRINGS[currentLang];
+    elAuthLoadingNote.textContent = s.authGateChecking;
+    elAuthGateHeading.textContent = s.authGateHeading;
+    elAuthGateDesc.textContent = s.authGateDesc;
+    elGateGoogleSignInLabel.textContent = s.googleSignInBtn;
+    elGoogleSignInLabel.textContent = s.googleSignInBtn;
+    elGoogleSignOutBtn.textContent = s.googleSignOutBtn;
+
+    var isSignedInVerified = Boolean(currentUser && currentUser.emailVerified);
+    if (!authResolved) {
+     elAuthLoadingNote.classList.remove("hidden");
+     elAuthGateCard.classList.add("hidden");
+     elAccountBar.classList.add("hidden");
+     elMyActivityPanel.classList.add("hidden");
+     elAppWorkspace.classList.add("hidden");
+    } else if (!isSignedInVerified) {
+     elAuthLoadingNote.classList.add("hidden");
+     elAuthGateCard.classList.remove("hidden");
+     elAccountBar.classList.add("hidden");
+     elMyActivityPanel.classList.add("hidden");
+     elAppWorkspace.classList.add("hidden");
+     activityPanelOpen = false;
+    } else {
+     elAuthLoadingNote.classList.add("hidden");
+     elAuthGateCard.classList.add("hidden");
+     elAccountBar.classList.remove("hidden");
+     elAppWorkspace.classList.remove("hidden");
+    }
+   }
+
+   function renderAccountBar() {
+    syncAuthGateUi();
+    var s = STRINGS[currentLang];
+    if (currentUser && currentUser.emailVerified) {
+     elAccountTitle.textContent = s.signedInAs.replace("{name}", currentUser.displayName || currentUser.email);
+     elAccountSub.textContent = currentUser.email;
+     elAccountSub.classList.remove("hidden");
+     elGoogleSignInBtn.classList.add("hidden");
+     elGoogleSignOutBtn.classList.remove("hidden");
+     var totalCount = myRequests.length + mySpaces.length + mySurveys.length;
+     elToggleActivityBtn.textContent = activityPanelOpen
+      ? s.myActivityHideBtn
+      : s.myActivityBtn.replace("{count}", String(totalCount));
+     elToggleActivityBtn.classList.remove("hidden");
+    } else {
+     elAccountTitle.textContent = s.googleSignInPrompt;
+     elAccountSub.textContent = "";
+     elAccountSub.classList.add("hidden");
+     elGoogleSignInBtn.classList.remove("hidden");
+     elGoogleSignOutBtn.classList.add("hidden");
+     elToggleActivityBtn.classList.add("hidden");
+     activityPanelOpen = false;
+    }
+    renderActivityPanel();
+   }
+
+   function renderActivityPanel() {
+    var s = STRINGS[currentLang];
+    if (!currentUser || !activityPanelOpen) {
+     elMyActivityPanel.classList.add("hidden");
+     return;
+    }
+    elMyActivityPanel.classList.remove("hidden");
+    elActivityHeading.textContent = s.myActivityHeading;
+    elActivityList.innerHTML = "";
+
+    var fb = window.IdleSpotFirebase;
+    if (myRequests.length === 0 && mySpaces.length === 0 && mySurveys.length === 0) {
+     var emptyEl = document.createElement("div");
+     emptyEl.className = "spaces-empty";
+     emptyEl.textContent = s.myActivityEmpty;
+     elActivityList.appendChild(emptyEl);
+    }
+
+    for (var i = 0; i < myRequests.length; i++) {
+     (function (req) {
+      var card = document.createElement("div");
+      card.className = "activity-card";
+      var head = document.createElement("div");
+      head.className = "activity-card-head";
+      var refSpan = document.createElement("span");
+      refSpan.className = "activity-ref";
+      refSpan.textContent = s.myReqKind + " · " + req.ref_id;
+      var statusSpan = document.createElement("span");
+      statusSpan.className = "activity-status";
+      statusSpan.textContent = (s.statusLabels && s.statusLabels[req.status]) || req.status;
+      head.appendChild(refSpan);
+      head.appendChild(statusSpan);
+
+      var meta = document.createElement("p");
+      meta.className = "activity-meta";
+      var vLabel = s.vehicles[req.vehicle_type] || req.vehicle_type;
+      meta.textContent = (req.city ? (req.city + " · ") : "") + req.area + " · " + vLabel + " (" + req.vehicle_number + ") · " + req.start_date + " (" + req.hours_needed + ")";
+
+      var actions = document.createElement("div");
+      actions.className = "activity-card-actions";
+      var copyBtn = document.createElement("button");
+      copyBtn.type = "button";
+      copyBtn.className = "small-btn";
+      copyBtn.textContent = s.receiptCopyBtn;
+      copyBtn.addEventListener("click", function () {
+       var text = buildReceiptPlainText({
+        refId: req.ref_id,
+        area: req.area,
+        item: vLabel + " (" + req.vehicle_number + ")",
+        when: req.start_date + " · " + req.hours_needed,
+        phone: req.phone,
+        time: req.commitment_time,
+        summary: req.confirmation_text
+       });
+       if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () {
+         copyBtn.textContent = s.receiptCopiedBtn;
+         setTimeout(function () { copyBtn.textContent = s.receiptCopyBtn; }, 1600);
+        }).catch(function () {});
+       }
+      });
+      actions.appendChild(copyBtn);
+
+      if (fb && req.status !== "cancelled") {
+       var cancelBtn = document.createElement("button");
+       cancelBtn.type = "button";
+       cancelBtn.className = "small-btn is-danger";
+       cancelBtn.textContent = s.cancelReqBtn;
+       cancelBtn.addEventListener("click", function () {
+        cancelBtn.disabled = true;
+        fb.cancelParkingRequest(req.id).catch(function () {
+         cancelBtn.disabled = false;
+        });
+       });
+       actions.appendChild(cancelBtn);
+      }
+
+      card.appendChild(head);
+      card.appendChild(meta);
+      card.appendChild(actions);
+      elActivityList.appendChild(card);
+     })(myRequests[i]);
+    }
+
+    for (var j = 0; j < mySpaces.length; j++) {
+     (function (spc) {
+      var card = document.createElement("div");
+      card.className = "activity-card";
+      var head = document.createElement("div");
+      head.className = "activity-card-head";
+      var refSpan = document.createElement("span");
+      refSpan.className = "activity-ref";
+      refSpan.textContent = s.mySpaceKind + " · " + spc.ref_id;
+      var statusSpan = document.createElement("span");
+      statusSpan.className = "activity-status";
+      statusSpan.textContent = (s.statusLabels && s.statusLabels[spc.status]) || spc.status;
+      head.appendChild(refSpan);
+      head.appendChild(statusSpan);
+
+      var info = formatSpaceSummary(spc);
+      var meta = document.createElement("p");
+      meta.className = "activity-meta";
+      meta.textContent = info.spaceTypeLabel + " — " + info.areaLabel + " · " + spc.hours_free;
+
+      var actions = document.createElement("div");
+      actions.className = "activity-card-actions";
+      if (fb) {
+       var toggleBtn = document.createElement("button");
+       toggleBtn.type = "button";
+       toggleBtn.className = "small-btn";
+       var nextSt = spc.status === "active" ? "paused" : "active";
+       toggleBtn.textContent = spc.status === "active" ? s.pauseSpaceBtn : s.activateSpaceBtn;
+       toggleBtn.addEventListener("click", function () {
+        toggleBtn.disabled = true;
+        fb.toggleSpaceStatus(spc.id, nextSt).catch(function () {
+         toggleBtn.disabled = false;
+        });
+       });
+       actions.appendChild(toggleBtn);
+      }
+
+      card.appendChild(head);
+      card.appendChild(meta);
+      card.appendChild(actions);
+      elActivityList.appendChild(card);
+     })(mySpaces[j]);
+    }
+
+    for (var m = 0; m < mySurveys.length; m++) {
+     (function (srv) {
+      var card = document.createElement("div");
+      card.className = "activity-card";
+      var head = document.createElement("div");
+      head.className = "activity-card-head";
+      var refSpan = document.createElement("span");
+      refSpan.className = "activity-ref";
+      refSpan.textContent = s.mySurveyKind + " · " + srv.ref_id;
+      head.appendChild(refSpan);
+      var meta = document.createElement("p");
+      meta.className = "activity-meta";
+      var payText = (s.surveyPayOpts && s.surveyPayOpts[srv.willing_to_pay_3hrs]) || srv.willing_to_pay_3hrs;
+      meta.textContent = srv.area + " · App: " + srv.would_use_app + " · 3h: " + payText;
+      card.appendChild(head);
+      card.appendChild(meta);
+      elActivityList.appendChild(card);
+     })(mySurveys[m]);
+    }
+
+    if (currentUser.isAdmin) {
+     elOperatorInboxWrap.classList.remove("hidden");
+     elOperatorInboxHeading.textContent = s.operatorInboxHeading;
+     elOperatorInboxList.innerHTML = "";
+     var allReqs = adminInboxData.requests || [];
+     var allSpaces = adminInboxData.spaces || [];
+     var allSurveys = adminInboxData.surveys || [];
+     var detailsMap = adminInboxData.privateDetailsById || {};
+
+     for (var r = 0; r < allReqs.length; r++) {
+      (function (req) {
+       var card = document.createElement("div");
+       card.className = "activity-card";
+       var head = document.createElement("div");
+       head.className = "activity-card-head";
+       var refSpan = document.createElement("span");
+       refSpan.className = "activity-ref";
+       refSpan.textContent = req.ref_id + " · " + req.name + " (" + req.phone + ")";
+       var stSpan = document.createElement("span");
+       stSpan.className = "activity-status";
+       stSpan.textContent = (s.statusLabels && s.statusLabels[req.status]) || req.status;
+       head.appendChild(refSpan);
+       head.appendChild(stSpan);
+
+       var meta = document.createElement("p");
+       meta.className = "activity-meta";
+       meta.textContent = (req.city ? (req.city + " · ") : "") + req.area + " · " + req.vehicle_type + " (" + req.vehicle_number + ") · " + req.start_date + " · " + req.hours_needed + (req.email ? (" · " + req.email) : "");
+
+       var actions = document.createElement("div");
+       actions.className = "activity-card-actions";
+       if (fb && req.status === "pending") {
+        var confirmBtn = document.createElement("button");
+        confirmBtn.type = "button";
+        confirmBtn.className = "small-btn is-primary";
+        confirmBtn.textContent = s.confirmBtn;
+        confirmBtn.addEventListener("click", function () {
+         confirmBtn.disabled = true;
+         fb.adminSetRequestStatus(req.id, "confirmed").catch(function () {
+          confirmBtn.disabled = false;
+         });
+        });
+        actions.appendChild(confirmBtn);
+       }
+       card.appendChild(head);
+       card.appendChild(meta);
+       if (actions.children.length > 0) card.appendChild(actions);
+       elOperatorInboxList.appendChild(card);
+      })(allReqs[r]);
+     }
+
+     for (var k = 0; k < allSpaces.length; k++) {
+      (function (spc) {
+       var priv = detailsMap[spc.id];
+       var card = document.createElement("div");
+       card.className = "activity-card";
+       var head = document.createElement("div");
+       head.className = "activity-card-head";
+       var refSpan = document.createElement("span");
+       refSpan.className = "activity-ref";
+       refSpan.textContent = spc.ref_id + (priv ? (" · " + priv.owner_name + " (" + priv.phone + ")") : "");
+       var stSpan = document.createElement("span");
+       stSpan.className = "activity-status";
+       stSpan.textContent = (s.statusLabels && s.statusLabels[spc.status]) || spc.status;
+       head.appendChild(refSpan);
+       head.appendChild(stSpan);
+
+       var meta = document.createElement("p");
+       meta.className = "activity-meta";
+       meta.textContent = (spc.city ? (spc.city + " · ") : "") + spc.area + " · " + spc.space_type + " · " + spc.hours_free + (priv ? (" · Mgr: " + priv.property_owner_or_manager + (priv.email ? (" · " + priv.email) : "") + (priv.location_link ? (" · Map: " + priv.location_link) : "")) : "");
+       card.appendChild(head);
+       card.appendChild(meta);
+       elOperatorInboxList.appendChild(card);
+      })(allSpaces[k]);
+     }
+
+     for (var sv = 0; sv < allSurveys.length; sv++) {
+      (function (srv) {
+       var card = document.createElement("div");
+       card.className = "activity-card";
+       var head = document.createElement("div");
+       head.className = "activity-card-head";
+       var refSpan = document.createElement("span");
+       refSpan.className = "activity-ref";
+       refSpan.textContent = srv.ref_id + " · " + srv.name + (srv.phone ? (" (" + srv.phone + ")") : "");
+       var stSpan = document.createElement("span");
+       stSpan.className = "activity-status";
+       stSpan.textContent = s.mySurveyKind;
+       head.appendChild(refSpan);
+       head.appendChild(stSpan);
+
+       var meta = document.createElement("p");
+       meta.className = "activity-meta";
+       var payTxt = (s.surveyPayOpts && s.surveyPayOpts[srv.willing_to_pay_3hrs]) || srv.willing_to_pay_3hrs;
+       meta.textContent = srv.area + " · Spot: " + srv.owns_spot_status + " · Problem: " + srv.faced_parking_problem + " · App: " + srv.would_use_app + " · 3h: " + payTxt + (srv.email ? (" · " + srv.email) : "") + (srv.additional_notes ? (" · " + srv.additional_notes) : "");
+       card.appendChild(head);
+       card.appendChild(meta);
+       elOperatorInboxList.appendChild(card);
+      })(allSurveys[sv]);
+     }
+    } else {
+     elOperatorInboxWrap.classList.add("hidden");
+    }
+   }
+
+   function populateHourSelect(selectEl, placeholderText) {
+    var currentVal = selectEl.value;
+    selectEl.innerHTML = "";
+    var ph = document.createElement("option");
+    ph.value = "";
+    ph.textContent = placeholderText;
+    selectEl.appendChild(ph);
+    for (var i = 0; i < HOUR_OPTIONS.length; i++) {
+     var opt = document.createElement("option");
+     opt.value = HOUR_OPTIONS[i];
+     opt.textContent = HOUR_OPTIONS[i];
+     selectEl.appendChild(opt);
+    }
+    if (currentVal && HOUR_OPTIONS.indexOf(currentVal) !== -1) {
+     selectEl.value = currentVal;
+    }
+   }
+
+   function normalizeHourToken(token) {
+    var m = String(token || "").trim().match(/^(\d{1,2})(?::00)?\s*(am|pm)$/i);
+    if (!m) return "";
+    var h = parseInt(m[1], 10);
+    if (h < 1 || h > 12) return "";
+    return h + ":00 " + m[2].toUpperCase();
+   }
+
+   function tryPrefillDriverHoursFromText(text) {
+    var parts = String(text || "").split(/\s*[-–to]+\s*/i);
+    if (parts.length !== 2) return;
+    var sHour = normalizeHourToken(parts[0]);
+    var eHour = normalizeHourToken(parts[1]);
+    if (sHour && HOUR_OPTIONS.indexOf(sHour) !== -1) elDriverStartHour.value = sHour;
+    if (eHour && HOUR_OPTIONS.indexOf(eHour) !== -1) elDriverEndHour.value = eHour;
+   }
+
+   function getDriverHoursRange() {
+    if (!elDriverStartHour.value || !elDriverEndHour.value) return "";
+    return elDriverStartHour.value + " - " + elDriverEndHour.value;
+   }
+
+   function populateCityAreaSelect(selectEl, cityKey, preserveValue) {
+    var s = STRINGS[currentLang];
+    var keys = CITY_AREA_KEYS[cityKey] || CITY_AREA_KEYS.Mumbai;
+    populateSelectOptions(selectEl, keys, s.areas, s.driverAreaPlaceholder, preserveValue);
+   }
+
+   function populateSpacesFilterSelect() {
+    var s = STRINGS[currentLang];
+    var labelsMap = {};
+    for (var i = 0; i < ALL_AREA_KEYS.length; i++) {
+     var key = ALL_AREA_KEYS[i];
+     if (key === "other") {
+      labelsMap[key] = s.areas[key];
+     } else {
+      var cityKey = inferCityForAreaKey(key);
+      var cityLabel = (s.cities && s.cities[cityKey]) || cityKey;
+      labelsMap[key] = cityLabel + " — " + s.areas[key];
+     }
+    }
+    populateSelectOptions(elSpacesAreaFilter, ALL_AREA_KEYS, labelsMap, s.filterAllAreas, true);
    }
 
    function populateSelectOptions(selectEl, keys, labelsMap, placeholderText, preserveValue) {
@@ -1622,9 +2964,9 @@
    }
 
    function syncHourPresetHighlights(target) {
-    var inputEl = target === "owner" ? elOwnerHours : elDriverHours;
-    var val = inputEl.value.trim();
-    var btns = document.querySelectorAll('[data-hour-target="' + target + '"]');
+    if (target !== "owner") return;
+    var val = elOwnerHours.value.trim();
+    var btns = document.querySelectorAll('[data-hour-target="owner"]');
     for (var i = 0; i < btns.length; i++) {
      btns[i].classList.toggle("is-active", Boolean(val && val === btns[i].getAttribute("data-hour-value")));
     }
@@ -1654,8 +2996,19 @@
     elPriceBox.appendChild(row);
    }
 
+   function getQuotedPriceForSelection(cityKey, areaKey, vehicleKey, duration) {
+    var group = getVehicleGroup(vehicleKey);
+    var cityPrices = AREAS_AND_PRICES[cityKey];
+    if (!cityPrices || !areaKey || areaKey === "other") return null;
+    var areaPrices = cityPrices[areaKey];
+    if (!areaPrices || !areaPrices[group]) return null;
+    var amount = areaPrices[group][duration];
+    return (amount === null || amount === undefined) ? null : amount;
+   }
+
    function updateLivePrice() {
     var s = STRINGS[currentLang];
+    var cityKey = elDriverCity.value || "Mumbai";
     var areaKey = elDriverArea.value;
     var duration = getSelectedDuration();
     var group = getVehicleGroup(elDriverVehicle.value);
@@ -1667,21 +3020,14 @@
      elPriceBox.classList.remove("hidden");
      return;
     }
-    if (!areaKey || areaKey === "other") {
+    if (!cityKey || !areaKey) {
      elPriceBox.textContent = "";
      elPriceBox.classList.add("hidden");
      return;
     }
-    var areaPrices = AREAS_AND_PRICES[areaKey];
-    if (!areaPrices || !areaPrices[group]) {
-     elPriceBox.textContent = "";
-     elPriceBox.classList.add("hidden");
-     return;
-    }
-    var amount = areaPrices[group][duration];
+    var amount = getQuotedPriceForSelection(cityKey, areaKey, elDriverVehicle.value, duration);
     if (amount === null || amount === undefined) {
-     elPriceBox.textContent = s.dailyUnavailable;
-     elPriceBox.classList.add("is-warning");
+     elPriceBox.textContent = s.priceUnconfirmed;
      elPriceBox.classList.remove("hidden");
      return;
     }
@@ -1710,21 +3056,60 @@
     document.getElementById("trust-2").textContent = s.trust2;
     document.getElementById("trust-3").textContent = s.trust3;
 
+    elTabSurvey.textContent = s.tabSurvey;
     elTabDriver.textContent = s.tabDriver;
     elTabOwner.textContent = s.tabOwner;
     elSwitchToOwnerBtn.textContent = s.ownerLink;
     elSwitchToDriverBtn.textContent = s.switchToDriverLink;
 
+    document.getElementById("survey-heading").textContent = s.surveyHeading;
+    document.getElementById("survey-intro").textContent = s.surveyIntro;
+    document.getElementById("lbl-survey-name").textContent = s.nameLabel;
+    document.getElementById("lbl-survey-area").textContent = s.surveyAreaLabel;
+    elSurveyArea.setAttribute("placeholder", s.surveyAreaPlaceholder);
+    document.getElementById("lbl-survey-phone").textContent = s.surveyPhoneOptional;
+    document.getElementById("lbl-survey-email").textContent = s.surveyEmailOptional;
+    elSurveyEmail.setAttribute("placeholder", s.emailPlaceholder);
+    document.getElementById("lbl-survey-q1").textContent = s.surveyQ1Label;
+    document.getElementById("txt-srv-q1-avail").textContent = s.surveyQ1Avail;
+    document.getElementById("txt-srv-q1-unavail").textContent = s.surveyQ1Unavail;
+    document.getElementById("txt-srv-q1-no").textContent = s.surveyQ1No;
+    document.getElementById("lbl-survey-q2").textContent = s.surveyQ2Label;
+    document.getElementById("txt-srv-q2-often").textContent = s.surveyQ2Often;
+    document.getElementById("txt-srv-q2-sometimes").textContent = s.surveyQ2Sometimes;
+    document.getElementById("txt-srv-q2-no").textContent = s.surveyQ2No;
+    document.getElementById("lbl-survey-q3").textContent = s.surveyQ3Label;
+    document.getElementById("txt-srv-q3-yes").textContent = s.surveyQ3Yes;
+    document.getElementById("txt-srv-q3-maybe").textContent = s.surveyQ3Maybe;
+    document.getElementById("txt-srv-q3-no").textContent = s.surveyQ3No;
+    document.getElementById("lbl-survey-q4").textContent = s.surveyQ4Label;
+    document.getElementById("txt-srv-q4-free").textContent = s.surveyPayOpts.free_only;
+    document.getElementById("txt-srv-q4-u50").textContent = s.surveyPayOpts.under_50;
+    document.getElementById("txt-srv-q4-50-100").textContent = s.surveyPayOpts["50_100"];
+    document.getElementById("txt-srv-q4-100-150").textContent = s.surveyPayOpts["100_150"];
+    document.getElementById("txt-srv-q4-150-250").textContent = s.surveyPayOpts["150_250"];
+    document.getElementById("txt-srv-q4-a250").textContent = s.surveyPayOpts.above_250;
+    document.getElementById("lbl-survey-notes").textContent = s.surveyNotesLabel;
+    elSurveySubmitBtn.textContent = surveySubmitting ? s.submitting : s.surveySubmitBtn;
+    elSurveyThankYouText.textContent = s.surveyThankYou;
+    if (surveySubmitted && surveyRefSaved) {
+     elSurveyThankYouRef.textContent = s.surveyRefNote.replace("{refId}", surveyRefSaved);
+    }
+    elSurveyGoDriverBtn.textContent = s.surveyGoDriverBtn;
+
     elSpacesHeading.textContent = s.spacesHeading;
-    populateSelectOptions(elSpacesAreaFilter, AREA_KEYS, s.areas, s.filterAllAreas, true);
+    populateSpacesFilterSelect();
     if (!elSpacesAreaFilter.value) elSpacesAreaFilter.value = "all";
     elFallbackFormHeading.textContent = s.fallbackFormHeading;
     elClearSelectedSpaceBtn.textContent = s.clearBtn;
     updateSelectedSpaceBanner();
     renderAvailableSpaces();
 
+    document.getElementById("lbl-driver-city").textContent = s.cityLabel;
+    populateSelectOptions(elDriverCity, CITY_KEYS, s.cities, null, true);
+    if (!elDriverCity.value) elDriverCity.value = "Mumbai";
     document.getElementById("lbl-driver-area").textContent = s.driverAreaLabel;
-    populateSelectOptions(elDriverArea, AREA_KEYS, s.areas, s.driverAreaPlaceholder, true);
+    populateCityAreaSelect(elDriverArea, elDriverCity.value, true);
     document.getElementById("lbl-driver-custom-area").textContent = s.driverCustomAreaLabel;
     document.getElementById("lbl-driver-vehicle").textContent = s.vehicleLabel;
     populateSelectOptions(elDriverVehicle, VEHICLE_KEYS, s.vehicles, null, true);
@@ -1736,11 +3121,15 @@
     document.getElementById("preset-date-tomorrow").textContent = s.presetTomorrow;
     document.getElementById("preset-date-monday").textContent = s.presetMonday;
     document.getElementById("lbl-driver-hours").textContent = s.hoursNeededLabel;
-    elDriverHours.setAttribute("placeholder", s.hoursNeededPlaceholder);
-    document.getElementById("preset-d-hr-3").textContent = s.presetHoursFull;
+    document.getElementById("lbl-driver-start-hour").textContent = s.startHourLabel;
+    document.getElementById("lbl-driver-end-hour").textContent = s.endHourLabel;
+    populateHourSelect(elDriverStartHour, s.startHourPlaceholder);
+    populateHourSelect(elDriverEndHour, s.endHourPlaceholder);
     document.getElementById("lbl-driver-name").textContent = s.nameLabel;
     document.getElementById("lbl-driver-phone").textContent = s.phoneLabel;
     document.getElementById("lbl-driver-vehicle-no").textContent = s.vehicleNoLabel;
+    document.getElementById("lbl-driver-email").textContent = s.emailLabel;
+    elDriverEmail.setAttribute("placeholder", s.emailPlaceholder);
     elDriverConsentNote.textContent = s.driverConsentNote;
     elOwnerConsentNote.textContent = s.ownerConsentNote;
     document.getElementById("driver-submit-btn").textContent = s.driverSubmit;
@@ -1752,13 +3141,17 @@
     if (driverSubmitted) {
      elDriverThankYouText.textContent = s.thankYou;
      elDriverReloadNote.textContent = s.reloadNote;
+     if (driverReceiptData) renderReceiptCard("driver");
     }
 
     document.getElementById("owner-heading").textContent = s.ownerHeading;
     document.getElementById("lbl-owner-name").textContent = s.nameLabel;
     document.getElementById("lbl-owner-phone").textContent = s.phoneLabel;
+    document.getElementById("lbl-owner-city").textContent = s.cityLabel;
+    populateSelectOptions(elOwnerCity, CITY_KEYS, s.cities, null, true);
+    if (!elOwnerCity.value) elOwnerCity.value = "Mumbai";
     document.getElementById("lbl-owner-area").textContent = s.ownerAreaLabel;
-    populateSelectOptions(elOwnerArea, AREA_KEYS, s.areas, s.driverAreaPlaceholder, true);
+    populateCityAreaSelect(elOwnerArea, elOwnerCity.value, true);
     document.getElementById("lbl-owner-custom-area").textContent = s.ownerCustomAreaLabel;
     document.getElementById("lbl-owner-space-type").textContent = s.ownerSpaceTypeLabel;
     populateSelectOptions(elOwnerSpaceType, SPACE_TYPE_KEYS, s.spaceTypes, s.ownerSpaceTypePlaceholder, true);
@@ -1768,6 +3161,10 @@
     document.getElementById("lbl-owner-capacity").textContent = s.ownerCapacityLabel;
     document.getElementById("lbl-owner-manager").textContent = s.ownerManagerLabel;
     document.getElementById("lbl-owner-amount").textContent = s.ownerAmountLabel;
+    document.getElementById("lbl-owner-location-link").textContent = s.ownerLocationLinkLabel;
+    elOwnerLocationLink.setAttribute("placeholder", s.locationLinkPlaceholder);
+    document.getElementById("lbl-owner-email").textContent = s.emailLabel;
+    elOwnerEmail.setAttribute("placeholder", s.emailPlaceholder);
     document.getElementById("owner-submit-btn").textContent = s.ownerSubmit;
     document.getElementById("lbl-owner-confirm-check").textContent = s.ownerConfirmCheck;
     elOwnerConfirmYesBtn.textContent = ownerSubmitting ? s.submitting : s.ownerConfirmYes;
@@ -1779,6 +3176,7 @@
      elOwnerThankYouText.textContent = s.ownerThankYou;
      elOwnerSpaceLiveNote.textContent = s.ownerSpaceLiveNote;
      elOwnerReloadNote.textContent = s.reloadNote;
+     if (ownerReceiptData) renderReceiptCard("owner");
     }
 
     if (s.footerTranslated) {
@@ -1793,16 +3191,20 @@
     updateDriverAreaVisibility();
     updateOwnerAreaVisibility();
     updateLivePrice();
+    renderAccountBar();
     clearAllInlineErrors();
    }
 
-   function getDisplayAreaLabel(areaKey, customText) {
-    return areaKey === "other" ? customText.trim() : (STRINGS[currentLang].areas[areaKey] || areaKey);
+   function getDisplayAreaLabel(cityKey, areaKey, customText) {
+    var s = STRINGS[currentLang];
+    var cityLabel = (s.cities && s.cities[cityKey]) || cityKey || "";
+    var areaLabel = areaKey === "other" ? customText.trim() : (s.areas[areaKey] || areaKey);
+    return cityLabel ? (cityLabel + " — " + areaLabel) : areaLabel;
    }
 
    function buildDriverConfirmSentence() {
     var s = STRINGS[currentLang];
-    var areaLabel = getDisplayAreaLabel(elDriverArea.value, elDriverCustomArea.value);
+    var areaLabel = getDisplayAreaLabel(elDriverCity.value, elDriverArea.value, elDriverCustomArea.value);
     var vehicleLabel = s.vehicles[elDriverVehicle.value] || elDriverVehicle.value;
     var durLabel = getSelectedDuration() === "day" ? s.durationDay : s.durationMonth;
     if (currentLang === "en") durLabel = durLabel.toLowerCase();
@@ -1811,7 +3213,7 @@
      .replace("{area}", areaLabel)
      .replace("{duration}", durLabel)
      .replace("{date}", elDriverDate.value)
-     .replace("{hours}", elDriverHours.value.trim())
+     .replace("{hours}", getDriverHoursRange())
      .replace("{name}", elDriverName.value.trim())
      .replace("{phone}", cleanTenDigitPhone(elDriverPhone.value) || elDriverPhone.value.trim());
     if (currentLang === "en" && elDriverVehicle.value === "auto") {
@@ -1822,7 +3224,7 @@
 
    function buildOwnerConfirmSentence() {
     var s = STRINGS[currentLang];
-    var areaLabel = getDisplayAreaLabel(elOwnerArea.value, elOwnerCustomArea.value);
+    var areaLabel = getDisplayAreaLabel(elOwnerCity.value, elOwnerArea.value, elOwnerCustomArea.value);
     var spaceLabel = s.spaceTypes[elOwnerSpaceType.value] || elOwnerSpaceType.value;
     var capNum = parseInt(elOwnerCapacity.value, 10);
     if (currentLang === "en") spaceLabel = spaceLabel.toLowerCase();
@@ -1848,6 +3250,71 @@
     (isWrapper ? wrapOrLinkEl : linkEl).classList.remove("hidden");
    }
 
+   function renderReceiptCard(kind) {
+    var data = kind === "owner" ? ownerReceiptData : driverReceiptData;
+    if (!data) return;
+    var s = STRINGS[currentLang];
+    var cardEl = kind === "owner" ? elOwnerReceiptCard : elDriverReceiptCard;
+    var titleEl = kind === "owner" ? elOwnerReceiptTitle : elDriverReceiptTitle;
+    var refEl = kind === "owner" ? elOwnerReceiptRef : elDriverReceiptRef;
+    var rowsEl = kind === "owner" ? elOwnerReceiptRows : elDriverReceiptRows;
+    var statusEl = kind === "owner" ? elOwnerReceiptEmailStatus : elDriverReceiptEmailStatus;
+    var copyBtn = kind === "owner" ? elOwnerReceiptCopyBtn : elDriverReceiptCopyBtn;
+    var saveBtn = kind === "owner" ? elOwnerReceiptSaveBtn : elDriverReceiptSaveBtn;
+
+    titleEl.textContent = s.receiptTitle;
+    refEl.textContent = data.refId;
+    rowsEl.innerHTML = "";
+    var pairs = [
+     [s.receiptRowsLabels.area, data.area],
+     [s.receiptRowsLabels.item, data.item],
+     [s.receiptRowsLabels.when, data.when],
+     [s.receiptRowsLabels.phone, data.phone],
+     [s.receiptRowsLabels.time, data.time]
+    ];
+    for (var i = 0; i < pairs.length; i++) {
+     var li = document.createElement("li");
+     li.className = "receipt-row";
+     var kSpan = document.createElement("span");
+     kSpan.className = "receipt-key";
+     kSpan.textContent = pairs[i][0];
+     var vSpan = document.createElement("span");
+     vSpan.className = "receipt-val";
+     vSpan.textContent = pairs[i][1];
+     li.appendChild(kSpan);
+     li.appendChild(vSpan);
+     rowsEl.appendChild(li);
+    }
+
+    if (data.email && data.emailSent) {
+     statusEl.textContent = s.receiptEmailSentNote.replace("{email}", data.email);
+    } else if (data.email) {
+     statusEl.textContent = s.receiptEmailNotSentNote;
+    } else {
+     statusEl.textContent = s.receiptNoEmailNote;
+    }
+
+    copyBtn.textContent = s.receiptCopyBtn;
+    saveBtn.textContent = s.receiptSaveBtn;
+    cardEl.classList.remove("hidden");
+   }
+
+   function buildReceiptPlainText(data) {
+    return [
+     "IDLE SPOT — CONFIRMATION RECEIPT",
+     "Reference ID: " + data.refId,
+     "Area: " + data.area,
+     "Details: " + data.item,
+     "Schedule: " + data.when,
+     "Phone: " + data.phone,
+     "Submitted: " + data.time,
+     "",
+     data.summary,
+     "",
+     "Launching soon. Any money paid is fully refundable."
+    ].join("\n");
+   }
+
    // 7. VALIDATION & ERROR HELPERS
    function setFieldError(id, message) {
     var el = document.getElementById(id);
@@ -1863,13 +3330,16 @@
 
    function clearAllInlineErrors() {
     var ids = [
-     "err-driver-area", "err-driver-custom-area", "err-driver-vehicle", "err-driver-duration",
+     "err-survey-name", "err-survey-area", "err-survey-phone", "err-survey-email",
+     "err-survey-q1", "err-survey-q2", "err-survey-q3", "err-survey-q4",
+     "err-driver-city", "err-driver-area", "err-driver-custom-area", "err-driver-vehicle", "err-driver-duration",
      "err-driver-date", "err-driver-hours", "err-driver-name", "err-driver-phone",
-     "err-driver-vehicle-no", "err-driver-confirm-check", "err-owner-name", "err-owner-phone",
-     "err-owner-area", "err-owner-custom-area", "err-owner-space-type", "err-owner-hours",
-     "err-owner-capacity", "err-owner-manager", "err-owner-confirm-check"
+     "err-driver-vehicle-no", "err-driver-email", "err-driver-confirm-check", "err-owner-name", "err-owner-phone",
+     "err-owner-city", "err-owner-area", "err-owner-custom-area", "err-owner-space-type", "err-owner-hours",
+     "err-owner-capacity", "err-owner-manager", "err-owner-location-link", "err-owner-email", "err-owner-confirm-check"
     ];
     for (var i = 0; i < ids.length; i++) setFieldError(ids[i], "");
+    elSurveySubmitErr.classList.add("hidden"); elSurveySubmitErr.textContent = "";
     elDriverSubmitErr.classList.add("hidden"); elDriverSubmitErr.textContent = "";
     elDriverConfirmSubmitErr.classList.add("hidden"); elDriverConfirmSubmitErr.textContent = "";
     elOwnerSubmitErr.classList.add("hidden"); elOwnerSubmitErr.textContent = "";
@@ -1885,6 +3355,7 @@
      valid = false;
      if (!firstBadEl && inputEl) firstBadEl = inputEl;
     }
+    setFieldError("err-driver-city", "");
     setFieldError("err-driver-area", "");
     setFieldError("err-driver-custom-area", "");
     setFieldError("err-driver-duration", "");
@@ -1893,17 +3364,25 @@
     setFieldError("err-driver-name", "");
     setFieldError("err-driver-phone", "");
     setFieldError("err-driver-vehicle-no", "");
+    setFieldError("err-driver-email", "");
     elDriverSubmitErr.classList.add("hidden");
 
+    var cityKey = elDriverCity.value;
     var areaKey = elDriverArea.value;
+    if (!cityKey || CITY_KEYS.indexOf(cityKey) === -1) fail("err-driver-city", e.cityRequired, elDriverCity);
     if (!areaKey) fail("err-driver-area", e.areaRequired, elDriverArea);
     if (areaKey === "other" && !elDriverCustomArea.value.trim()) fail("err-driver-custom-area", e.customAreaRequired, elDriverCustomArea);
     if (getVehicleGroup(elDriverVehicle.value) === "two_auto" && getSelectedDuration() === "day") fail("err-driver-duration", e.dailyUnavailable, elDurMonth);
     if (!elDriverDate.value) fail("err-driver-date", e.dateRequired, elDriverDate);
-    if (!elDriverHours.value.trim()) fail("err-driver-hours", e.hoursNeededRequired, elDriverHours);
+    if (!elDriverStartHour.value || !elDriverEndHour.value) {
+     fail("err-driver-hours", e.hoursNeededRequired, !elDriverStartHour.value ? elDriverStartHour : elDriverEndHour);
+    } else if (elDriverStartHour.value === elDriverEndHour.value) {
+     fail("err-driver-hours", e.hoursNeededSame, elDriverEndHour);
+    }
     if (!elDriverName.value.trim()) fail("err-driver-name", e.nameRequired, elDriverName);
     if (!cleanTenDigitPhone(elDriverPhone.value)) fail("err-driver-phone", e.phoneInvalid, elDriverPhone);
     if (!elDriverVehicleNo.value.trim()) fail("err-driver-vehicle-no", e.vehicleNoRequired, elDriverVehicleNo);
+    if (!isValidOptionalEmail(elDriverEmail.value)) fail("err-driver-email", e.emailInvalid, elDriverEmail);
     if (firstBadEl) firstBadEl.focus();
     return valid;
    }
@@ -1919,17 +3398,22 @@
     }
     setFieldError("err-owner-name", "");
     setFieldError("err-owner-phone", "");
+    setFieldError("err-owner-city", "");
     setFieldError("err-owner-area", "");
     setFieldError("err-owner-custom-area", "");
     setFieldError("err-owner-space-type", "");
     setFieldError("err-owner-hours", "");
     setFieldError("err-owner-capacity", "");
     setFieldError("err-owner-manager", "");
+    setFieldError("err-owner-location-link", "");
+    setFieldError("err-owner-email", "");
     elOwnerSubmitErr.classList.add("hidden");
 
     if (!elOwnerName.value.trim()) fail("err-owner-name", e.nameRequired, elOwnerName);
     if (!cleanTenDigitPhone(elOwnerPhone.value)) fail("err-owner-phone", e.phoneInvalid, elOwnerPhone);
+    var cityKey = elOwnerCity.value;
     var areaKey = elOwnerArea.value;
+    if (!cityKey || CITY_KEYS.indexOf(cityKey) === -1) fail("err-owner-city", e.cityRequired, elOwnerCity);
     if (!areaKey) fail("err-owner-area", e.areaRequired, elOwnerArea);
     if (areaKey === "other" && !elOwnerCustomArea.value.trim()) fail("err-owner-custom-area", e.ownerCustomAreaRequired, elOwnerCustomArea);
     if (!elOwnerSpaceType.value) fail("err-owner-space-type", e.spaceTypeRequired, elOwnerSpaceType);
@@ -1937,29 +3421,45 @@
     var capVal = parseInt(elOwnerCapacity.value, 10);
     if (!elOwnerCapacity.value || isNaN(capVal) || capVal < 1) fail("err-owner-capacity", e.capacityRequired, elOwnerCapacity);
     if (!elOwnerManager.value.trim()) fail("err-owner-manager", e.managerRequired, elOwnerManager);
+    if (!isValidOptionalUrl(elOwnerLocationLink.value)) fail("err-owner-location-link", e.locationLinkInvalid, elOwnerLocationLink);
+    if (!isValidOptionalEmail(elOwnerEmail.value)) fail("err-owner-email", e.emailInvalid, elOwnerEmail);
     if (firstBadEl) firstBadEl.focus();
     return valid;
    }
 
-   // 8. SUBMISSION HANDLERS (Express API + optional Formspree forward)
-   function postToApiAndOptionalFormspree(apiUrl, formspreeUrl, payload) {
-    return fetch(apiUrl, {
+   // 8. SUBMISSION HANDLERS (Firebase Auth + Firestore + optional Email/Formspree)
+   function sendOptionalEmailAndFormspree(kind, refId, payload, userRows, operatorRows, formspreeUrl) {
+    if (formspreeUrl && formspreeUrl.indexOf("[PASTE") !== 0) {
+     fetch(formspreeUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json", "Accept": "application/json" },
+      body: JSON.stringify(payload)
+     }).catch(function () {});
+    }
+    return fetch("/api/notify-email", {
      method: "POST",
      headers: { "Content-Type": "application/json", "Accept": "application/json" },
-     body: JSON.stringify(payload)
-    }).then(function (response) {
-     if (!response.ok) throw new Error("HTTP " + response.status);
-     return response.json().then(function (json) {
-      if (formspreeUrl && formspreeUrl.indexOf("[PASTE") !== 0) {
-       fetch(formspreeUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json", "Accept": "application/json" },
-        body: JSON.stringify(payload)
-       }).catch(function () {});
-      }
-      return json;
-     });
+     body: JSON.stringify({
+      ref_id: refId,
+      kind: kind,
+      email: payload.email || "",
+      summary: payload.confirmation_text || "",
+      user_rows: userRows,
+      operator_rows: operatorRows
+     })
+    }).then(function (resp) {
+     return resp.ok ? resp.json() : { email_sent: false };
+    }).catch(function () {
+     return { email_sent: false };
     });
+   }
+
+   function ensureGoogleSignedInForSubmit() {
+    var fb = window.IdleSpotFirebase;
+    if (!fb) return Promise.reject(new Error("Firebase client not ready."));
+    var user = fb.getCurrentUser();
+    if (user && user.emailVerified) return Promise.resolve(user);
+    return fb.signInWithGoogle();
    }
 
    function buildAreaPayloadValue(areaKey, customText) {
@@ -1968,6 +3468,7 @@
 
    elDriverForm.addEventListener("submit", function (event) {
     event.preventDefault();
+    if (!currentUser || !currentUser.emailVerified) { syncAuthGateUi(); return; }
     if (driverSubmitting || driverSubmitted || driverConfirming || !validateDriverForm()) return;
     driverConfirming = true;
     elDriverConfirmText.textContent = buildDriverConfirmSentence();
@@ -2011,11 +3512,11 @@
     elDriverConfirmYesBtn.textContent = s.submitting;
     elDriverConfirmSubmitErr.classList.add("hidden");
 
+    var cityKey = elDriverCity.value || "Mumbai";
     var areaKey = elDriverArea.value;
     var vehicleKey = elDriverVehicle.value;
     var duration = getSelectedDuration();
-    var group = getVehicleGroup(vehicleKey);
-    var quotedPrice = (areaKey !== "other" && AREAS_AND_PRICES[areaKey] && AREAS_AND_PRICES[areaKey][group]) ? AREAS_AND_PRICES[areaKey][group][duration] : null;
+    var quotedPrice = getQuotedPriceForSelection(cityKey, areaKey, vehicleKey, duration);
     var confirmationSentence = buildDriverConfirmSentence();
     var matchedSummary = selectedSpace ? (selectedSpace.space_type + " in " + selectedSpace.area + " (" + selectedSpace.hours_free + ")") : null;
     var payload = {
@@ -2026,42 +3527,81 @@
      referrer: document.referrer || "none",
      page_url: window.location.href,
      language: currentLang,
+     city: cityKey,
      area: buildAreaPayloadValue(areaKey, elDriverCustomArea.value),
      area_key: areaKey,
      vehicle_type: vehicleKey,
      duration: duration === "day" ? "per_day" : "per_month",
      quoted_price_inr: quotedPrice,
      start_date: elDriverDate.value,
-     hours_needed: elDriverHours.value.trim(),
+     hours_needed: getDriverHoursRange(),
      name: elDriverName.value.trim(),
      phone: cleanTenDigitPhone(elDriverPhone.value),
+     email: elDriverEmail.value.trim() || null,
      vehicle_number: elDriverVehicleNo.value.trim(),
      commitment_confirmed: "yes",
      commitment_time: formatLocalIsoWithOffset(new Date()),
      confirmation_text: confirmationSentence
     };
 
-    postToApiAndOptionalFormspree("/api/requests", DRIVER_ENDPOINT, payload).then(function () {
+    ensureGoogleSignedInForSubmit().then(function (user) {
+     if (!payload.email && user && user.email) payload.email = user.email;
+     return window.IdleSpotFirebase.createParkingRequest(payload);
+    }).then(function (created) {
+     var refId = created.refId;
+     var priceStr = quotedPrice !== null ? ("Rs " + formatIndianRupees(quotedPrice)) : STRINGS[currentLang].spaceRateStandard;
+     var userRows = [
+      { label: "City", value: payload.city },
+      { label: "Area", value: payload.area },
+      { label: "Vehicle", value: vehicleKey + " (" + payload.vehicle_number + ")" },
+      { label: "Schedule", value: payload.start_date + " · " + payload.hours_needed },
+      { label: "Quoted price", value: priceStr },
+      { label: "Phone", value: payload.phone }
+     ];
+     var operatorRows = [
+      { label: "Driver", value: payload.name },
+      { label: "Email", value: payload.email || "Not provided" }
+     ].concat(userRows);
+     return sendOptionalEmailAndFormspree("driver", refId, payload, userRows, operatorRows, DRIVER_ENDPOINT).then(function (mailResp) {
+      return { refId: refId, emailSent: Boolean(mailResp && mailResp.email_sent), priceStr: priceStr };
+     });
+    }).then(function (res) {
      driverSubmitting = false;
      driverConfirming = false;
      driverSubmitted = true;
      elDriverConfirmBox.classList.add("hidden");
      elDriverThankYouText.textContent = STRINGS[currentLang].thankYou;
      elDriverReloadNote.textContent = STRINGS[currentLang].reloadNote;
-     setupWhatsAppHandoff(elDriverWaWrap, elDriverWaLink, confirmationSentence + " (Vehicle: " + payload.vehicle_number + ")", true);
+     driverReceiptData = {
+      refId: res.refId,
+      area: getDisplayAreaLabel(cityKey, areaKey, elDriverCustomArea.value),
+      item: (STRINGS[currentLang].vehicles[vehicleKey] || vehicleKey) + " (" + payload.vehicle_number + ") · " + res.priceStr,
+      when: payload.start_date + " · " + payload.hours_needed,
+      phone: payload.phone,
+      email: payload.email,
+      emailSent: res.emailSent,
+      time: payload.commitment_time.slice(0, 16).replace("T", " "),
+      summary: confirmationSentence
+     };
+     renderReceiptCard("driver");
+     setupWhatsAppHandoff(elDriverWaWrap, elDriverWaLink, confirmationSentence + " (Ref: " + res.refId + ", Vehicle: " + payload.vehicle_number + ")", true);
      elDriverThankYou.classList.remove("hidden");
-    }).catch(function () {
+    }).catch(function (err) {
      driverSubmitting = false;
      elDriverConfirmYesBtn.disabled = false;
      elDriverConfirmBackBtn.disabled = false;
      elDriverConfirmYesBtn.textContent = STRINGS[currentLang].driverConfirmYes;
-     elDriverConfirmSubmitErr.textContent = STRINGS[currentLang].errors.submitFailed;
+     var msg = (err && err.code && String(err.code).indexOf("auth/") === 0)
+      ? STRINGS[currentLang].authCancelledError
+      : STRINGS[currentLang].errors.submitFailed;
+     elDriverConfirmSubmitErr.textContent = msg;
      elDriverConfirmSubmitErr.classList.remove("hidden");
     });
    });
 
    elOwnerForm.addEventListener("submit", function (event) {
     event.preventDefault();
+    if (!currentUser || !currentUser.emailVerified) { syncAuthGateUi(); return; }
     if (ownerSubmitting || ownerSubmitted || ownerConfirming || !validateOwnerForm()) return;
     ownerConfirming = true;
     elOwnerConfirmText.textContent = buildOwnerConfirmSentence();
@@ -2105,6 +3645,7 @@
     elOwnerConfirmYesBtn.textContent = s.submitting;
     elOwnerConfirmSubmitErr.classList.add("hidden");
 
+    var cityKey = elOwnerCity.value || "Mumbai";
     var areaKey = elOwnerArea.value;
     var confirmationSentence = buildOwnerConfirmSentence();
     var payload = {
@@ -2113,22 +3654,47 @@
      referrer: document.referrer || "none",
      page_url: window.location.href,
      language: currentLang,
+     city: cityKey,
      area: buildAreaPayloadValue(areaKey, elOwnerCustomArea.value),
      area_key: areaKey,
      custom_area: areaKey === "other" ? elOwnerCustomArea.value.trim() : "",
      name: elOwnerName.value.trim(),
      phone: cleanTenDigitPhone(elOwnerPhone.value),
+     email: elOwnerEmail.value.trim() || null,
      space_type: elOwnerSpaceType.value,
      hours_free: elOwnerHours.value.trim(),
      vehicles_fit: parseInt(elOwnerCapacity.value, 10),
      property_owner_or_manager: elOwnerManager.value.trim(),
      desired_monthly_amount: elOwnerAmount.value.trim() || null,
+     location_link: elOwnerLocationLink.value.trim() || null,
      commitment_confirmed: "yes",
      commitment_time: formatLocalIsoWithOffset(new Date()),
      confirmation_text: confirmationSentence
     };
 
-    postToApiAndOptionalFormspree("/api/spaces", OWNER_ENDPOINT, payload).then(function () {
+    ensureGoogleSignedInForSubmit().then(function (user) {
+     if (!payload.email && user && user.email) payload.email = user.email;
+     return window.IdleSpotFirebase.createSpaceListing(payload);
+    }).then(function (created) {
+     var refId = created.refId;
+     var userRows = [
+      { label: "City", value: payload.city },
+      { label: "Area", value: payload.area },
+      { label: "Space type", value: payload.space_type },
+      { label: "Hours free", value: payload.hours_free },
+      { label: "Capacity", value: payload.vehicles_fit + " vehicle(s)" },
+      { label: "Phone", value: payload.phone }
+     ];
+     var operatorRows = [
+      { label: "Owner / Contact", value: payload.name },
+      { label: "Manager", value: payload.property_owner_or_manager },
+      { label: "Email", value: payload.email || "Not provided" },
+      { label: "Location link", value: payload.location_link || "Not provided" }
+     ].concat(userRows);
+     return sendOptionalEmailAndFormspree("owner", refId, payload, userRows, operatorRows, OWNER_ENDPOINT).then(function (mailResp) {
+      return { refId: refId, emailSent: Boolean(mailResp && mailResp.email_sent) };
+     });
+    }).then(function (res) {
      ownerSubmitting = false;
      ownerConfirming = false;
      ownerSubmitted = true;
@@ -2136,16 +3702,155 @@
      elOwnerThankYouText.textContent = STRINGS[currentLang].ownerThankYou;
      elOwnerSpaceLiveNote.textContent = STRINGS[currentLang].ownerSpaceLiveNote;
      elOwnerReloadNote.textContent = STRINGS[currentLang].reloadNote;
-     setupWhatsAppHandoff(elOwnerWaLink, elOwnerWaLink, confirmationSentence + " (Name: " + payload.name + ")", false);
+     var spLabel = STRINGS[currentLang].spaceTypes[payload.space_type] || payload.space_type;
+     ownerReceiptData = {
+      refId: res.refId,
+      area: getDisplayAreaLabel(cityKey, areaKey, elOwnerCustomArea.value),
+      item: spLabel + " · " + payload.vehicles_fit + " vehicle(s)",
+      when: payload.hours_free,
+      phone: payload.phone,
+      email: payload.email,
+      emailSent: res.emailSent,
+      time: payload.commitment_time.slice(0, 16).replace("T", " "),
+      summary: confirmationSentence
+     };
+     renderReceiptCard("owner");
+     setupWhatsAppHandoff(elOwnerWaLink, elOwnerWaLink, confirmationSentence + " (Ref: " + res.refId + ", Name: " + payload.name + ")", false);
      elOwnerThankYou.classList.remove("hidden");
-     loadAvailableSpaces();
-    }).catch(function () {
+    }).catch(function (err) {
      ownerSubmitting = false;
      elOwnerConfirmYesBtn.disabled = false;
      elOwnerConfirmBackBtn.disabled = false;
      elOwnerConfirmYesBtn.textContent = STRINGS[currentLang].ownerConfirmYes;
-     elOwnerConfirmSubmitErr.textContent = STRINGS[currentLang].errors.submitFailed;
+     var msg = (err && err.code && String(err.code).indexOf("auth/") === 0)
+      ? STRINGS[currentLang].authCancelledError
+      : STRINGS[currentLang].errors.submitFailed;
+     elOwnerConfirmSubmitErr.textContent = msg;
      elOwnerConfirmSubmitErr.classList.remove("hidden");
+    });
+   });
+
+   function getCheckedRadioValue(name) {
+    var checked = document.querySelector('input[name="' + name + '"]:checked');
+    return checked ? checked.value : "";
+   }
+
+   function syncChoiceOptionHighlights() {
+    var radios = document.querySelectorAll('#survey-form input[type="radio"]');
+    for (var i = 0; i < radios.length; i++) {
+     var label = radios[i].closest(".choice-option");
+     if (label) label.classList.toggle("is-selected", radios[i].checked);
+    }
+   }
+
+   function validateSurveyForm() {
+    var e = STRINGS[currentLang].errors;
+    var valid = true;
+    var firstBadEl = null;
+    function fail(errId, msg, inputEl) {
+     setFieldError(errId, msg);
+     valid = false;
+     if (!firstBadEl && inputEl) firstBadEl = inputEl;
+    }
+    setFieldError("err-survey-name", "");
+    setFieldError("err-survey-area", "");
+    setFieldError("err-survey-phone", "");
+    setFieldError("err-survey-email", "");
+    setFieldError("err-survey-q1", "");
+    setFieldError("err-survey-q2", "");
+    setFieldError("err-survey-q3", "");
+    setFieldError("err-survey-q4", "");
+    elSurveySubmitErr.classList.add("hidden");
+
+    if (!elSurveyName.value.trim()) fail("err-survey-name", e.nameRequired, elSurveyName);
+    if (!elSurveyArea.value.trim()) fail("err-survey-area", e.surveyAreaRequired, elSurveyArea);
+    var phoneTrimmed = elSurveyPhone.value.trim();
+    if (phoneTrimmed && !cleanTenDigitPhone(phoneTrimmed)) fail("err-survey-phone", e.surveyPhoneInvalid, elSurveyPhone);
+    if (!isValidOptionalEmail(elSurveyEmail.value)) fail("err-survey-email", e.emailInvalid, elSurveyEmail);
+    if (!getCheckedRadioValue("survey_owns_spot")) fail("err-survey-q1", e.surveyQ1Required, document.getElementById("srv-q1-avail"));
+    if (!getCheckedRadioValue("survey_problem")) fail("err-survey-q2", e.surveyQ2Required, document.getElementById("srv-q2-often"));
+    if (!getCheckedRadioValue("survey_use_app")) fail("err-survey-q3", e.surveyQ3Required, document.getElementById("srv-q3-yes"));
+    if (!getCheckedRadioValue("survey_pay")) fail("err-survey-q4", e.surveyQ4Required, document.getElementById("srv-q4-free"));
+    if (firstBadEl) firstBadEl.focus();
+    return valid;
+   }
+
+   elSurveyForm.addEventListener("change", function (ev) {
+    if (ev.target && ev.target.type === "radio") {
+     syncChoiceOptionHighlights();
+     if (ev.target.name === "survey_owns_spot") setFieldError("err-survey-q1", "");
+     else if (ev.target.name === "survey_problem") setFieldError("err-survey-q2", "");
+     else if (ev.target.name === "survey_use_app") setFieldError("err-survey-q3", "");
+     else if (ev.target.name === "survey_pay") setFieldError("err-survey-q4", "");
+    }
+   });
+
+   elSurveyForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    if (!currentUser || !currentUser.emailVerified) { syncAuthGateUi(); return; }
+    if (surveySubmitting || surveySubmitted || !validateSurveyForm()) return;
+
+    var s = STRINGS[currentLang];
+    surveySubmitting = true;
+    elSurveySubmitBtn.disabled = true;
+    elSurveySubmitBtn.textContent = s.submitting;
+    elSurveySubmitErr.classList.add("hidden");
+
+    var phoneCleaned = elSurveyPhone.value.trim() ? (cleanTenDigitPhone(elSurveyPhone.value) || "") : "";
+    var surveyPayload = {
+     name: elSurveyName.value.trim(),
+     area: elSurveyArea.value.trim(),
+     phone: phoneCleaned,
+     email: elSurveyEmail.value.trim() || null,
+     owns_spot_status: getCheckedRadioValue("survey_owns_spot"),
+     faced_parking_problem: getCheckedRadioValue("survey_problem"),
+     would_use_app: getCheckedRadioValue("survey_use_app"),
+     willing_to_pay_3hrs: getCheckedRadioValue("survey_pay"),
+     additional_notes: elSurveyNotes.value.trim(),
+     source: getUrlSource(),
+     language: currentLang
+    };
+
+    ensureGoogleSignedInForSubmit().then(function (user) {
+     if (!surveyPayload.email && user && user.email) surveyPayload.email = user.email;
+     return window.IdleSpotFirebase.createSurveyResponse(surveyPayload);
+    }).then(function (created) {
+     var refId = created.refId;
+     var payLabel = (s.surveyPayOpts && s.surveyPayOpts[surveyPayload.willing_to_pay_3hrs]) || surveyPayload.willing_to_pay_3hrs;
+     var userRows = [
+      { label: "Name", value: surveyPayload.name },
+      { label: "Area", value: surveyPayload.area },
+      { label: "Q1 Owns Spot", value: surveyPayload.owns_spot_status },
+      { label: "Q2 Parking Problem", value: surveyPayload.faced_parking_problem },
+      { label: "Q3 Would Use App", value: surveyPayload.would_use_app },
+      { label: "Q4 Willing to Pay (3h)", value: payLabel }
+     ];
+     var operatorRows = userRows.concat([
+      { label: "Phone", value: surveyPayload.phone || "Not provided" },
+      { label: "Email", value: surveyPayload.email || "Not provided" },
+      { label: "Notes", value: surveyPayload.additional_notes || "None" }
+     ]);
+     surveyPayload.confirmation_text = "Parking survey submitted by " + surveyPayload.name + " (" + surveyPayload.area + ").";
+     return sendOptionalEmailAndFormspree("survey", refId, surveyPayload, userRows, operatorRows, "").then(function () {
+      return { refId: refId };
+     });
+    }).then(function (res) {
+     surveySubmitting = false;
+     surveySubmitted = true;
+     surveyRefSaved = res.refId;
+     elSurveyForm.classList.add("hidden");
+     elSurveyThankYouText.textContent = STRINGS[currentLang].surveyThankYou;
+     elSurveyThankYouRef.textContent = STRINGS[currentLang].surveyRefNote.replace("{refId}", res.refId);
+     elSurveyThankYou.classList.remove("hidden");
+    }).catch(function (err) {
+     surveySubmitting = false;
+     elSurveySubmitBtn.disabled = false;
+     elSurveySubmitBtn.textContent = STRINGS[currentLang].surveySubmitBtn;
+     var msg = (err && err.code && String(err.code).indexOf("auth/") === 0)
+      ? STRINGS[currentLang].authCancelledError
+      : STRINGS[currentLang].errors.submitFailed;
+     elSurveySubmitErr.textContent = msg;
+     elSurveySubmitErr.classList.remove("hidden");
     });
    });
 
@@ -2158,8 +3863,13 @@
     });
    }
 
+   elTabSurvey.addEventListener("click", function () { setActiveMode("survey"); });
    elTabDriver.addEventListener("click", function () { setActiveMode("driver"); });
    elTabOwner.addEventListener("click", function () { setActiveMode("owner"); });
+   elSurveyGoDriverBtn.addEventListener("click", function () {
+    setActiveMode("driver");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+   });
    elSwitchToOwnerBtn.addEventListener("click", function () {
     setActiveMode("owner");
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -2173,6 +3883,35 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
    });
 
+   function wireReceiptButtons(kind, copyBtn, saveBtn) {
+    copyBtn.addEventListener("click", function () {
+     var data = kind === "owner" ? ownerReceiptData : driverReceiptData;
+     if (!data) return;
+     var text = buildReceiptPlainText(data);
+     if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () {
+       copyBtn.textContent = STRINGS[currentLang].receiptCopiedBtn;
+       setTimeout(function () { copyBtn.textContent = STRINGS[currentLang].receiptCopyBtn; }, 1800);
+      }).catch(function () {});
+     }
+    });
+    saveBtn.addEventListener("click", function () {
+     var data = kind === "owner" ? ownerReceiptData : driverReceiptData;
+     if (!data) return;
+     var blob = new Blob([buildReceiptPlainText(data)], { type: "text/plain;charset=utf-8" });
+     var url = URL.createObjectURL(blob);
+     var a = document.createElement("a");
+     a.href = url;
+     a.download = "IdleSpot-Receipt-" + data.refId + ".txt";
+     document.body.appendChild(a);
+     a.click();
+     document.body.removeChild(a);
+     setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+    });
+   }
+   wireReceiptButtons("driver", elDriverReceiptCopyBtn, elDriverReceiptSaveBtn);
+   wireReceiptButtons("owner", elOwnerReceiptCopyBtn, elOwnerReceiptSaveBtn);
+
    elSpacesAreaFilter.addEventListener("change", function () {
     renderAvailableSpaces();
    });
@@ -2181,6 +3920,23 @@
     selectedSpace = null;
     updateSelectedSpaceBanner();
     renderAvailableSpaces();
+   });
+
+   elDriverCity.addEventListener("change", function () {
+    setFieldError("err-driver-city", "");
+    setFieldError("err-driver-area", "");
+    setFieldError("err-driver-custom-area", "");
+    var nextCity = elDriverCity.value || "Mumbai";
+    if (selectedSpace && inferSpaceCity(selectedSpace) !== nextCity) {
+     selectedSpace = null;
+     updateSelectedSpaceBanner();
+     renderAvailableSpaces();
+    }
+    populateCityAreaSelect(elDriverArea, nextCity, false);
+    elDriverArea.value = "";
+    elDriverCustomArea.value = "";
+    updateDriverAreaVisibility();
+    updateLivePrice();
    });
 
    elDriverArea.addEventListener("change", function () {
@@ -2207,9 +3963,23 @@
     updateLivePrice();
    });
 
+   elOwnerCity.addEventListener("change", function () {
+    setFieldError("err-owner-city", "");
+    setFieldError("err-owner-area", "");
+    setFieldError("err-owner-custom-area", "");
+    populateCityAreaSelect(elOwnerArea, elOwnerCity.value || "Mumbai", false);
+    elOwnerArea.value = "";
+    elOwnerCustomArea.value = "";
+    updateOwnerAreaVisibility();
+   });
+
    elOwnerArea.addEventListener("change", function () {
     setFieldError("err-owner-area", "");
     updateOwnerAreaVisibility();
+   });
+
+   elOwnerLocationLink.addEventListener("input", function () {
+    setFieldError("err-owner-location-link", "");
    });
 
    var datePresetBtns = document.querySelectorAll("[data-date-preset]");
@@ -2237,17 +4007,17 @@
      if (target === "owner") {
       elOwnerHours.value = val;
       setFieldError("err-owner-hours", "");
-     } else {
-      elDriverHours.value = val;
-      setFieldError("err-driver-hours", "");
      }
      syncHourPresetHighlights(target);
     });
    }
 
-   elDriverHours.addEventListener("input", function () {
+   elDriverStartHour.addEventListener("change", function () {
     setFieldError("err-driver-hours", "");
-    syncHourPresetHighlights("driver");
+   });
+
+   elDriverEndHour.addEventListener("change", function () {
+    setFieldError("err-driver-hours", "");
    });
 
    elOwnerHours.addEventListener("input", function () {
@@ -2259,8 +4029,22 @@
    elDriverDate.value = getTodayLocalISO();
    applyLanguage(detectInitialLanguage());
 
+   var queryCityRaw = getQueryParam(["city"]);
+   var queryCity = queryCityRaw && /^pune$/i.test(queryCityRaw) ? "Pune" : queryCityRaw && /^mumbai$/i.test(queryCityRaw) ? "Mumbai" : null;
+   if (queryCity) {
+    elDriverCity.value = queryCity;
+    elOwnerCity.value = queryCity;
+    populateCityAreaSelect(elDriverArea, queryCity, false);
+    populateCityAreaSelect(elOwnerArea, queryCity, false);
+   }
+
    var queryArea = getQueryParam(["area"]);
-   if (queryArea && AREA_KEYS.indexOf(queryArea) !== -1) {
+   if (queryArea && ALL_AREA_KEYS.indexOf(queryArea) !== -1) {
+    var areaCity = queryCity || inferCityForAreaKey(queryArea);
+    elDriverCity.value = areaCity;
+    elOwnerCity.value = areaCity;
+    populateCityAreaSelect(elDriverArea, areaCity, false);
+    populateCityAreaSelect(elOwnerArea, areaCity, false);
     elSpacesAreaFilter.value = queryArea;
     elDriverArea.value = queryArea;
     elOwnerArea.value = queryArea;
@@ -2269,12 +4053,145 @@
     updateLivePrice();
    }
 
-   if (getQueryParam(["mode", "type"]) === "owner") setActiveMode("owner");
+   var initialMode = getQueryParam(["mode", "type"]);
+   if (initialMode === "owner") setActiveMode("owner");
+   else if (initialMode === "survey") setActiveMode("survey");
    else setActiveMode("driver");
 
    syncDatePresetHighlights();
    syncHourPresetHighlights("driver");
    syncHourPresetHighlights("owner");
+
+   // 10. FIREBASE AUTH + FIRESTORE REAL-TIME SYNC
+   function clearUserSubscriptions() {
+    if (unsubPublicSpaces) { unsubPublicSpaces(); unsubPublicSpaces = null; }
+    if (unsubMyRequests) { unsubMyRequests(); unsubMyRequests = null; }
+    if (unsubMySpaces) { unsubMySpaces(); unsubMySpaces = null; }
+    if (unsubMySurveys) { unsubMySurveys(); unsubMySurveys = null; }
+    if (unsubAdminInbox) { unsubAdminInbox(); unsubAdminInbox = null; }
+   }
+
+   function startPublicSpacesSubscription() {
+    var fb = window.IdleSpotFirebase;
+    if (!fb || unsubPublicSpaces || !currentUser || !currentUser.emailVerified) return;
+    unsubPublicSpaces = fb.subscribePublicSpaces(
+     function (spaces) {
+      spacesLoadFailed = false;
+      availableSpaces = spaces;
+      renderAvailableSpaces();
+     },
+     function () {
+      spacesLoadFailed = true;
+      renderAvailableSpaces();
+     }
+    );
+   }
+
+   function bindFirebaseBridge() {
+    var fb = window.IdleSpotFirebase;
+    if (!fb) return;
+
+    fb.subscribeAuth(function (user) {
+     authResolved = true;
+     currentUser = user;
+     clearUserSubscriptions();
+     availableSpaces = [];
+     selectedSpace = null;
+     spacesLoadFailed = false;
+     myRequests = [];
+     mySpaces = [];
+     mySurveys = [];
+     adminInboxData = { requests: [], spaces: [], privateDetailsById: {}, surveys: [] };
+     updateSelectedSpaceBanner();
+     renderAvailableSpaces();
+
+     if (user && user.emailVerified) {
+      if (!elSurveyName.value.trim() && user.displayName) elSurveyName.value = user.displayName;
+      if (!elDriverName.value.trim() && user.displayName) elDriverName.value = user.displayName;
+      if (!elOwnerName.value.trim() && user.displayName) elOwnerName.value = user.displayName;
+      if (!elSurveyEmail.value.trim() && user.email) elSurveyEmail.value = user.email;
+      if (!elDriverEmail.value.trim() && user.email) elDriverEmail.value = user.email;
+      if (!elOwnerEmail.value.trim() && user.email) elOwnerEmail.value = user.email;
+
+      startPublicSpacesSubscription();
+
+      unsubMyRequests = fb.subscribeMyRequests(
+       user.uid,
+       function (items) {
+        myRequests = items;
+        renderAccountBar();
+       },
+       function () {}
+      );
+      unsubMySpaces = fb.subscribeMySpaces(
+       user.uid,
+       function (items) {
+        mySpaces = items;
+        renderAccountBar();
+       },
+       function () {}
+      );
+      unsubMySurveys = fb.subscribeMySurveys(
+       user.uid,
+       function (items) {
+        mySurveys = items;
+        renderAccountBar();
+       },
+       function () {}
+      );
+      if (user.isAdmin) {
+       unsubAdminInbox = fb.subscribeAdminInbox(
+        function (inbox) {
+         adminInboxData = inbox;
+         renderActivityPanel();
+        },
+        function () {}
+       );
+      }
+     }
+     renderAccountBar();
+    });
+   }
+
+   function triggerGoogleSignIn(errEl) {
+    if (errEl) {
+     errEl.textContent = "";
+     errEl.classList.add("hidden");
+    }
+    var fb = window.IdleSpotFirebase;
+    if (!fb) return;
+    fb.signInWithGoogle().catch(function () {
+     if (errEl) {
+      errEl.textContent = STRINGS[currentLang].authCancelledError;
+      errEl.classList.remove("hidden");
+     }
+    });
+   }
+
+   elGateGoogleSignInBtn.addEventListener("click", function () {
+    triggerGoogleSignIn(elGateAuthErr);
+   });
+
+   elGoogleSignInBtn.addEventListener("click", function () {
+    triggerGoogleSignIn(elAccountAuthErr);
+   });
+
+   elGoogleSignOutBtn.addEventListener("click", function () {
+    var fb = window.IdleSpotFirebase;
+    if (!fb) return;
+    fb.signOutGoogle().catch(function () {});
+   });
+
+   elToggleActivityBtn.addEventListener("click", function () {
+    activityPanelOpen = !activityPanelOpen;
+    renderAccountBar();
+   });
+
+   if (window.IdleSpotFirebase) {
+    bindFirebaseBridge();
+   } else {
+    window.addEventListener("idlespot-firebase-ready", bindFirebaseBridge, { once: true });
+   }
   })();
  </script>
 </body>

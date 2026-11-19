@@ -1,269 +1,256 @@
+import "dotenv/config";
 import express from "express";
 import type { Request, Response } from "express";
-import fs from "fs";
 import path from "path";
-import crypto from "crypto";
 import { fileURLToPath } from "url";
-
-interface StoredSpace {
-  id: string;
-  area: string;
-  area_key: string;
-  custom_area: string;
-  space_type: string;
-  hours_free: string;
-  vehicles_fit: number;
-  desired_monthly_amount: string | null;
-  name: string;
-  phone: string;
-  property_owner_or_manager: string;
-  source: string;
-  referrer: string;
-  language: string;
-  commitment_confirmed: string;
-  commitment_time: string;
-  confirmation_text: string;
-  created_at: string;
-}
-
-interface PublicSpace {
-  id: string;
-  area: string;
-  area_key: string;
-  custom_area: string;
-  space_type: string;
-  hours_free: string;
-  vehicles_fit: number;
-  desired_monthly_amount: string | null;
-  created_at: string;
-}
-
-interface StoredRequest {
-  id: string;
-  matched_space_id: string | null;
-  matched_space_summary: string | null;
-  area: string;
-  area_key: string;
-  vehicle_type: string;
-  duration: string;
-  quoted_price_inr: number | null;
-  start_date: string;
-  hours_needed: string;
-  name: string;
-  phone: string;
-  vehicle_number: string;
-  source: string;
-  referrer: string;
-  language: string;
-  commitment_confirmed: string;
-  commitment_time: string;
-  confirmation_text: string;
-  created_at: string;
-}
-
-interface ParkingStore {
-  spaces: StoredSpace[];
-  requests: StoredRequest[];
-}
+import nodemailer from "nodemailer";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-const DATA_DIR = path.join(__dirname, "data");
-const STORE_FILE = path.join(DATA_DIR, "parking-store.json");
-
-function ensureStore(): ParkingStore {
-  try {
-    if (!fs.existsSync(DATA_DIR)) {
-      fs.mkdirSync(DATA_DIR, { recursive: true });
-    }
-    if (!fs.existsSync(STORE_FILE)) {
-      const empty: ParkingStore = { spaces: [], requests: [] };
-      fs.writeFileSync(STORE_FILE, JSON.stringify(empty, null, 2), "utf8");
-      return empty;
-    }
-    const raw = fs.readFileSync(STORE_FILE, "utf8");
-    const parsed = JSON.parse(raw) as Partial<ParkingStore>;
-    return {
-      spaces: Array.isArray(parsed.spaces) ? parsed.spaces : [],
-      requests: Array.isArray(parsed.requests) ? parsed.requests : [],
-    };
-  } catch (err) {
-    console.error("Failed reading store file:", err);
-    return { spaces: [], requests: [] };
-  }
-}
-
-function writeStore(store: ParkingStore): void {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-  const tmpFile = STORE_FILE + ".tmp";
-  fs.writeFileSync(tmpFile, JSON.stringify(store, null, 2), "utf8");
-  fs.renameSync(tmpFile, STORE_FILE);
-}
-
-function toPublicSpace(space: StoredSpace): PublicSpace {
-  return {
-    id: space.id,
-    area: space.area,
-    area_key: space.area_key,
-    custom_area: space.custom_area,
-    space_type: space.space_type,
-    hours_free: space.hours_free,
-    vehicles_fit: space.vehicles_fit,
-    desired_monthly_amount: space.desired_monthly_amount,
-    created_at: space.created_at,
-  };
-}
 
 function cleanString(value: unknown, maxLen = 300): string {
   if (typeof value !== "string") return "";
   return value.trim().slice(0, maxLen);
 }
 
-function isTenDigitPhone(value: string): boolean {
-  return /^[0-9]{10}$/.test(value);
+function isValidEmail(value: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(value) && value.length <= 160;
 }
 
-let store: ParkingStore = ensureStore();
+function escapeHtml(value: string): string {
+  return value
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
+interface ReceiptRow {
+  label: string;
+  value: string;
+}
+
+interface MailOutcome {
+  email_configured: boolean;
+  user_email_sent: boolean;
+  operator_email_sent: boolean;
+}
+
+function getSmtpConfig(): { host: string; port: number; user: string; pass: string; notifyTo: string } | null {
+  const user = (process.env.SMTP_USER || "").trim();
+  const pass = (process.env.SMTP_PASS || "").trim();
+  if (!user || !pass || user.startsWith("MY_") || pass.startsWith("MY_")) {
+    return null;
+  }
+  const host = (process.env.SMTP_HOST || "smtp.gmail.com").trim();
+  const parsedPort = Number(process.env.SMTP_PORT || "465");
+  const port = Number.isFinite(parsedPort) && parsedPort > 0 ? parsedPort : 465;
+  const rawNotify = (process.env.NOTIFY_EMAIL || "").trim();
+  const notifyTo = rawNotify && !rawNotify.startsWith("MY_") ? rawNotify : user;
+  return { host, port, user, pass, notifyTo };
+}
+
+function buildReceiptEmailHtml(title: string, refId: string, rows: ReceiptRow[], summary: string, footerNote: string): string {
+  const rowsHtml = rows
+    .map(
+      (r) =>
+        `<tr><td style="padding:8px 0;border-bottom:1px solid #eceae4;color:#5c5c5c;font-size:14px;width:40%;vertical-align:top;">${escapeHtml(r.label)}</td><td style="padding:8px 0;border-bottom:1px solid #eceae4;color:#1a1a1a;font-size:14px;font-weight:600;vertical-align:top;">${escapeHtml(r.value)}</td></tr>`
+    )
+    .join("");
+  return `<!doctype html><html><body style="margin:0;padding:24px;background:#faf9f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1a1a1a;">
+  <div style="max-width:540px;margin:0 auto;background:#ffffff;border:1px solid #dcdad4;border-radius:6px;padding:24px;">
+    <div style="font-size:16px;font-weight:700;color:#0f5e5a;margin-bottom:4px;">Idle Spot</div>
+    <h1 style="font-size:20px;line-height:1.3;margin:0 0 14px;color:#1a1a1a;">${escapeHtml(title)}</h1>
+    <div style="background:#f3f2ee;border:1px solid #dcdad4;border-radius:6px;padding:12px 14px;margin-bottom:16px;">
+      <div style="font-size:12px;color:#5c5c5c;text-transform:uppercase;letter-spacing:0.04em;">Reference ID</div>
+      <div style="font-size:18px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#0f5e5a;margin-top:2px;">${escapeHtml(refId)}</div>
+    </div>
+    <p style="font-size:14px;line-height:1.5;color:#1a1a1a;margin:0 0 16px;">${escapeHtml(summary)}</p>
+    <table style="width:100%;border-collapse:collapse;margin-bottom:18px;">${rowsHtml}</table>
+    <p style="font-size:13px;line-height:1.45;color:#5c5c5c;margin:0;border-top:1px solid #eceae4;padding-top:14px;">${escapeHtml(footerNote)}</p>
+  </div>
+</body></html>`;
+}
+
+function buildReceiptEmailText(title: string, refId: string, rows: ReceiptRow[], summary: string, footerNote: string): string {
+  const lines = [
+    "IDLE SPOT — " + title,
+    "Reference ID: " + refId,
+    "",
+    summary,
+    "",
+    ...rows.map((r) => `${r.label}: ${r.value}`),
+    "",
+    footerNote,
+  ];
+  return lines.join("\n");
+}
+
+async function sendReceiptAndOperatorEmails(params: {
+  refId: string;
+  kindTitle: string;
+  userEmail: string | null;
+  userRows: ReceiptRow[];
+  operatorRows: ReceiptRow[];
+  summary: string;
+}): Promise<MailOutcome> {
+  const cfg = getSmtpConfig();
+  if (!cfg) {
+    return { email_configured: false, user_email_sent: false, operator_email_sent: false };
+  }
+
+  const transporter = nodemailer.createTransport({
+    host: cfg.host,
+    port: cfg.port,
+    secure: cfg.port === 465,
+    auth: { user: cfg.user, pass: cfg.pass },
+    connectionTimeout: 5000,
+    greetingTimeout: 5000,
+    socketTimeout: 5000,
+  });
+
+  const userFooter = "Zero payment on this page. Launching soon. Any money paid is fully refundable.";
+  const tasks: Array<Promise<void>> = [];
+  let userSent = false;
+  let operatorSent = false;
+
+  if (params.userEmail) {
+    tasks.push(
+      transporter
+        .sendMail({
+          from: `"Idle Spot" <${cfg.user}>`,
+          to: params.userEmail,
+          replyTo: cfg.notifyTo,
+          subject: `Idle Spot Confirmation Receipt (${params.refId})`,
+          text: buildReceiptEmailText(params.kindTitle, params.refId, params.userRows, params.summary, userFooter),
+          html: buildReceiptEmailHtml(params.kindTitle, params.refId, params.userRows, params.summary, userFooter),
+        })
+        .then(() => {
+          userSent = true;
+        })
+        .catch((err) => {
+          console.error("Failed sending user receipt email:", err?.message || err);
+        })
+    );
+  }
+
+  if (cfg.notifyTo) {
+    tasks.push(
+      transporter
+        .sendMail({
+          from: `"Idle Spot Alerts" <${cfg.user}>`,
+          to: cfg.notifyTo,
+          subject: `[Idle Spot] New ${params.kindTitle} (${params.refId})`,
+          text: buildReceiptEmailText(`New ${params.kindTitle}`, params.refId, params.operatorRows, params.summary, "Reply directly by phone/WhatsApp or email."),
+          html: buildReceiptEmailHtml(`New ${params.kindTitle}`, params.refId, params.operatorRows, params.summary, "Reply directly by phone/WhatsApp or email."),
+        })
+        .then(() => {
+          operatorSent = true;
+        })
+        .catch((err) => {
+          console.error("Failed sending operator alert email:", err?.message || err);
+        })
+    );
+  }
+
+  const timeoutPromise = new Promise<void>((resolve) => setTimeout(resolve, 6000));
+  await Promise.race([Promise.all(tasks), timeoutPromise]);
+
+  return {
+    email_configured: true,
+    user_email_sent: userSent,
+    operator_email_sent: operatorSent,
+  };
+}
 
 async function startServer(): Promise<void> {
   const app = express();
   app.use(express.json({ limit: "250kb" }));
 
+  // Never expose local store, server code, rules, or config files over HTTP (including in Vite dev mode)
+  app.use((req: Request, res: Response, next) => {
+    const p = req.path.toLowerCase();
+    if (
+      p === "/data" ||
+      p.startsWith("/data/") ||
+      p === "/server.ts" ||
+      p === "/metadata.json" ||
+      p === "/package.json" ||
+      p === "/package-lock.json" ||
+      p === "/vite.config.ts" ||
+      p === "/tsconfig.json" ||
+      p === "/eslint.config.js" ||
+      p === "/firestore.rules" ||
+      p === "/firestore.rules.test.ts" ||
+      p === "/draft_firestore.rules" ||
+      p === "/firebase-blueprint.json" ||
+      p === "/security_spec.md" ||
+      p.startsWith("/.env")
+    ) {
+      res.status(404).end("Not found");
+      return;
+    }
+    next();
+  });
+
   app.get("/api/health", (_req: Request, res: Response) => {
     res.json({ ok: true });
   });
 
-  // Public list of verified/submitted owner spaces (never exposes phone, name, or manager details)
-  app.get("/api/spaces", (req: Request, res: Response) => {
-    const areaFilter = cleanString(req.query.area, 64);
-    const list = store.spaces
-      .filter((space) => !areaFilter || areaFilter === "all" || space.area_key === areaFilter)
-      .slice()
-      .reverse()
-      .map(toPublicSpace);
-    res.json({ ok: true, spaces: list });
-  });
-
-  // Owner lists a parking space -> persisted & immediately visible to drivers across devices
-  app.post("/api/spaces", (req: Request, res: Response) => {
+  // Optional SMTP confirmation receipt & operator alert after Firestore save
+  app.post("/api/notify-email", async (req: Request, res: Response) => {
     const body = (req.body || {}) as Record<string, unknown>;
-    const name = cleanString(body.name, 120);
-    const phone = cleanString(body.phone, 20).replace(/[\s\-()]/g, "");
-    const area = cleanString(body.area, 200);
-    const areaKey = cleanString(body.area_key, 40);
-    const customArea = cleanString(body.custom_area, 160);
-    const spaceType = cleanString(body.space_type, 40);
-    const hoursFree = cleanString(body.hours_free, 120);
-    const vehiclesFit = Number(body.vehicles_fit);
-    const manager = cleanString(body.property_owner_or_manager, 160);
-    const desiredAmount = cleanString(body.desired_monthly_amount, 60) || null;
+    const refId = cleanString(body.ref_id, 40);
+    const kind = body.kind === "owner" ? "owner" : body.kind === "survey" ? "survey" : "driver";
+    const rawEmail = cleanString(body.email, 160);
+    const userEmail = rawEmail && isValidEmail(rawEmail) ? rawEmail : null;
+    const summary = cleanString(body.summary, 600);
+    const rawUserRows = Array.isArray(body.user_rows) ? body.user_rows : [];
+    const rawOpRows = Array.isArray(body.operator_rows) ? body.operator_rows : [];
 
-    if (
-      !name ||
-      !isTenDigitPhone(phone) ||
-      !area ||
-      !areaKey ||
-      !spaceType ||
-      !hoursFree ||
-      !Number.isFinite(vehiclesFit) ||
-      vehiclesFit < 1 ||
-      !manager ||
-      body.commitment_confirmed !== "yes"
-    ) {
-      res.status(400).json({ ok: false, error: "Invalid space submission payload." });
+    const toRows = (arr: unknown[]): ReceiptRow[] =>
+      arr
+        .slice(0, 12)
+        .map((item) => {
+          const obj = (item || {}) as Record<string, unknown>;
+          return {
+            label: cleanString(obj.label, 80),
+            value: cleanString(obj.value, 240),
+          };
+        })
+        .filter((r) => r.label && r.value);
+
+    if (!refId || !summary) {
+      res.status(400).json({ ok: false, error: "Invalid email notification payload." });
       return;
     }
 
-    const newSpace: StoredSpace = {
-      id: "spc_" + crypto.randomUUID().slice(0, 8),
-      area,
-      area_key: areaKey,
-      custom_area: customArea,
-      space_type: spaceType,
-      hours_free: hoursFree,
-      vehicles_fit: Math.floor(vehiclesFit),
-      desired_monthly_amount: desiredAmount,
-      name,
-      phone,
-      property_owner_or_manager: manager,
-      source: cleanString(body.source, 80) || "direct",
-      referrer: cleanString(body.referrer, 300) || "none",
-      language: cleanString(body.language, 10) || "en",
-      commitment_confirmed: "yes",
-      commitment_time: cleanString(body.commitment_time, 64) || new Date().toISOString(),
-      confirmation_text: cleanString(body.confirmation_text, 600),
-      created_at: new Date().toISOString(),
-    };
+    const kindTitle =
+      kind === "owner"
+        ? "Space Listing Receipt"
+        : kind === "survey"
+        ? "Parking Survey Receipt"
+        : "Parking Request Receipt";
 
-    store.spaces.push(newSpace);
-    writeStore(store);
+    const outcome = await sendReceiptAndOperatorEmails({
+      refId,
+      kindTitle,
+      userEmail,
+      userRows: toRows(rawUserRows),
+      operatorRows: toRows(rawOpRows),
+      summary,
+    });
 
-    res.status(201).json({ ok: true, space: toPublicSpace(newSpace) });
+    res.json({
+      ok: true,
+      email_configured: outcome.email_configured,
+      email_sent: outcome.user_email_sent,
+    });
   });
 
-  // Driver requests either a listed space or a custom space (kept private on server)
-  app.post("/api/requests", (req: Request, res: Response) => {
-    const body = (req.body || {}) as Record<string, unknown>;
-    const area = cleanString(body.area, 200);
-    const areaKey = cleanString(body.area_key, 40);
-    const vehicleType = cleanString(body.vehicle_type, 40);
-    const duration = cleanString(body.duration, 40);
-    const startDate = cleanString(body.start_date, 30);
-    const hoursNeeded = cleanString(body.hours_needed, 120);
-    const name = cleanString(body.name, 120);
-    const phone = cleanString(body.phone, 20).replace(/[\s\-()]/g, "");
-    const vehicleNumber = cleanString(body.vehicle_number, 40);
-
-    if (
-      !area ||
-      !areaKey ||
-      !vehicleType ||
-      !duration ||
-      !startDate ||
-      !hoursNeeded ||
-      !name ||
-      !isTenDigitPhone(phone) ||
-      !vehicleNumber ||
-      body.commitment_confirmed !== "yes"
-    ) {
-      res.status(400).json({ ok: false, error: "Invalid request submission payload." });
-      return;
-    }
-
-    const quotedPrice =
-      typeof body.quoted_price_inr === "number" && Number.isFinite(body.quoted_price_inr)
-        ? body.quoted_price_inr
-        : null;
-
-    const newRequest: StoredRequest = {
-      id: "req_" + crypto.randomUUID().slice(0, 8),
-      matched_space_id: cleanString(body.matched_space_id, 40) || null,
-      matched_space_summary: cleanString(body.matched_space_summary, 240) || null,
-      area,
-      area_key: areaKey,
-      vehicle_type: vehicleType,
-      duration,
-      quoted_price_inr: quotedPrice,
-      start_date: startDate,
-      hours_needed: hoursNeeded,
-      name,
-      phone,
-      vehicle_number: vehicleNumber,
-      source: cleanString(body.source, 80) || "direct",
-      referrer: cleanString(body.referrer, 300) || "none",
-      language: cleanString(body.language, 10) || "en",
-      commitment_confirmed: "yes",
-      commitment_time: cleanString(body.commitment_time, 64) || new Date().toISOString(),
-      confirmation_text: cleanString(body.confirmation_text, 600),
-      created_at: new Date().toISOString(),
-    };
-
-    store.requests.push(newRequest);
-    writeStore(store);
-
-    res.status(201).json({ ok: true, id: newRequest.id });
+  app.use("/api", (_req: Request, res: Response) => {
+    res.status(404).json({ ok: false, error: "Not found" });
   });
 
   const isProd = process.env.NODE_ENV === "production";
