@@ -58,17 +58,17 @@ function buildReceiptEmailHtml(title: string, refId: string, rows: ReceiptRow[],
         `<tr><td style="padding:8px 0;border-bottom:1px solid #eceae4;color:#5c5c5c;font-size:14px;width:40%;vertical-align:top;">${escapeHtml(r.label)}</td><td style="padding:8px 0;border-bottom:1px solid #eceae4;color:#1a1a1a;font-size:14px;font-weight:600;vertical-align:top;">${escapeHtml(r.value)}</td></tr>`
     )
     .join("");
-  return `<!doctype html><html><body style="margin:0;padding:24px;background:#faf9f6;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1a1a1a;">
-  <div style="max-width:540px;margin:0 auto;background:#ffffff;border:1px solid #dcdad4;border-radius:6px;padding:24px;">
-    <div style="font-size:16px;font-weight:700;color:#0f5e5a;margin-bottom:4px;">Idle Spot</div>
-    <h1 style="font-size:20px;line-height:1.3;margin:0 0 14px;color:#1a1a1a;">${escapeHtml(title)}</h1>
-    <div style="background:#f3f2ee;border:1px solid #dcdad4;border-radius:6px;padding:12px 14px;margin-bottom:16px;">
-      <div style="font-size:12px;color:#5c5c5c;text-transform:uppercase;letter-spacing:0.04em;">Reference ID</div>
-      <div style="font-size:18px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#0f5e5a;margin-top:2px;">${escapeHtml(refId)}</div>
+  return `<!doctype html><html><body style="margin:0;padding:24px;background:#FAF7F0;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:#1A1A1A;">
+  <div style="max-width:540px;margin:0 auto;background:#ffffff;border:1px solid #d8d2c5;border-radius:6px;padding:24px;">
+    <div style="font-size:16px;font-weight:700;color:#1F5C3F;margin-bottom:4px;">Idle Spot</div>
+    <h1 style="font-size:20px;line-height:1.3;margin:0 0 14px;color:#1A1A1A;">${escapeHtml(title)}</h1>
+    <div style="background:#F3EFE6;border:1px solid #d8d2c5;border-radius:6px;padding:12px 14px;margin-bottom:16px;">
+      <div style="font-size:12px;color:#524f49;text-transform:uppercase;letter-spacing:0.04em;">Reference ID</div>
+      <div style="font-size:18px;font-weight:700;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;color:#1F5C3F;margin-top:2px;">${escapeHtml(refId)}</div>
     </div>
-    <p style="font-size:14px;line-height:1.5;color:#1a1a1a;margin:0 0 16px;">${escapeHtml(summary)}</p>
+    <p style="font-size:14px;line-height:1.5;color:#1A1A1A;margin:0 0 16px;">${escapeHtml(summary)}</p>
     <table style="width:100%;border-collapse:collapse;margin-bottom:18px;">${rowsHtml}</table>
-    <p style="font-size:13px;line-height:1.45;color:#5c5c5c;margin:0;border-top:1px solid #eceae4;padding-top:14px;">${escapeHtml(footerNote)}</p>
+    <p style="font-size:13px;line-height:1.45;color:#524f49;margin:0;border-top:1px solid #eceae4;padding-top:14px;">${escapeHtml(footerNote)}</p>
   </div>
 </body></html>`;
 }

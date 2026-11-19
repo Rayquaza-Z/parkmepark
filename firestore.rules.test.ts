@@ -134,11 +134,12 @@ function runSecurityVerification(): void {
 
   // Blueprint collection coverage check
   const collectionPaths = Object.keys(blueprint.firestore || {});
-  assert.ok(collectionPaths.length === 5, "Expected 5 top-level collections in firebase-blueprint.json");
+  assert.ok(collectionPaths.length === 6, "Expected 6 top-level collections in firebase-blueprint.json");
   assertMatchesRule(rulesSource, "match /{document=**} {\n      allow read, write: if false;", "default deny catch-all");
   assertMatchesRule(rulesSource, "match /test/{docId}", "test/connection guard");
   assertMatchesRule(rulesSource, "match /admins/{adminId} {\n      allow read, write: if false;", "admins out-of-band lock");
   assertMatchesRule(rulesSource, "match /users/{userId}", "users match block");
+  assertMatchesRule(rulesSource, "match /userVerifications/{userId}", "userVerifications match block");
   assertMatchesRule(rulesSource, "match /spaces/{spaceId}", "spaces match block");
   assertMatchesRule(rulesSource, "match /spacePrivateDetails/{spaceId}", "spacePrivateDetails match block");
   assertMatchesRule(rulesSource, "match /parkingRequests/{requestId}", "parkingRequests match block");
@@ -181,8 +182,11 @@ function runSecurityVerification(): void {
     "Dirty #3 spoofed admin rejected"
   );
 
-  // Also verify city validation and Pune/Dadar areaKeys exist in rules
+  // Also verify city validation, Google Maps URL guard, cancellation policy, and Pune/Dadar areaKeys
   assertMatchesRule(rulesSource, "isValidCity(", "City allowlist guard");
+  assertMatchesRule(rulesSource, "isValidGoogleMapsUrl(data.locationLink)", "Mandatory Google Maps URL guard");
+  assertMatchesRule(rulesSource, "incoming().cancellationPolicyAccepted == true", "Driver cancellation acceptance guard");
+  assertMatchesRule(rulesSource, "incoming().cancellationDeadline is timestamp", "Driver cancellation deadline timestamp guard");
   assertMatchesRule(rulesSource, "'dadar'", "Mumbai dadar areaKey");
   assertMatchesRule(rulesSource, "'koregaon_park'", "Pune areaKeys in rules");
 
@@ -191,6 +195,7 @@ function runSecurityVerification(): void {
   for (const forbidden of ["phone", "email", "ownerName", "propertyOwnerOrManager", "locationLink"]) {
     assert.ok(!publicSpaceProps.includes(forbidden), `PII leakage risk in PublicSpace: ${forbidden}`);
   }
+  assert.ok(!rulesSource.toLowerCase().includes("digilocker"), "DigiLocker references must be removed from firestore.rules");
 
   console.log("Verified firebase-blueprint.json + firestore.rules against all 12 Dirty Dozen invariants.");
 }

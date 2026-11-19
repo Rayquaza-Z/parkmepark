@@ -81,16 +81,58 @@ service cloud.firestore {
       return phone is string && phone.size() == 10 && phone.matches('^[0-9]{10}$');
     }
 
+    function isValidGoogleMapsUrl(url) {
+      return url is string
+        && url.size() >= 12
+        && url.size() <= 500
+        && url.matches('^https://.*(google\\.com/maps|maps\\.app\\.goo\\.gl|goo\\.gl/maps).*');
+    }
+
     // --- Entity Validation Blueprints ---
     function isValidUserProfile(data) {
       return data.keys().hasAll(['uid', 'displayName', 'email', 'photoUrl', 'createdAt', 'updatedAt'])
-        && data.keys().hasOnly(['uid', 'displayName', 'email', 'photoUrl', 'createdAt', 'updatedAt'])
+        && data.keys().hasOnly([
+          'uid', 'displayName', 'email', 'photoUrl',
+          'phone', 'contactEmail', 'profileCompleted', 'vehicleProofType',
+          'vehicleNumber', 'dlVerificationMethod', 'drivingLicenseNumber',
+          'createdAt', 'updatedAt'
+        ])
         && isValidId(data.uid)
         && data.uid == request.auth.uid
         && isStr(data.displayName, 1, 120)
         && isStr(data.email, 3, 160)
         && data.email == request.auth.token.email
         && isStr(data.photoUrl, 0, 500)
+        && (!('phone' in data) || data.phone == null || data.phone == '' || isValidPhone(data.phone))
+        && (!('contactEmail' in data) || data.contactEmail == null || isStr(data.contactEmail, 0, 160))
+        && (!('profileCompleted' in data) || data.profileCompleted == null || data.profileCompleted is bool)
+        && (!('vehicleProofType' in data) || data.vehicleProofType == null || (data.vehicleProofType is string && data.vehicleProofType in ['vehicle_photo', 'rc_document']))
+        && (!('vehicleNumber' in data) || data.vehicleNumber == null || isStr(data.vehicleNumber, 0, 40))
+        && (!('dlVerificationMethod' in data) || data.dlVerificationMethod == null || (data.dlVerificationMethod is string && data.dlVerificationMethod in ['dl_doc_upload', 'dl_number_only']))
+        && (!('drivingLicenseNumber' in data) || data.drivingLicenseNumber == null || isStr(data.drivingLicenseNumber, 0, 40))
+        && data.createdAt is timestamp
+        && data.updatedAt is timestamp;
+    }
+
+    function isValidUserVerification(data) {
+      return data.keys().hasAll([
+          'uid', 'vehicleProofType', 'vehicleProofDataUrl', 'vehicleProofFileName',
+          'createdAt', 'updatedAt'
+        ])
+        && data.keys().hasOnly([
+          'uid', 'vehicleProofType', 'vehicleProofDataUrl', 'vehicleProofFileName',
+          'dlVerificationMethod', 'dlDocumentDataUrl', 'dlDocumentFileName',
+          'createdAt', 'updatedAt'
+        ])
+        && isValidId(data.uid)
+        && data.uid == request.auth.uid
+        && data.vehicleProofType is string
+        && data.vehicleProofType in ['vehicle_photo', 'rc_document']
+        && isStr(data.vehicleProofDataUrl, 1, 350000)
+        && isStr(data.vehicleProofFileName, 1, 160)
+        && (!('dlVerificationMethod' in data) || data.dlVerificationMethod == null || (data.dlVerificationMethod is string && data.dlVerificationMethod in ['dl_doc_upload', 'dl_number_only']))
+        && (!('dlDocumentDataUrl' in data) || data.dlDocumentDataUrl == null || isStr(data.dlDocumentDataUrl, 0, 350000))
+        && (!('dlDocumentFileName' in data) || data.dlDocumentFileName == null || isStr(data.dlDocumentFileName, 0, 160))
         && data.createdAt is timestamp
         && data.updatedAt is timestamp;
     }
@@ -126,7 +168,7 @@ service cloud.firestore {
 
     function isValidSpacePrivate(data) {
       return data.keys().hasAll([
-          'ownerUid', 'refId', 'ownerName', 'phone', 'email',
+          'ownerUid', 'refId', 'ownerName', 'phone', 'email', 'locationLink',
           'propertyOwnerOrManager', 'confirmationText', 'commitmentConfirmed',
           'commitmentTime', 'source', 'referrer', 'language', 'createdAt'
         ])
@@ -143,7 +185,7 @@ service cloud.firestore {
         && isStr(data.ownerName, 1, 120)
         && isValidPhone(data.phone)
         && isStr(data.email, 0, 160)
-        && (!('locationLink' in data) || data.locationLink == null || isStr(data.locationLink, 0, 500))
+        && isValidGoogleMapsUrl(data.locationLink)
         && isStr(data.propertyOwnerOrManager, 1, 160)
         && isStr(data.confirmationText, 1, 600)
         && data.commitmentConfirmed == 'yes'
@@ -168,7 +210,8 @@ service cloud.firestore {
           'city', 'area', 'areaKey', 'vehicleType', 'duration', 'quotedPriceInr',
           'startDate', 'hoursNeeded', 'driverName', 'phone', 'email',
           'vehicleNumber', 'confirmationText', 'commitmentConfirmed',
-          'commitmentTime', 'status', 'source', 'referrer', 'pageUrl', 'language', 'createdAt'
+          'commitmentTime', 'status', 'source', 'referrer', 'pageUrl',
+          'cancellationPolicyAccepted', 'cancellationDeadline', 'language', 'createdAt'
         ])
         && isValidId(data.driverUid)
         && isStr(data.refId, 6, 32)
@@ -196,6 +239,8 @@ service cloud.firestore {
         && isStr(data.source, 1, 80)
         && isStr(data.referrer, 1, 300)
         && (!('pageUrl' in data) || data.pageUrl == null || isStr(data.pageUrl, 0, 500))
+        && (!('cancellationPolicyAccepted' in data) || data.cancellationPolicyAccepted == null || data.cancellationPolicyAccepted is bool)
+        && (!('cancellationDeadline' in data) || data.cancellationDeadline == null || data.cancellationDeadline is timestamp)
         && isValidLang(data.language)
         && data.createdAt is timestamp;
     }
@@ -250,7 +295,30 @@ service cloud.firestore {
         && incoming().uid == existing().uid
         && incoming().createdAt == existing().createdAt
         && incoming().updatedAt == request.time
-        && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'email', 'photoUrl', 'updatedAt']);
+        && incoming().diff(existing()).affectedKeys().hasOnly([
+          'displayName', 'email', 'photoUrl', 'phone', 'contactEmail',
+          'profileCompleted', 'vehicleProofType', 'vehicleNumber',
+          'dlVerificationMethod', 'drivingLicenseNumber', 'updatedAt'
+        ]);
+      allow delete: if false;
+    }
+
+    match /userVerifications/{userId} {
+      allow get: if isValidId(userId) && isVerifiedUser() && (request.auth.uid == userId || isAdmin());
+      allow list: if isAdminList();
+      allow create: if isValidId(userId)
+        && isVerifiedUser()
+        && request.auth.uid == userId
+        && isValidUserVerification(incoming())
+        && incoming().createdAt == request.time
+        && incoming().updatedAt == request.time;
+      allow update: if isValidId(userId)
+        && isVerifiedUser()
+        && request.auth.uid == userId
+        && isValidUserVerification(incoming())
+        && incoming().uid == existing().uid
+        && incoming().createdAt == existing().createdAt
+        && incoming().updatedAt == request.time;
       allow delete: if false;
     }
 
@@ -316,23 +384,18 @@ service cloud.firestore {
         && isValidParkingRequest(incoming())
         && incoming().driverUid == request.auth.uid
         && incoming().status == 'pending'
+        && incoming().cancellationPolicyAccepted == true
+        && incoming().cancellationDeadline is timestamp
         && incoming().createdAt == request.time
         && (incoming().matchedSpaceId == '' || exists(/databases/$(database)/documents/spaces/$(incoming().matchedSpaceId)));
       allow update: if isValidId(requestId)
-        && isVerifiedUser()
+        && isAdmin()
         && isValidParkingRequest(incoming())
+        && existing().status != 'cancelled'
         && incoming().driverUid == existing().driverUid
         && incoming().refId == existing().refId
         && incoming().createdAt == existing().createdAt
-        && (
-          isAdmin() ||
-          (
-            existing().status != 'cancelled'
-            && existing().driverUid == request.auth.uid
-            && incoming().status == 'cancelled'
-            && incoming().diff(existing()).affectedKeys().hasOnly(['status'])
-          )
-        );
+        && incoming().diff(existing()).affectedKeys().hasOnly(['status']);
       allow delete: if false;
     }
 

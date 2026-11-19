@@ -22,7 +22,7 @@ import {
   onSnapshot,
   writeBatch,
   serverTimestamp,
-  type Timestamp,
+  Timestamp,
   type Unsubscribe,
 } from "firebase/firestore";
 import firebaseConfig from "../firebase-applet-config.json";
@@ -124,6 +124,9 @@ const VALID_WOULD_USE_APP = new Set(["yes", "maybe", "no"]);
 const VALID_WILLING_TO_PAY = new Set(["free_only", "under_50", "50_100", "100_150", "150_250", "above_250"]);
 const ID_REGEX = /^[a-zA-Z0-9_-]{1,128}$/;
 const PHONE_REGEX = /^[0-9]{10}$/;
+const GOOGLE_MAPS_HTTPS_REGEX = /^https:\/\/.*(google\.com\/maps|maps\.app\.goo\.gl|goo\.gl\/maps)/i;
+const VALID_VEHICLE_PROOF_TYPES = new Set(["vehicle_photo", "rc_document"]);
+const VALID_DL_METHODS = new Set(["dl_doc_upload", "dl_number_only"]);
 
 function clampStr(value: unknown, maxLen: number, fallback = ""): string {
   const text = typeof value === "string" ? value.trim() : fallback;
@@ -156,6 +159,27 @@ export interface AuthUserSummary {
   emailVerified: boolean;
   photoUrl: string;
   isAdmin: boolean;
+}
+
+export interface UserProfileRecord {
+  uid: string;
+  display_name: string;
+  email: string;
+  contact_email: string;
+  phone: string;
+  profile_completed: boolean;
+  vehicle_proof_type: "vehicle_photo" | "rc_document" | null;
+  vehicle_number: string;
+  dl_verification_method: "dl_doc_upload" | "dl_number_only" | null;
+  driving_license_number: string;
+}
+
+export interface UserVerificationSummary {
+  uid: string;
+  vehicle_proof_type: string;
+  vehicle_proof_file_name: string;
+  dl_verification_method: string;
+  dl_document_file_name: string;
 }
 
 export interface PublicSpaceRecord {
@@ -218,6 +242,8 @@ export interface ParkingRequestRecord {
   status: "pending" | "confirmed" | "cancelled";
   source: string;
   page_url: string | null;
+  cancellation_policy_accepted: boolean | null;
+  cancellation_deadline: string | null;
   language: string;
   created_at: string;
   _sortMs: number;
@@ -313,6 +339,159 @@ export function subscribeAuth(callback: (user: AuthUserSummary | null) => void):
   });
 }
 
+function mapUserProfile(uid: string, data: Record<string, unknown>): UserProfileRecord {
+  const proofRaw = clampStr(data.vehicleProofType, 30);
+  const dlRaw = clampStr(data.dlVerificationMethod, 30);
+  return {
+    uid,
+    display_name: clampStr(data.displayName, 120),
+    email: clampStr(data.email, 160),
+    contact_email: clampStr(data.contactEmail, 160) || clampStr(data.email, 160),
+    phone: clampStr(data.phone, 20),
+    profile_completed: data.profileCompleted === true,
+    vehicle_proof_type: VALID_VEHICLE_PROOF_TYPES.has(proofRaw)
+      ? (proofRaw as "vehicle_photo" | "rc_document")
+      : null,
+    vehicle_number: clampStr(data.vehicleNumber, 40),
+    dl_verification_method: VALID_DL_METHODS.has(dlRaw)
+      ? (dlRaw as "dl_doc_upload" | "dl_number_only")
+      : null,
+    driving_license_number: clampStr(data.drivingLicenseNumber, 40),
+  };
+}
+
+export function subscribeMyProfile(
+  uid: string,
+  onData: (profile: UserProfileRecord | null) => void,
+  onError: (err: Error) => void
+): Unsubscribe {
+  const path = `users/${uid}`;
+  return onSnapshot(
+    doc(db, "users", uid),
+    (snap) => {
+      if (!snap.exists()) {
+        onData(null);
+        return;
+      }
+      onData(mapUserProfile(snap.id, snap.data() as Record<string, unknown>));
+    },
+    (error) => {
+      try {
+        handleFirestoreError(error, OperationType.GET, path);
+      } catch (wrapped) {
+        onError(wrapped instanceof Error ? wrapped : new Error(String(wrapped)));
+      }
+    }
+  );
+}
+
+export interface SaveUserProfileInput {
+  display_name: string;
+  phone: string;
+  contact_email: string;
+  vehicle_proof_type: "vehicle_photo" | "rc_document";
+  vehicle_number: string;
+  vehicle_proof_data_url: string;
+  vehicle_proof_file_name: string;
+  dl_verification_method?: "dl_doc_upload" | "dl_number_only" | null;
+  driving_license_number: string;
+  dl_document_data_url?: string | null;
+  dl_document_file_name?: string | null;
+}
+
+export async function saveUserProfileAndVerification(input: SaveUserProfileInput): Promise<UserProfileRecord> {
+  const user = auth.currentUser;
+  if (!user || !user.emailVerified || !user.email) {
+    throw new Error("Please sign in with Google first.");
+  }
+
+  const displayName = clampStr(input.display_name, 120);
+  if (!displayName) throw new Error("Full name is required.");
+  const phone = clampStr(input.phone, 20).replace(/[\s\-()]/g, "");
+  if (!PHONE_REGEX.test(phone)) throw new Error("Phone number must be 10 digits.");
+  const contactEmail = clampStr(input.contact_email, 160);
+  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(contactEmail)) {
+    throw new Error("Please enter a valid email address.");
+  }
+  const vehicleProofType = VALID_VEHICLE_PROOF_TYPES.has(input.vehicle_proof_type)
+    ? input.vehicle_proof_type
+    : "vehicle_photo";
+  const vehicleNumber = clampStr(input.vehicle_number, 40).toUpperCase();
+  if (!vehicleNumber) throw new Error("Vehicle number is required.");
+  const vehicleProofDataUrl = clampStr(input.vehicle_proof_data_url, 350000);
+  const vehicleProofFileName = clampStr(input.vehicle_proof_file_name, 160) || "vehicle-proof";
+  if (!vehicleProofDataUrl) throw new Error("Vehicle ownership proof upload is required.");
+
+  const drivingLicenseNumber = clampStr(input.driving_license_number, 40).toUpperCase();
+  const dlDocDataUrl = clampStr(input.dl_document_data_url, 350000);
+  const dlDocFileName = clampStr(input.dl_document_file_name, 160);
+  const dlVerificationMethod: "dl_doc_upload" | "dl_number_only" | null = dlDocDataUrl
+    ? "dl_doc_upload"
+    : drivingLicenseNumber
+      ? "dl_number_only"
+      : null;
+
+  const userRef = doc(db, "users", user.uid);
+  const verRef = doc(db, "userVerifications", user.uid);
+  const [userSnap, verSnap] = await Promise.all([getDoc(userRef), getDoc(verRef)]);
+
+  const profileFields = {
+    displayName,
+    email: clampStr(user.email, 160),
+    photoUrl: clampStr(user.photoURL, 500),
+    phone,
+    contactEmail,
+    profileCompleted: true,
+    vehicleProofType,
+    vehicleNumber,
+    dlVerificationMethod,
+    drivingLicenseNumber,
+    updatedAt: serverTimestamp(),
+  };
+
+  const verFields = {
+    uid: user.uid,
+    vehicleProofType,
+    vehicleProofDataUrl,
+    vehicleProofFileName,
+    dlVerificationMethod,
+    dlDocumentDataUrl: dlDocDataUrl || null,
+    dlDocumentFileName: dlDocFileName || null,
+    updatedAt: serverTimestamp(),
+  };
+
+  const batch = writeBatch(db);
+  if (!userSnap.exists()) {
+    batch.set(userRef, { uid: user.uid, ...profileFields, createdAt: serverTimestamp() });
+  } else {
+    batch.update(userRef, profileFields);
+  }
+  if (!verSnap.exists()) {
+    batch.set(verRef, { ...verFields, createdAt: serverTimestamp() });
+  } else {
+    batch.update(verRef, verFields);
+  }
+
+  try {
+    await batch.commit();
+  } catch (err) {
+    handleFirestoreError(err, OperationType.WRITE, `users/${user.uid}`);
+  }
+
+  return {
+    uid: user.uid,
+    display_name: displayName,
+    email: profileFields.email,
+    contact_email: contactEmail,
+    phone,
+    profile_completed: true,
+    vehicle_proof_type: vehicleProofType,
+    vehicle_number: vehicleNumber,
+    dl_verification_method: dlVerificationMethod,
+    driving_license_number: drivingLicenseNumber,
+  };
+}
+
 function parseNullableCity(value: unknown): "Mumbai" | "Pune" | null {
   if (value === "Mumbai" || value === "Pune") return value;
   return null;
@@ -392,6 +571,9 @@ function mapParkingRequest(id: string, data: Record<string, unknown>): ParkingRe
     status,
     source: clampStr(data.source, 80),
     page_url: pageUrl || null,
+    cancellation_policy_accepted:
+      typeof data.cancellationPolicyAccepted === "boolean" ? data.cancellationPolicyAccepted : null,
+    cancellation_deadline: data.cancellationDeadline ? toIsoDate(data.cancellationDeadline) : null,
     language: clampStr(data.language, 10),
     created_at: toIsoDate(data.createdAt),
     _sortMs: toEpochMs(data.createdAt),
@@ -659,6 +841,9 @@ export async function createSpaceListing(input: CreateSpaceInput): Promise<{
   }
 
   const locationLinkClean = clampStr(input.location_link, 500);
+  if (!GOOGLE_MAPS_HTTPS_REGEX.test(locationLinkClean)) {
+    throw new Error("Please paste a Google Maps link starting with https://");
+  }
   const pageUrlClean = clampStr(input.page_url, 500);
   const suffix = crypto.randomUUID().replace(/-/g, "").slice(0, 8);
   const spaceId = `spc_${suffix}`;
@@ -687,7 +872,7 @@ export async function createSpaceListing(input: CreateSpaceInput): Promise<{
     ownerName: clampStr(input.name, 120) || clampStr(user.displayName, 120) || "Owner",
     phone,
     email: clampStr(input.email || user.email, 160),
-    locationLink: locationLinkClean || null,
+    locationLink: locationLinkClean,
     propertyOwnerOrManager: clampStr(input.property_owner_or_manager, 160) || "Owner",
     confirmationText: clampStr(input.confirmation_text, 600) || `Space listing (${spaceType}) in ${publicDoc.area}.`,
     commitmentConfirmed: "yes" as const,
@@ -751,6 +936,8 @@ export interface CreateRequestInput {
   source?: string;
   referrer?: string;
   page_url?: string | null;
+  cancellation_policy_accepted: boolean;
+  cancellation_deadline_iso: string;
   language?: string;
 }
 
@@ -771,6 +958,13 @@ export async function createParkingRequest(input: CreateRequestInput): Promise<{
   const phone = clampStr(input.phone, 20).replace(/[\s\-()]/g, "");
   if (!PHONE_REGEX.test(phone)) {
     throw new Error("Phone number must be 10 digits.");
+  }
+  if (input.cancellation_policy_accepted !== true) {
+    throw new Error("Please accept the cancellation policy.");
+  }
+  const deadlineMs = Date.parse(input.cancellation_deadline_iso);
+  if (!Number.isFinite(deadlineMs)) {
+    throw new Error("Invalid cancellation deadline.");
   }
 
   const matchedSpaceId =
@@ -813,6 +1007,8 @@ export async function createParkingRequest(input: CreateRequestInput): Promise<{
     source: clampStr(input.source, 80) || "direct",
     referrer: clampStr(input.referrer, 300) || "none",
     pageUrl: pageUrlClean || null,
+    cancellationPolicyAccepted: true,
+    cancellationDeadline: Timestamp.fromDate(new Date(deadlineMs)),
     language: lang,
     createdAt: serverTimestamp(),
   };
@@ -937,6 +1133,8 @@ export interface IdleSpotFirebaseBridge {
   signInWithGoogle: typeof signInWithGoogle;
   signOutGoogle: typeof signOutGoogle;
   subscribeAuth: typeof subscribeAuth;
+  subscribeMyProfile: typeof subscribeMyProfile;
+  saveUserProfileAndVerification: typeof saveUserProfileAndVerification;
   subscribePublicSpaces: typeof subscribePublicSpaces;
   subscribeMySpaces: typeof subscribeMySpaces;
   subscribeMyRequests: typeof subscribeMyRequests;
@@ -961,6 +1159,8 @@ window.IdleSpotFirebase = {
   signInWithGoogle,
   signOutGoogle,
   subscribeAuth,
+  subscribeMyProfile,
+  saveUserProfileAndVerification,
   subscribePublicSpaces,
   subscribeMySpaces,
   subscribeMyRequests,

@@ -25,6 +25,34 @@
           "type": "string",
           "maxLength": 500
         },
+        "phone": {
+          "type": "string",
+          "maxLength": 10,
+          "pattern": "^([0-9]{10})?$"
+        },
+        "contactEmail": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "profileCompleted": {
+          "type": "boolean"
+        },
+        "vehicleProofType": {
+          "type": "string",
+          "enum": ["vehicle_photo", "rc_document", null]
+        },
+        "vehicleNumber": {
+          "type": "string",
+          "maxLength": 40
+        },
+        "dlVerificationMethod": {
+          "type": "string",
+          "enum": ["dl_doc_upload", "dl_number_only", null]
+        },
+        "drivingLicenseNumber": {
+          "type": "string",
+          "maxLength": 40
+        },
         "createdAt": {
           "type": "string",
           "format": "date-time"
@@ -35,6 +63,61 @@
         }
       },
       "required": ["uid", "displayName", "email", "photoUrl", "createdAt", "updatedAt"]
+    },
+    "UserVerification": {
+      "title": "UserVerification",
+      "description": "Private vehicle ownership and optional driving license verification documents owned strictly by the signed-in user and verified admin.",
+      "type": "object",
+      "properties": {
+        "uid": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128,
+          "pattern": "^[a-zA-Z0-9_\\-]+$"
+        },
+        "vehicleProofType": {
+          "type": "string",
+          "enum": ["vehicle_photo", "rc_document"]
+        },
+        "vehicleProofDataUrl": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 350000
+        },
+        "vehicleProofFileName": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 160
+        },
+        "dlVerificationMethod": {
+          "type": "string",
+          "enum": ["dl_doc_upload", "dl_number_only", null]
+        },
+        "dlDocumentDataUrl": {
+          "type": "string",
+          "maxLength": 350000
+        },
+        "dlDocumentFileName": {
+          "type": "string",
+          "maxLength": 160
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time"
+        }
+      },
+      "required": [
+        "uid",
+        "vehicleProofType",
+        "vehicleProofDataUrl",
+        "vehicleProofFileName",
+        "createdAt",
+        "updatedAt"
+      ]
     },
     "PublicSpace": {
       "title": "PublicSpace",
@@ -154,7 +237,8 @@
         },
         "locationLink": {
           "type": "string",
-          "description": "Nullable optional Google Maps or location link for owner listing verification.",
+          "description": "Mandatory Google Maps https link for owner listing verification (never exposed publicly).",
+          "minLength": 12,
           "maxLength": 500
         },
         "propertyOwnerOrManager": {
@@ -330,6 +414,15 @@
           "description": "Nullable submission page URL for legacy compatibility.",
           "maxLength": 500
         },
+        "cancellationPolicyAccepted": {
+          "type": "boolean",
+          "description": "Whether the driver accepted the cancellation window rule (nullable for legacy records)."
+        },
+        "cancellationDeadline": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Start date minus CANCELLATION_HOURS (nullable for legacy records)."
+        },
         "language": {
           "type": "string",
           "enum": ["en", "hi", "mr"]
@@ -457,6 +550,10 @@
     "/users/{userId}": {
       "schema": { "$ref": "#/entities/UserProfile" },
       "description": "Authenticated Google account profiles keyed by Firebase Auth UID."
+    },
+    "/userVerifications/{userId}": {
+      "schema": { "$ref": "#/entities/UserVerification" },
+      "description": "Private vehicle proof and Driving License verification documents keyed by Firebase Auth UID."
     },
     "/spaces/{spaceId}": {
       "schema": { "$ref": "#/entities/PublicSpace" },

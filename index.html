@@ -13,18 +13,19 @@
  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari:wght@400;600;700&family=Noto+Sans:wght@600;700&display=swap" rel="stylesheet" />
  <style>
   :root {
-   --bg: #faf9f6;
-   --surface: #ffffff;
-   --surface-tinted: #f3f2ee;
-   --text: #1a1a1a;
-   --muted: #5c5c5c;
-   --border: #dcdad4;
-   --accent: #0f5e5a;
-   --accent-hover: #0c4c49;
-   --accent-border: #0a423f;
-   --accent-text: #ffffff;
-   --error: #b00020;
-   --error-bg: #fff5f6;
+   --bg: #FAF7F0;
+   --surface: #FFFFFF;
+   --surface-tinted: #F3EFE6;
+   --text: #1A1A1A;
+   --muted: #524F49;
+   --border: #D8D2C5;
+   --accent: #1F5C3F;
+   --accent-hover: #174630;
+   --accent-border: #133A27;
+   --accent-text: #FFFFFF;
+   --secondary-accent: #2E4A6B;
+   --error: #B00020;
+   --error-bg: #FFF5F6;
    --radius: 6px;
    --space-field: 22px;
    --space-section: 28px;
@@ -155,13 +156,17 @@
   .trust-item {
    display: flex;
    align-items: flex-start;
-   gap: 10px;
+   gap: 8px;
    font-size: 14px;
    line-height: 1.4;
    color: var(--text);
   }
 
-  .trust-icon { flex-shrink: 0; width: 17px; height: 17px; margin-top: 2px; color: var(--accent); }
+  .trust-bullet {
+   flex-shrink: 0;
+   font-weight: 700;
+   color: var(--secondary-accent);
+  }
 
   .mode-tabs {
    display: grid;
@@ -342,7 +347,7 @@
    background-color: var(--surface);
    border: 1px solid var(--border);
    border-radius: var(--radius);
-   transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+   transition: border-color var(--transition-fast);
   }
 
   textarea { min-height: 88px; resize: vertical; }
@@ -516,7 +521,7 @@
   .price-box {
    padding: 16px;
    margin-bottom: var(--space-field);
-   border: 1px solid var(--border);
+   border: 2px solid var(--secondary-accent);
    background-color: var(--surface);
    border-radius: var(--radius);
    font-size: 16px;
@@ -654,10 +659,28 @@
   }
 
   .thank-you-header { display: flex; align-items: flex-start; gap: 12px; }
-  .thank-you-icon { flex-shrink: 0; width: 22px; height: 22px; margin-top: 2px; color: var(--accent); }
+  .thank-you-tick {
+   flex-shrink: 0;
+   font-family: var(--font-heading);
+   font-size: 18px;
+   font-weight: 700;
+   line-height: 1.25;
+   color: var(--secondary-accent);
+  }
   .thank-you-content p { margin: 0 0 6px; }
   .thank-you-content p:first-child { font-weight: 600; }
   .thank-you-content p:last-child { margin-bottom: 0; }
+  .thank-you-sub { font-size: 15px; line-height: 1.45; color: var(--text); }
+  .cancel-rule-box {
+   margin: 0 0 14px;
+   padding: 12px 14px;
+   border: 1px solid var(--secondary-accent);
+   background-color: var(--surface);
+   border-radius: var(--radius);
+   font-size: 14px;
+   line-height: 1.45;
+   color: var(--text);
+  }
   .thank-you-actions { margin-top: 16px; display: flex; flex-direction: column; gap: 10px; }
   .reload-note { font-weight: 400; font-size: 15px; color: var(--muted); }
   .receipt-card {
@@ -744,6 +767,30 @@
    font-size: 15px;
    line-height: 1.5;
    color: var(--muted);
+  }
+  .profile-gate-card {
+   padding: 22px 20px;
+   margin-bottom: 24px;
+   border: 1px solid var(--border);
+   background-color: var(--surface);
+   border-radius: var(--radius);
+  }
+  .file-input-control {
+   display: block;
+   width: 100%;
+   padding: 10px 12px;
+   font-family: inherit;
+   font-size: 14px;
+   color: var(--text);
+   background-color: var(--surface-tinted);
+   border: 1px solid var(--border);
+   border-radius: var(--radius);
+  }
+  .file-status-note {
+   margin-top: 6px;
+   font-size: 13px;
+   font-weight: 600;
+   color: var(--secondary-accent);
   }
   .account-bar {
    padding: 14px 16px;
@@ -949,12 +996,6 @@
    <h2 id="auth-gate-heading" class="auth-gate-heading">Sign in required</h2>
    <p id="auth-gate-desc" class="auth-gate-desc">Please sign in with your Google account to view available parking spaces, request a spot, or list your space.</p>
    <button type="button" id="gate-google-signin-btn" class="google-btn">
-    <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
-     <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-     <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-     <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-     <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-    </svg>
     <span id="gate-google-signin-label">Continue with Google</span>
    </button>
    <div id="gate-auth-error" class="field-error hidden"></div>
@@ -968,12 +1009,6 @@
     </div>
     <div class="account-actions">
      <button type="button" id="google-signin-btn" class="google-btn hidden">
-      <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
-       <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
-       <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
-       <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
-       <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
-      </svg>
       <span id="google-signin-label">Continue with Google</span>
      </button>
      <button type="button" id="toggle-activity-btn" class="small-btn is-primary hidden">My Receipts (0)</button>
@@ -982,6 +1017,70 @@
    </div>
    <div id="account-auth-error" class="field-error hidden"></div>
   </div>
+
+  <section id="profile-gate-card" class="profile-gate-card hidden" aria-live="polite">
+   <h2 id="profile-gate-heading" class="auth-gate-heading">Complete your verification profile</h2>
+   <p id="profile-gate-desc" class="auth-gate-desc">Before using Idle Spot, complete your profile with contact details, vehicle number, and proof of vehicle ownership.</p>
+   <form id="profile-onboarding-form" novalidate>
+    <div class="field">
+     <label class="field-label" for="profile-name" id="lbl-profile-name">Full name</label>
+     <input type="text" id="profile-name" name="profile_name" autocomplete="name" required />
+     <div class="field-error hidden" id="err-profile-name"></div>
+    </div>
+
+    <div class="field">
+     <label class="field-label" for="profile-phone" id="lbl-profile-phone">Phone number</label>
+     <input type="tel" id="profile-phone" name="profile_phone" inputmode="numeric" autocomplete="tel-national" maxlength="15" required />
+     <div class="field-error hidden" id="err-profile-phone"></div>
+    </div>
+
+    <div class="field">
+     <label class="field-label" for="profile-email" id="lbl-profile-email">Email</label>
+     <input type="email" id="profile-email" name="profile_email" inputmode="email" autocomplete="email" required />
+     <div class="field-error hidden" id="err-profile-email"></div>
+    </div>
+
+    <div class="field">
+     <label class="field-label" for="profile-vehicle-no" id="lbl-profile-vehicle-no">Vehicle number</label>
+     <input type="text" id="profile-vehicle-no" name="profile_vehicle_no" autocomplete="off" autocapitalize="characters" required />
+     <div class="field-error hidden" id="err-profile-vehicle-no"></div>
+    </div>
+
+    <div class="field">
+     <span class="field-label" id="lbl-profile-proof-type">Proof of vehicle ownership</span>
+     <div class="choice-stack" role="radiogroup" aria-labelledby="lbl-profile-proof-type">
+      <label class="choice-option" for="proof-type-photo">
+       <input type="radio" id="proof-type-photo" name="vehicle_proof_type" value="vehicle_photo" checked />
+       <span id="txt-proof-type-photo">Photo of vehicle and numberplate</span>
+      </label>
+      <label class="choice-option" for="proof-type-rc">
+       <input type="radio" id="proof-type-rc" name="vehicle_proof_type" value="rc_document" />
+       <span id="txt-proof-type-rc">Car registration (RC) document</span>
+      </label>
+     </div>
+     <div style="margin-top: 10px;">
+      <input type="file" id="profile-vehicle-proof-file" class="file-input-control" accept="image/*,.pdf" required />
+      <div id="profile-vehicle-proof-status" class="file-status-note hidden"></div>
+     </div>
+     <div class="field-error hidden" id="err-profile-vehicle-proof"></div>
+    </div>
+
+    <div class="field">
+     <span class="field-label" id="lbl-profile-dl">Driving License details (optional)</span>
+     <label class="hours-sub-label" for="profile-dl-no" id="lbl-profile-dl-no">Driving License number (optional)</label>
+     <input type="text" id="profile-dl-no" name="profile_dl_no" autocomplete="off" autocapitalize="characters" maxlength="40" />
+     <div style="margin-top: 10px;">
+      <label class="hours-sub-label" for="profile-dl-file" id="lbl-profile-dl-file">Upload Driving License photo or PDF (optional)</label>
+      <input type="file" id="profile-dl-file" class="file-input-control" accept="image/*,.pdf" />
+      <div id="profile-dl-file-status" class="file-status-note hidden"></div>
+     </div>
+     <div class="field-error hidden" id="err-profile-dl"></div>
+    </div>
+
+    <div id="profile-submit-error" class="form-error-banner hidden" role="alert"></div>
+    <button type="submit" id="profile-submit-btn" class="submit-btn">Save profile and continue</button>
+   </form>
+  </section>
 
   <section id="my-activity-panel" class="activity-panel hidden" aria-live="polite">
    <h2 id="activity-heading">My Receipts &amp; Activity</h2>
@@ -995,15 +1094,15 @@
   <div class="trust-strip" aria-label="Service guarantees">
    <ul class="trust-list">
     <li class="trust-item">
-     <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+     <span class="trust-bullet" aria-hidden="true">-</span>
      <span id="trust-1">Spaces verified directly with the property owner or manager.</span>
     </li>
     <li class="trust-item">
-     <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+     <span class="trust-bullet" aria-hidden="true">-</span>
      <span id="trust-2">Exact location, gate access, and owner contact sent on WhatsApp before you arrive.</span>
     </li>
     <li class="trust-item">
-     <svg class="trust-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+     <span class="trust-bullet" aria-hidden="true">-</span>
      <span id="trust-3">Zero payment on this page — confirm availability first.</span>
     </li>
    </ul>
@@ -1144,7 +1243,7 @@
 
    <div id="survey-thank-you" class="thank-you-box hidden" role="status" aria-live="polite">
     <div class="thank-you-header">
-     <svg class="thank-you-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+     <span class="thank-you-tick" aria-hidden="true">✓</span>
      <div class="thank-you-content">
       <p id="survey-thank-you-text">Thank you for completing the Idle Spot parking survey.</p>
       <p id="survey-thank-you-ref" class="reload-note"></p>
@@ -1275,11 +1374,17 @@
 
    <div id="driver-confirm-box" class="confirm-box hidden" role="region" aria-live="polite">
     <p id="driver-confirm-text" class="confirm-summary"></p>
+    <p id="driver-cancellation-rule" class="cancel-rule-box"></p>
     <label class="checkbox-option" for="driver-confirm-check">
      <input type="checkbox" id="driver-confirm-check" />
      <span id="lbl-driver-confirm-check">I understand a space is confirmed on WhatsApp within 24 hours, and I will not be charged anything on this page.</span>
     </label>
     <div class="field-error hidden" id="err-driver-confirm-check"></div>
+    <label class="checkbox-option" for="driver-cancel-policy-check">
+     <input type="checkbox" id="driver-cancel-policy-check" />
+     <span id="lbl-driver-cancel-policy-check">I have read the cancellation rule.</span>
+    </label>
+    <div class="field-error hidden" id="err-driver-cancel-policy-check"></div>
     <div id="driver-confirm-submit-error" class="form-error-banner hidden" role="alert"></div>
     <div class="confirm-actions">
      <button type="button" id="driver-confirm-yes-btn" class="submit-btn">Yes, request this space</button>
@@ -1289,9 +1394,11 @@
 
    <div id="driver-thank-you" class="thank-you-box hidden" role="status" aria-live="polite">
     <div class="thank-you-header">
-     <svg class="thank-you-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+     <span class="thank-you-tick" aria-hidden="true">✓</span>
      <div class="thank-you-content">
       <p id="driver-thank-you-text"></p>
+      <p id="driver-safe-note" class="thank-you-sub"></p>
+      <p id="driver-cancel-summary" class="thank-you-sub"></p>
       <p id="driver-reload-note" class="reload-note"></p>
      </div>
     </div>
@@ -1352,6 +1459,13 @@
     </div>
 
     <div class="field">
+     <label class="field-label" for="owner-location-link" id="lbl-owner-location-link">Location link (Google Maps link of the space)</label>
+     <input type="url" id="owner-location-link" name="location_link" autocomplete="off" placeholder="https://maps.app.goo.gl/..." maxlength="500" required />
+     <div id="owner-location-link-helper" class="helper-note">Open the space in Google Maps, tap Share, and paste the link here.</div>
+     <div class="field-error hidden" id="err-owner-location-link"></div>
+    </div>
+
+    <div class="field">
      <label class="field-label" for="owner-space-type" id="lbl-owner-space-type">Type of space</label>
      <select id="owner-space-type" name="space_type" required></select>
      <div class="field-error hidden" id="err-owner-space-type"></div>
@@ -1386,12 +1500,6 @@
     </div>
 
     <div class="field">
-     <label class="field-label" for="owner-location-link" id="lbl-owner-location-link">Location link (optional)</label>
-     <input type="url" id="owner-location-link" name="location_link" autocomplete="off" placeholder="https://maps.google.com/..." maxlength="500" />
-     <div class="field-error hidden" id="err-owner-location-link"></div>
-    </div>
-
-    <div class="field">
      <label class="field-label" for="owner-email" id="lbl-owner-email">Email for instant receipt (optional)</label>
      <input type="email" id="owner-email" name="email" inputmode="email" autocomplete="email" placeholder="name@example.com" />
      <div class="field-error hidden" id="err-owner-email"></div>
@@ -1418,7 +1526,7 @@
 
    <div id="owner-thank-you" class="thank-you-box hidden" role="status" aria-live="polite">
     <div class="thank-you-header">
-     <svg class="thank-you-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="20 6 9 17 4 12"></polyline></svg>
+     <span class="thank-you-tick" aria-hidden="true">✓</span>
      <div class="thank-you-content">
       <p id="owner-thank-you-text"></p>
       <p id="owner-space-live-note" class="reload-note"></p>
@@ -1465,7 +1573,13 @@
    var OWNER_ENDPOINT = "[PASTE OWNER FORMSPREE URL]";
    var WHATSAPP_NUMBER = "[PASTE WHATSAPP NUMBER e.g. 9198XXXXXXXX]";
 
-   // 2. AREAS AND PRICES — EDIT NUMBERS HERE (in INR)
+   // 2. AREAS, PRICES, AND CANCELLATION CONFIG — EDIT HERE
+   var CANCELLATION_HOURS = 24;
+   var REFUND_RULE = {
+    en: "no refund is available",
+    hi: "कोई रिफंड उपलब्ध नहीं होगा",
+    mr: "कोणताही परतावा मिळणार नाही"
+   };
    var AREAS_AND_PRICES = {
     Mumbai: {
      colaba: { car_taxi: { day: 150, month: 3000 }, two_auto: { day: null, month: 1200 } },
@@ -1587,9 +1701,13 @@
      submitting: "Sending...",
      driverConfirmSentence: "You are requesting a {vehicle} space in {area}, {duration}, starting {date} ({hours}), for {name}, phone {phone}.",
      driverConfirmCheck: "I understand a space is confirmed on WhatsApp within 24 hours, and I will not be charged anything on this page.",
+     cancellationRuleText: "You can cancel for a full refund up to {hours} hours before your start date. After that, {rule}.",
+     driverCancelPolicyCheck: "I have read the cancellation rule.",
+     cancellationDeadlineLabel: "Free cancellation deadline",
      driverConfirmYes: "Yes, request this space",
      confirmBack: "Go back and edit",
      thankYou: "Thank you. We will confirm on WhatsApp within 24 hours.",
+     driverSafeNote: "Drive safe. We will confirm your space on WhatsApp within 24 hours.",
      ownerThankYou: "Thank you. We will call you to verify the space before any driver is shown it.",
      reloadNote: "To send another request, reload this page.",
      receiptTitle: "Idle Spot Receipt",
@@ -1599,11 +1717,25 @@
      receiptEmailSentNote: "Saved to your Google account and emailed to {email}.",
      receiptEmailNotSentNote: "Saved to your Google account. Keep this Reference ID for your records.",
      receiptNoEmailNote: "Saved to your Google account. Keep this Reference ID for your records.",
-     receiptRowsLabels: { area: "Area", item: "Details", when: "Schedule", phone: "Phone", time: "Submitted" },
+     receiptRowsLabels: { area: "Area", item: "Details", when: "Schedule", phone: "Phone", deadline: "Cancel before", time: "Submitted" },
      googleSignInPrompt: "Sign in with Google to save confirmation receipts across devices.",
      authGateChecking: "Checking sign-in status...",
      authGateHeading: "Sign in required",
      authGateDesc: "Please sign in with your Google account to view available parking spaces, request a spot, or list your space.",
+     profileGateHeading: "Complete your verification profile",
+     profileGateDesc: "Before using Idle Spot, complete your profile with contact details, vehicle number, and proof of vehicle ownership.",
+     profileNameLabel: "Full name",
+     profilePhoneLabel: "Phone number",
+     profileEmailLabel: "Email",
+     profileVehicleNoLabel: "Vehicle number",
+     profileProofTypeLabel: "Proof of vehicle ownership",
+     profileProofPhotoLabel: "Photo of vehicle and numberplate",
+     profileProofRcLabel: "Car registration (RC) document",
+     profileDlLabel: "Driving License details (optional)",
+     profileDlNoLabel: "Driving License number (optional)",
+     profileDlFileLabel: "Upload Driving License photo or PDF (optional)",
+     profileFileReady: "Ready: {fileName}",
+     profileSubmitBtn: "Save profile and continue",
      googleSignInBtn: "Continue with Google",
      googleSignOutBtn: "Sign out",
      signedInAs: "Signed in as {name}",
@@ -1614,7 +1746,7 @@
      myReqKind: "Parking Request",
      mySpaceKind: "Listed Space",
      statusLabels: { pending: "Pending", confirmed: "Confirmed", cancelled: "Cancelled", active: "Active", paused: "Paused" },
-     cancelReqBtn: "Cancel request",
+     adminCancelReqBtn: "Cancel request",
      pauseSpaceBtn: "Pause listing",
      activateSpaceBtn: "Make active",
      operatorInboxHeading: "Operator Inbox (All Requests & Owner Contacts)",
@@ -1632,10 +1764,11 @@
      ownerCapacityLabel: "Number of vehicles it fits",
      ownerManagerLabel: "Who owns or manages the property",
      ownerAmountLabel: "Monthly amount you would want (optional)",
-     ownerLocationLinkLabel: "Location link (optional)",
+     ownerLocationLinkLabel: "Location link (Google Maps link of the space)",
+     ownerLocationLinkHelper: "Open the space in Google Maps, tap Share, and paste the link here.",
      locationLinkPlaceholder: "https://maps.app.goo.gl/...",
      ownerSubmit: "Submit space details",
-     ownerConfirmSentence: "You are offering {spaceType} in {area}, free {hours}, for up to {vehicles} vehicles. We will call you on {phone} to verify it before any driver is shown the space.",
+     ownerConfirmSentence: "You are offering {spaceType} in {area}, free {hours}, for up to {vehicles} vehicles. We will call you on {phone} to verify it before any driver is shown the space. We will use this map link to verify the location.",
      ownerConfirmCheck: "I confirm I have the right to let this space out, or I manage it for the owner.",
      ownerConfirmYes: "Yes, list this space",
      areas: {
@@ -1663,14 +1796,18 @@
       hoursNeededSame: "End hour must be different from start hour.",
       nameRequired: "Please enter your name.",
       phoneInvalid: "Please enter a 10-digit phone number.",
-      emailInvalid: "Please enter a valid email address, or leave it blank.",
-      locationLinkInvalid: "Please enter a valid http/https location link, or leave it blank.",
+      emailInvalid: "Please enter a valid email address.",
+      emailOptionalInvalid: "Please enter a valid email address, or leave it blank.",
+      locationLinkInvalid: "Please paste a Google Maps link starting with https://",
       vehicleNoRequired: "Please enter your vehicle number.",
+      vehicleProofRequired: "Please upload a vehicle/numberplate photo or RC document.",
+      fileTooLarge: "File is too large for upload (please keep under 250 KB or upload an image).",
       spaceTypeRequired: "Please select the type of space.",
       hoursRequired: "Please enter the hours the space is free.",
       capacityRequired: "Please enter how many vehicles it fits.",
       managerRequired: "Please enter who owns or manages the property.",
       confirmCheckRequired: "Please tick the box above to confirm.",
+      cancelPolicyRequired: "Please tick that you have read the cancellation rule.",
       surveyAreaRequired: "Please enter your area or neighbourhood.",
       surveyPhoneInvalid: "Please enter a 10-digit phone number, or leave it blank.",
       surveyQ1Required: "Please select an option for question 1.",
@@ -1779,9 +1916,13 @@
      submitting: "भेजा जा रहा है...",
      driverConfirmSentence: "आप {area} में {vehicle} के लिए पार्किंग की जगह, {duration}, {date} से ({hours}), {name}, फ़ोन {phone} के लिए अनुरोध कर रहे हैं।",
      driverConfirmCheck: "मैं समझता/समझती हूँ कि जगह की पुष्टि 24 घंटे के भीतर व्हाट्सएप पर की जाएगी, और मुझसे इस पेज पर कोई शुल्क नहीं लिया जाएगा।",
+     cancellationRuleText: "आप अपनी शुरुआती तारीख से {hours} घंटे पहले तक पूरे रिफंड के साथ रद्द कर सकते हैं। उसके बाद, {rule}।",
+     driverCancelPolicyCheck: "मैंने रद्दीकरण नियम पढ़ लिया है।",
+     cancellationDeadlineLabel: "निःशुल्क रद्दीकरण समय-सीमा",
      driverConfirmYes: "हाँ, यह जगह अनुरोध करें",
      confirmBack: "वापस जाकर बदलें",
      thankYou: "धन्यवाद। हम 24 घंटे के भीतर व्हाट्सएप पर पुष्टि करेंगे।",
+     driverSafeNote: "सुरक्षित ड्राइव करें। हम 24 घंटे के भीतर व्हाट्सएप पर आपकी जगह की पुष्टि करेंगे।",
      ownerThankYou: "धन्यवाद। किसी भी ड्राइवर को जगह दिखाने से पहले हम पुष्टि के लिए आपको कॉल करेंगे।",
      reloadNote: "एक और अनुरोध भेजने के लिए इस पेज को रीलोड करें।",
      receiptTitle: "Idle Spot रसीद",
@@ -1791,11 +1932,25 @@
      receiptEmailSentNote: "आपके Google खाते में सुरक्षित और {email} पर ईमेल भेजा गया।",
      receiptEmailNotSentNote: "आपके Google खाते में सुरक्षित। कृपया यह रेफ़रेंस आईडी संभाल कर रखें।",
      receiptNoEmailNote: "आपके Google खाते में सुरक्षित। कृपया यह रेफ़रेंस आईडी संभाल कर रखें।",
-     receiptRowsLabels: { area: "इलाका", item: "विवरण", when: "समय", phone: "फ़ोन", time: "भेजे जाने का समय" },
+     receiptRowsLabels: { area: "इलाका", item: "विवरण", when: "समय", phone: "फ़ोन", deadline: "रद्द सीमा", time: "भेजे जाने का समय" },
      googleSignInPrompt: "रसीदें सेव करने और अपने अनुरोध देखने के लिए Google से साइन इन करें।",
      authGateChecking: "साइन-इन स्थिति जांची जा रही है...",
      authGateHeading: "साइन इन आवश्यक है",
      authGateDesc: "उपलब्ध पार्किंग जगहें देखने, पार्किंग का अनुरोध करने या अपनी जगह दर्ज करने के लिए कृपया अपने Google खाते से साइन इन करें।",
+     profileGateHeading: "अपना सत्यापन प्रोफ़ाइल पूरा करें",
+     profileGateDesc: "Idle Spot का उपयोग करने से पहले अपना नाम, नंबर, ईमेल, वाहन नंबर और वाहन स्वामित्व का प्रमाण पूरा करें।",
+     profileNameLabel: "पूरा नाम",
+     profilePhoneLabel: "फ़ोन नंबर",
+     profileEmailLabel: "ईमेल",
+     profileVehicleNoLabel: "वाहन नंबर",
+     profileProofTypeLabel: "वाहन स्वामित्व का प्रमाण",
+     profileProofPhotoLabel: "गाड़ी और नंबर प्लेट की फोटो",
+     profileProofRcLabel: "गाड़ी पंजीकरण (RC) दस्तावेज़",
+     profileDlLabel: "ड्राइविंग लाइसेंस विवरण (वैकल्पिक)",
+     profileDlNoLabel: "ड्राइविंग लाइसेंस नंबर (वैकल्पिक)",
+     profileDlFileLabel: "ड्राइविंग लाइसेंस फोटो या PDF अपलोड करें (वैकल्पिक)",
+     profileFileReady: "तैयार: {fileName}",
+     profileSubmitBtn: "प्रोफ़ाइल सेव करें और आगे बढ़ें",
      googleSignInBtn: "Google से जारी रखें",
      googleSignOutBtn: "साइन आउट",
      signedInAs: "{name} के रूप में साइन इन",
@@ -1806,7 +1961,7 @@
      myReqKind: "पार्किंग अनुरोध",
      mySpaceKind: "दर्ज जगह",
      statusLabels: { pending: "लंबित", confirmed: "पुष्ट", cancelled: "रद्द", active: "सक्रिय", paused: "रुका हुआ" },
-     cancelReqBtn: "अनुरोध रद्द करें",
+     adminCancelReqBtn: "अनुरोध रद्द करें",
      pauseSpaceBtn: "लिस्टिंग रोकें",
      activateSpaceBtn: "सक्रिय करें",
      operatorInboxHeading: "ऑपरेटर इनबॉक्स (सभी अनुरोध और संपर्क)",
@@ -1824,10 +1979,11 @@
      ownerCapacityLabel: "इसमें कितने वाहन आ सकते हैं",
      ownerManagerLabel: "इस संपत्ति के मालिक या प्रबंधक कौन हैं",
      ownerAmountLabel: "आप कितना मासिक किराया चाहेंगे (वैकल्पिक)",
-     ownerLocationLinkLabel: "लोकेशन लिंक (वैकल्पिक)",
+     ownerLocationLinkLabel: "लोकेशन लिंक (जगह का Google Maps लिंक)",
+     ownerLocationLinkHelper: "Google Maps में जगह खोलें, Share पर टैप करें और लिंक यहाँ पेस्ट करें।",
      locationLinkPlaceholder: "https://maps.app.goo.gl/...",
      ownerSubmit: "जगह की जानकारी भेजें",
-     ownerConfirmSentence: "आप {area} में {spaceType} दे रहे हैं, जो {hours} खाली रहता है और जिसमें {vehicles} वाहन आ सकते हैं। किसी भी ड्राइवर को जगह दिखाने से पहले हम पुष्टि के लिए आपको {phone} पर कॉल करेंगे।",
+     ownerConfirmSentence: "आप {area} में {spaceType} दे रहे हैं, जो {hours} खाली रहता है और जिसमें {vehicles} वाहन आ सकते हैं। किसी भी ड्राइवर को जगह दिखाने से पहले हम पुष्टि के लिए आपको {phone} पर कॉल करेंगे। इस मैप लिंक का उपयोग हम लोकेशन की पुष्टि करने के लिए करेंगे।",
      ownerConfirmCheck: "मैं पुष्टि करता/करती हूँ कि मुझे यह जगह किराए पर देने का अधिकार है, या मैं मालिक की ओर से इसका प्रबंधन करता/करती हूँ।",
      ownerConfirmYes: "हाँ, यह जगह दर्ज करें",
      areas: {
@@ -1855,14 +2011,18 @@
       hoursNeededSame: "अंतिम समय शुरुआती समय से अलग होना चाहिए।",
       nameRequired: "कृपया अपना नाम लिखें।",
       phoneInvalid: "कृपया 10 अंकों का फ़ोन नंबर लिखें।",
-      emailInvalid: "कृपया सही ईमेल लिखें, या इसे खाली छोड़ दें।",
-      locationLinkInvalid: "कृपया सही http/https लोकेशन लिंक लिखें, या खाली छोड़ दें।",
+      emailInvalid: "कृपया सही ईमेल पता लिखें।",
+      emailOptionalInvalid: "कृपया सही ईमेल लिखें, या इसे खाली छोड़ दें।",
+      locationLinkInvalid: "कृपया https:// से शुरू होने वाला Google Maps लिंक पेस्ट करें।",
       vehicleNoRequired: "कृपया अपना वाहन नंबर लिखें।",
+      vehicleProofRequired: "कृपया गाड़ी/नंबर प्लेट की फोटो या RC दस्तावेज़ अपलोड करें।",
+      fileTooLarge: "फ़ाइल बहुत बड़ी है (कृपया 250 KB से कम रखें या फोटो अपलोड करें)।",
       spaceTypeRequired: "कृपया जगह का प्रकार चुनें।",
       hoursRequired: "कृपया बताएं कि जगह किस समय खाली रहती है।",
       capacityRequired: "कृपया बताएं कि इसमें कितने वाहन आ सकते हैं।",
       managerRequired: "कृपया लिखें कि संपत्ति के मालिक या प्रबंधक कौन हैं।",
       confirmCheckRequired: "पुष्टि करने के लिए कृपया ऊपर दिए गए बॉक्स पर टिक करें।",
+      cancelPolicyRequired: "कृपया रद्दीकरण नियम पढ़ने की पुष्टि के लिए बॉक्स पर टिक करें।",
       surveyAreaRequired: "कृपया अपना इलाका लिखें।",
       surveyPhoneInvalid: "कृपया 10 अंकों का फ़ोन नंबर लिखें, या खाली छोड़ दें।",
       surveyQ1Required: "कृपया प्रश्न 1 के लिए एक विकल्प चुनें।",
@@ -1971,9 +2131,13 @@
      submitting: "पाठवत आहे...",
      driverConfirmSentence: "तुम्ही {area} मध्ये {vehicle} साठी पार्किंगची जागा, {duration}, {date} पासून ({hours}), {name}, फोन {phone} साठी विनंती करत आहात.",
      driverConfirmCheck: "मला समजले आहे की जागा 24 तासांत WhatsApp वर निश्चित केली जाईल, आणि या पानावर माझ्याकडून कोणतेही शुल्क घेतले जाणार नाही.",
+     cancellationRuleText: "तुम्ही तुमच्या सुरुवातीच्या तारखेपूर्वी {hours} तासांपर्यंत पूर्ण परताव्यासाठी रद्द करू शकता. त्यानंतर, {rule}.",
+     driverCancelPolicyCheck: "मी रद्दीकरणाचा नियम वाचला आहे.",
+     cancellationDeadlineLabel: "मोफत रद्दीकरण अंतिम मुदत",
      driverConfirmYes: "होय, या जागेची विनंती करा",
      confirmBack: "मागे जाऊन बदला",
      thankYou: "धन्यवाद. आम्ही 24 तासांत WhatsApp वर खात्री करू.",
+     driverSafeNote: "सुरक्षितपणे गाडी चालवा. आम्ही 24 तासांत WhatsApp वर तुमच्या जागेची खात्री करू.",
      ownerThankYou: "धन्यवाद. कोणत्याही चालकाला जागा दाखवण्यापूर्वी आम्ही खात्रीसाठी तुम्हाला कॉल करू.",
      reloadNote: "दुसरी विनंती पाठवण्यासाठी हे पान पुन्हा लोड करा.",
      receiptTitle: "Idle Spot पावती",
@@ -1983,11 +2147,25 @@
      receiptEmailSentNote: "तुमच्या Google खात्यात जतन केले आणि {email} वर ईमेल पाठवले.",
      receiptEmailNotSentNote: "तुमच्या Google खात्यात जतन केले. कृपया हा संदर्भ क्रमांक जतन करून ठेवा.",
      receiptNoEmailNote: "तुमच्या Google खात्यात जतन केले. कृपया हा संदर्भ क्रमांक जतन करून ठेवा.",
-     receiptRowsLabels: { area: "परिसर", item: "तपशील", when: "वेळ", phone: "फोन", time: "नोंदवलेली वेळ" },
+     receiptRowsLabels: { area: "परिसर", item: "तपशील", when: "वेळ", phone: "फोन", deadline: "रद्द मुदत", time: "नोंदवलेली वेळ" },
      googleSignInPrompt: "पावत्या सेव्ह करण्यासाठी आणि विनंत्या पाहण्यासाठी Google ने साइन इन करा.",
      authGateChecking: "साइन-इन स्थिती तपासत आहे...",
      authGateHeading: "साइन इन आवश्यक आहे",
      authGateDesc: "उपलब्ध पार्किंग जागा पाहण्यासाठी, जागेची विनंती करण्यासाठी किंवा तुमची जागा नोंदवण्यासाठी कृपया तुमच्या Google खात्याने साइन इन करा.",
+     profileGateHeading: "तुमचे पडताळणी प्रोफाइल पूर्ण करा",
+     profileGateDesc: "Idle Spot वापरण्यापूर्वी तुमचे नाव, नंबर, ईमेल, वाहन नंबर आणि वाहन मालकीचा पुरावा पूर्ण करा.",
+     profileNameLabel: "पूर्ण नाव",
+     profilePhoneLabel: "फोन नंबर",
+     profileEmailLabel: "ईमेल",
+     profileVehicleNoLabel: "वाहनाचा नंबर",
+     profileProofTypeLabel: "वाहन मालकीचा पुरावा",
+     profileProofPhotoLabel: "गाडी आणि नंबर प्लेटचा फोटो",
+     profileProofRcLabel: "गाडी नोंदणी (RC) दस्तऐवज",
+     profileDlLabel: "ड्रायव्हिंग लायसन्स तपशील (ऐच्छिक)",
+     profileDlNoLabel: "ड्रायव्हिंग लायसन्स नंबर (ऐच्छिक)",
+     profileDlFileLabel: "ड्रायव्हिंग लायसन्स फोटो किंवा PDF अपलोड करा (ऐच्छिक)",
+     profileFileReady: "तयार: {fileName}",
+     profileSubmitBtn: "प्रोफाइल सेव्ह करा आणि पुढे जा",
      googleSignInBtn: "Google ने सुरू ठेवा",
      googleSignOutBtn: "साइन आउट",
      signedInAs: "{name} म्हणून साइन इन",
@@ -1998,7 +2176,7 @@
      myReqKind: "पार्किंग विनंती",
      mySpaceKind: "नोंदवलेली जागा",
      statusLabels: { pending: "प्रलंबित", confirmed: "निश्चित", cancelled: "रद्द", active: "सक्रिय", paused: "थांबवलेली" },
-     cancelReqBtn: "विनंती रद्द करा",
+     adminCancelReqBtn: "विनंती रद्द करा",
      pauseSpaceBtn: "जागा थांबवा",
      activateSpaceBtn: "सक्रिय करा",
      operatorInboxHeading: "ऑपरेटर इनबॉक्स (सर्व विनंत्या आणि संपर्क)",
@@ -2016,10 +2194,11 @@
      ownerCapacityLabel: "यात किती वाहने बसू शकतात",
      ownerManagerLabel: "या जागेचे मालक किंवा व्यवस्थापक कोण आहेत",
      ownerAmountLabel: "तुम्हाला किती मासिक भाडे हवे आहे (ऐच्छिक)",
-     ownerLocationLinkLabel: "लोकेशन लिंक (ऐच्छिक)",
+     ownerLocationLinkLabel: "लोकेशन लिंक (जागेची Google Maps लिंक)",
+     ownerLocationLinkHelper: "Google Maps मध्ये जागा उघडा, Share वर टॅप करा आणि लिंक येथे पेस्ट करा.",
      locationLinkPlaceholder: "https://maps.app.goo.gl/...",
      ownerSubmit: "जागेची माहिती पाठवा",
-     ownerConfirmSentence: "तुम्ही {area} मध्ये {spaceType} देत आहात, जी {hours} मोकळी असते आणि ज्यात {vehicles} वाहने बसू शकतात. कोणत्याही चालकाला जागा दाखवण्यापूर्वी आम्ही खात्रीसाठी तुम्हाला {phone} वर कॉल करू.",
+     ownerConfirmSentence: "तुम्ही {area} मध्ये {spaceType} देत आहात, जी {hours} मोकळी असते आणि ज्यात {vehicles} वाहने बसू शकतात. कोणत्याही चालकाला जागा दाखवण्यापूर्वी आम्ही खात्रीसाठी तुम्हाला {phone} वर कॉल करू. या मॅप लिंकचा वापर आम्ही जागेच्या ठिकाणाची पडताळणी करण्यासाठी करू.",
      ownerConfirmCheck: "मी खात्री देतो/देते की मला ही जागा भाड्याने देण्याचा अधिकार आहे, किंवा मी मालकासाठी तिचे व्यवस्थापन करतो/करते.",
      ownerConfirmYes: "होय, ही जागा नोंदवा",
      areas: {
@@ -2047,14 +2226,18 @@
       hoursNeededSame: "शेवटची वेळ सुरुवातीच्या वेळेपेक्षा वेगळी असावी.",
       nameRequired: "कृपया तुमचे नाव लिहा.",
       phoneInvalid: "कृपया 10 अंकी फोन नंबर टाका.",
-      emailInvalid: "कृपया वैध ईमेल पत्ता टाका किंवा रिकामा सोडा.",
-      locationLinkInvalid: "कृपया वैध http/https लोकेशन लिंक टाका किंवा रिकामे सोडा.",
+      emailInvalid: "कृपया वैध ईमेल पत्ता टाका.",
+      emailOptionalInvalid: "कृपया वैध ईमेल पत्ता टाका किंवा रिकामा सोडा.",
+      locationLinkInvalid: "कृपया https:// ने सुरू होणारी Google Maps लिंक पेस्ट करा.",
       vehicleNoRequired: "कृपया तुमच्या वाहनाचा नंबर लिहा.",
+      vehicleProofRequired: "कृपया गाडी/नंबर प्लेटचा फोटो किंवा RC दस्तऐवज अपलोड करा.",
+      fileTooLarge: "फाइल खूप मोठी आहे (कृपया 250 KB पेक्षा लहान ठेवा किंवा फोटो अपलोड करा).",
       spaceTypeRequired: "कृपया जागेचा प्रकार निवडा.",
       hoursRequired: "कृपया जागा कोणत्या वेळेत मोकळी असते ते लिहा.",
       capacityRequired: "कृपया यात किती वाहने बसू शकतात ते लिहा.",
       managerRequired: "कृपया या जागेचे मालक किंवा व्यवस्थापक कोण आहेत ते लिहा.",
       confirmCheckRequired: "खात्री करण्यासाठी कृपया वरील बॉक्सवर टिक करा.",
+      cancelPolicyRequired: "कृपया रद्दीकरणाचा नियम वाचल्याची खात्री करण्यासाठी बॉक्सवर टिक करा.",
       surveyAreaRequired: "कृपया तुमचा परिसर लिहा.",
       surveyPhoneInvalid: "कृपया 10 अंकी फोन नंबर टाका किंवा रिकामा सोडा.",
       surveyQ1Required: "कृपया प्रश्न 1 साठी एक पर्याय निवडा.",
@@ -2108,12 +2291,18 @@
    var surveyRefSaved = "";
    var currentUser = null;
    var authResolved = false;
+   var userProfile = null;
+   var profileResolved = false;
+   var profileSubmitting = false;
+   var vehicleProofUpload = { dataUrl: "", fileName: "" };
+   var dlDocUpload = { dataUrl: "", fileName: "" };
    var myRequests = [];
    var mySpaces = [];
    var mySurveys = [];
    var adminInboxData = { requests: [], spaces: [], privateDetailsById: {}, surveys: [] };
    var activityPanelOpen = false;
    var unsubPublicSpaces = null;
+   var unsubMyProfile = null;
    var unsubMyRequests = null;
    var unsubMySpaces = null;
    var unsubMySurveys = null;
@@ -2200,16 +2389,91 @@
     return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(trimmed) && trimmed.length <= 160;
    }
 
-   function isValidOptionalUrl(raw) {
+   function isValidRequiredEmail(raw) {
     var trimmed = String(raw || "").trim();
-    if (!trimmed) return true;
-    if (trimmed.length > 500 || !/^https?:\/\//i.test(trimmed)) return false;
+    if (!trimmed) return false;
+    return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(trimmed) && trimmed.length <= 160;
+   }
+
+   function isValidGoogleMapsUrl(raw) {
+    var trimmed = String(raw || "").trim();
+    if (!trimmed || trimmed.length > 500 || !/^https:\/\//i.test(trimmed)) return false;
+    if (!/(google\.com\/maps|maps\.app\.goo\.gl|goo\.gl\/maps)/i.test(trimmed)) return false;
     try {
-     new URL(trimmed);
-     return true;
+     var parsed = new URL(trimmed);
+     return parsed.protocol === "https:";
     } catch (e) {
      return false;
     }
+   }
+
+   function computeCancellationDeadline(startDateIso) {
+    var parts = String(startDateIso || "").split("-");
+    if (parts.length !== 3) return null;
+    var yr = parseInt(parts[0], 10);
+    var mo = parseInt(parts[1], 10) - 1;
+    var dy = parseInt(parts[2], 10);
+    if (isNaN(yr) || isNaN(mo) || isNaN(dy)) return null;
+    var startLocal = new Date(yr, mo, dy, 0, 0, 0, 0);
+    return new Date(startLocal.getTime() - CANCELLATION_HOURS * 60 * 60 * 1000);
+   }
+
+   function buildCancellationRuleSentence() {
+    var s = STRINGS[currentLang];
+    var ruleText = REFUND_RULE[currentLang] || REFUND_RULE.en;
+    return s.cancellationRuleText
+     .replace("{hours}", String(CANCELLATION_HOURS))
+     .replace("{rule}", ruleText);
+   }
+
+   function readAndCompressProofFile(file, onSuccess, onError) {
+    var e = STRINGS[currentLang].errors;
+    if (!file) { onError(e.vehicleProofRequired); return; }
+    var isImage = /^image\//i.test(file.type || "");
+    if (!isImage) {
+     var reader = new FileReader();
+     reader.onload = function () {
+      var dataUrl = typeof reader.result === "string" ? reader.result : "";
+      if (!dataUrl || dataUrl.length > 340000) {
+       onError(e.fileTooLarge);
+       return;
+      }
+      onSuccess({ dataUrl: dataUrl, fileName: file.name || "document" });
+     };
+     reader.onerror = function () { onError(e.fileTooLarge); };
+     reader.readAsDataURL(file);
+     return;
+    }
+    var imgReader = new FileReader();
+    imgReader.onload = function () {
+     var img = new Image();
+     img.onload = function () {
+      try {
+       var maxDim = 1000;
+       var w = img.width || 1;
+       var h = img.height || 1;
+       var scale = Math.min(1, maxDim / Math.max(w, h));
+       var canvas = document.createElement("canvas");
+       canvas.width = Math.max(1, Math.round(w * scale));
+       canvas.height = Math.max(1, Math.round(h * scale));
+       var ctx = canvas.getContext("2d");
+       ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+       var outUrl = canvas.toDataURL("image/jpeg", 0.72);
+       if (outUrl.length > 340000) outUrl = canvas.toDataURL("image/jpeg", 0.5);
+       if (!outUrl || outUrl.length > 340000) {
+        onError(e.fileTooLarge);
+        return;
+       }
+       onSuccess({ dataUrl: outUrl, fileName: file.name || "photo.jpg" });
+      } catch (err) {
+       onError(e.fileTooLarge);
+      }
+     };
+     img.onerror = function () { onError(e.fileTooLarge); };
+     img.src = typeof imgReader.result === "string" ? imgReader.result : "";
+    };
+    imgReader.onerror = function () { onError(e.fileTooLarge); };
+    imgReader.readAsDataURL(file);
    }
 
    function getCleanWhatsAppNumber() {
@@ -2249,6 +2513,21 @@
    var elGateGoogleSignInBtn = document.getElementById("gate-google-signin-btn");
    var elGateGoogleSignInLabel = document.getElementById("gate-google-signin-label");
    var elGateAuthErr = document.getElementById("gate-auth-error");
+   var elProfileGateCard = document.getElementById("profile-gate-card");
+   var elProfileGateHeading = document.getElementById("profile-gate-heading");
+   var elProfileGateDesc = document.getElementById("profile-gate-desc");
+   var elProfileForm = document.getElementById("profile-onboarding-form");
+   var elProfileName = document.getElementById("profile-name");
+   var elProfilePhone = document.getElementById("profile-phone");
+   var elProfileEmail = document.getElementById("profile-email");
+   var elProfileVehicleNo = document.getElementById("profile-vehicle-no");
+   var elProfileVehicleProofFile = document.getElementById("profile-vehicle-proof-file");
+   var elProfileVehicleProofStatus = document.getElementById("profile-vehicle-proof-status");
+   var elProfileDlNo = document.getElementById("profile-dl-no");
+   var elProfileDlFile = document.getElementById("profile-dl-file");
+   var elProfileDlFileStatus = document.getElementById("profile-dl-file-status");
+   var elProfileSubmitErr = document.getElementById("profile-submit-error");
+   var elProfileSubmitBtn = document.getElementById("profile-submit-btn");
    var elAppWorkspace = document.getElementById("app-workspace");
    var elAccountBar = document.getElementById("account-bar");
    var elAccountTitle = document.getElementById("account-title");
@@ -2296,12 +2575,16 @@
    var elDriverSubmitErr = document.getElementById("driver-submit-error");
    var elDriverConfirmBox = document.getElementById("driver-confirm-box");
    var elDriverConfirmText = document.getElementById("driver-confirm-text");
+   var elDriverCancellationRule = document.getElementById("driver-cancellation-rule");
    var elDriverConfirmCheck = document.getElementById("driver-confirm-check");
+   var elDriverCancelPolicyCheck = document.getElementById("driver-cancel-policy-check");
    var elDriverConfirmYesBtn = document.getElementById("driver-confirm-yes-btn");
    var elDriverConfirmBackBtn = document.getElementById("driver-confirm-back-btn");
    var elDriverConfirmSubmitErr = document.getElementById("driver-confirm-submit-error");
    var elDriverThankYou = document.getElementById("driver-thank-you");
    var elDriverThankYouText = document.getElementById("driver-thank-you-text");
+   var elDriverSafeNote = document.getElementById("driver-safe-note");
+   var elDriverCancelSummary = document.getElementById("driver-cancel-summary");
    var elDriverReloadNote = document.getElementById("driver-reload-note");
    var elDriverReceiptCard = document.getElementById("driver-receipt-card");
    var elDriverReceiptTitle = document.getElementById("driver-receipt-title");
@@ -2326,6 +2609,7 @@
    var elOwnerManager = document.getElementById("owner-manager");
    var elOwnerAmount = document.getElementById("owner-amount");
    var elOwnerLocationLink = document.getElementById("owner-location-link");
+   var elOwnerLocationLinkHelper = document.getElementById("owner-location-link-helper");
    var elOwnerEmail = document.getElementById("owner-email");
    var elOwnerConsentNote = document.getElementById("owner-consent-note");
    var elOwnerSubmitErr = document.getElementById("owner-submit-error");
@@ -2508,6 +2792,10 @@
     }
    }
 
+   function isUserProfileCompleted() {
+    return Boolean(userProfile && userProfile.profile_completed === true);
+   }
+
    function syncAuthGateUi() {
     var s = STRINGS[currentLang];
     elAuthLoadingNote.textContent = s.authGateChecking;
@@ -2518,22 +2806,33 @@
     elGoogleSignOutBtn.textContent = s.googleSignOutBtn;
 
     var isSignedInVerified = Boolean(currentUser && currentUser.emailVerified);
-    if (!authResolved) {
+    if (!authResolved || (isSignedInVerified && !profileResolved)) {
      elAuthLoadingNote.classList.remove("hidden");
      elAuthGateCard.classList.add("hidden");
+     elProfileGateCard.classList.add("hidden");
      elAccountBar.classList.add("hidden");
      elMyActivityPanel.classList.add("hidden");
      elAppWorkspace.classList.add("hidden");
     } else if (!isSignedInVerified) {
      elAuthLoadingNote.classList.add("hidden");
      elAuthGateCard.classList.remove("hidden");
+     elProfileGateCard.classList.add("hidden");
      elAccountBar.classList.add("hidden");
+     elMyActivityPanel.classList.add("hidden");
+     elAppWorkspace.classList.add("hidden");
+     activityPanelOpen = false;
+    } else if (!isUserProfileCompleted()) {
+     elAuthLoadingNote.classList.add("hidden");
+     elAuthGateCard.classList.add("hidden");
+     elProfileGateCard.classList.remove("hidden");
+     elAccountBar.classList.remove("hidden");
      elMyActivityPanel.classList.add("hidden");
      elAppWorkspace.classList.add("hidden");
      activityPanelOpen = false;
     } else {
      elAuthLoadingNote.classList.add("hidden");
      elAuthGateCard.classList.add("hidden");
+     elProfileGateCard.classList.add("hidden");
      elAccountBar.classList.remove("hidden");
      elAppWorkspace.classList.remove("hidden");
     }
@@ -2543,16 +2842,22 @@
     syncAuthGateUi();
     var s = STRINGS[currentLang];
     if (currentUser && currentUser.emailVerified) {
-     elAccountTitle.textContent = s.signedInAs.replace("{name}", currentUser.displayName || currentUser.email);
+     var displayName = (userProfile && userProfile.display_name) || currentUser.displayName || currentUser.email;
+     elAccountTitle.textContent = s.signedInAs.replace("{name}", displayName);
      elAccountSub.textContent = currentUser.email;
      elAccountSub.classList.remove("hidden");
      elGoogleSignInBtn.classList.add("hidden");
      elGoogleSignOutBtn.classList.remove("hidden");
-     var totalCount = myRequests.length + mySpaces.length + mySurveys.length;
-     elToggleActivityBtn.textContent = activityPanelOpen
-      ? s.myActivityHideBtn
-      : s.myActivityBtn.replace("{count}", String(totalCount));
-     elToggleActivityBtn.classList.remove("hidden");
+     if (isUserProfileCompleted()) {
+      var totalCount = myRequests.length + mySpaces.length + mySurveys.length;
+      elToggleActivityBtn.textContent = activityPanelOpen
+       ? s.myActivityHideBtn
+       : s.myActivityBtn.replace("{count}", String(totalCount));
+      elToggleActivityBtn.classList.remove("hidden");
+     } else {
+      elToggleActivityBtn.classList.add("hidden");
+      activityPanelOpen = false;
+     }
     } else {
      elAccountTitle.textContent = s.googleSignInPrompt;
      elAccountSub.textContent = "";
@@ -2601,7 +2906,8 @@
       var meta = document.createElement("p");
       meta.className = "activity-meta";
       var vLabel = s.vehicles[req.vehicle_type] || req.vehicle_type;
-      meta.textContent = (req.city ? (req.city + " · ") : "") + req.area + " · " + vLabel + " (" + req.vehicle_number + ") · " + req.start_date + " (" + req.hours_needed + ")";
+      var deadlineStr = req.cancellation_deadline ? String(req.cancellation_deadline).slice(0, 16).replace("T", " ") : "";
+      meta.textContent = (req.city ? (req.city + " · ") : "") + req.area + " · " + vLabel + " (" + req.vehicle_number + ") · " + req.start_date + " (" + req.hours_needed + ")" + (deadlineStr ? (" · " + s.cancellationDeadlineLabel + ": " + deadlineStr) : "");
 
       var actions = document.createElement("div");
       actions.className = "activity-card-actions";
@@ -2616,6 +2922,7 @@
         item: vLabel + " (" + req.vehicle_number + ")",
         when: req.start_date + " · " + req.hours_needed,
         phone: req.phone,
+        deadline: deadlineStr,
         time: req.commitment_time,
         summary: req.confirmation_text
        });
@@ -2627,20 +2934,6 @@
        }
       });
       actions.appendChild(copyBtn);
-
-      if (fb && req.status !== "cancelled") {
-       var cancelBtn = document.createElement("button");
-       cancelBtn.type = "button";
-       cancelBtn.className = "small-btn is-danger";
-       cancelBtn.textContent = s.cancelReqBtn;
-       cancelBtn.addEventListener("click", function () {
-        cancelBtn.disabled = true;
-        fb.cancelParkingRequest(req.id).catch(function () {
-         cancelBtn.disabled = false;
-        });
-       });
-       actions.appendChild(cancelBtn);
-      }
 
       card.appendChild(head);
       card.appendChild(meta);
@@ -2739,7 +3032,8 @@
 
        var meta = document.createElement("p");
        meta.className = "activity-meta";
-       meta.textContent = (req.city ? (req.city + " · ") : "") + req.area + " · " + req.vehicle_type + " (" + req.vehicle_number + ") · " + req.start_date + " · " + req.hours_needed + (req.email ? (" · " + req.email) : "");
+       var reqDeadline = req.cancellation_deadline ? String(req.cancellation_deadline).slice(0, 16).replace("T", " ") : "";
+       meta.textContent = (req.city ? (req.city + " · ") : "") + req.area + " · " + req.vehicle_type + " (" + req.vehicle_number + ") · " + req.start_date + " · " + req.hours_needed + (reqDeadline ? (" · Deadline: " + reqDeadline) : "") + (req.email ? (" · " + req.email) : "");
 
        var actions = document.createElement("div");
        actions.className = "activity-card-actions";
@@ -2755,6 +3049,19 @@
          });
         });
         actions.appendChild(confirmBtn);
+       }
+       if (fb && req.status !== "cancelled") {
+        var adminCancelBtn = document.createElement("button");
+        adminCancelBtn.type = "button";
+        adminCancelBtn.className = "small-btn is-danger";
+        adminCancelBtn.textContent = s.adminCancelReqBtn;
+        adminCancelBtn.addEventListener("click", function () {
+         adminCancelBtn.disabled = true;
+         fb.adminSetRequestStatus(req.id, "cancelled").catch(function () {
+          adminCancelBtn.disabled = false;
+         });
+        });
+        actions.appendChild(adminCancelBtn);
        }
        card.appendChild(head);
        card.appendChild(meta);
@@ -3056,6 +3363,27 @@
     document.getElementById("trust-2").textContent = s.trust2;
     document.getElementById("trust-3").textContent = s.trust3;
 
+    elProfileGateHeading.textContent = s.profileGateHeading;
+    elProfileGateDesc.textContent = s.profileGateDesc;
+    document.getElementById("lbl-profile-name").textContent = s.profileNameLabel;
+    document.getElementById("lbl-profile-phone").textContent = s.profilePhoneLabel;
+    document.getElementById("lbl-profile-email").textContent = s.profileEmailLabel;
+    elProfileEmail.setAttribute("placeholder", s.emailPlaceholder);
+    document.getElementById("lbl-profile-vehicle-no").textContent = s.profileVehicleNoLabel;
+    document.getElementById("lbl-profile-proof-type").textContent = s.profileProofTypeLabel;
+    document.getElementById("txt-proof-type-photo").textContent = s.profileProofPhotoLabel;
+    document.getElementById("txt-proof-type-rc").textContent = s.profileProofRcLabel;
+    document.getElementById("lbl-profile-dl").textContent = s.profileDlLabel;
+    document.getElementById("lbl-profile-dl-no").textContent = s.profileDlNoLabel;
+    document.getElementById("lbl-profile-dl-file").textContent = s.profileDlFileLabel;
+    if (vehicleProofUpload.fileName) {
+     elProfileVehicleProofStatus.textContent = s.profileFileReady.replace("{fileName}", vehicleProofUpload.fileName);
+    }
+    if (dlDocUpload.fileName) {
+     elProfileDlFileStatus.textContent = s.profileFileReady.replace("{fileName}", dlDocUpload.fileName);
+    }
+    elProfileSubmitBtn.textContent = profileSubmitting ? s.submitting : s.profileSubmitBtn;
+
     elTabSurvey.textContent = s.tabSurvey;
     elTabDriver.textContent = s.tabDriver;
     elTabOwner.textContent = s.tabOwner;
@@ -3134,14 +3462,20 @@
     elOwnerConsentNote.textContent = s.ownerConsentNote;
     document.getElementById("driver-submit-btn").textContent = s.driverSubmit;
     document.getElementById("lbl-driver-confirm-check").textContent = s.driverConfirmCheck;
+    document.getElementById("lbl-driver-cancel-policy-check").textContent = s.driverCancelPolicyCheck;
+    elDriverCancellationRule.textContent = buildCancellationRuleSentence();
     elDriverConfirmYesBtn.textContent = driverSubmitting ? s.submitting : s.driverConfirmYes;
     elDriverConfirmBackBtn.textContent = s.confirmBack;
     elDriverWaLink.textContent = s.whatsappButton;
     if (driverConfirming) elDriverConfirmText.textContent = buildDriverConfirmSentence();
     if (driverSubmitted) {
      elDriverThankYouText.textContent = s.thankYou;
+     elDriverSafeNote.textContent = s.driverSafeNote;
      elDriverReloadNote.textContent = s.reloadNote;
-     if (driverReceiptData) renderReceiptCard("driver");
+     if (driverReceiptData) {
+      elDriverCancelSummary.textContent = buildCancellationRuleSentence() + (driverReceiptData.deadline ? (" (" + s.cancellationDeadlineLabel + ": " + driverReceiptData.deadline + ")") : "");
+      renderReceiptCard("driver");
+     }
     }
 
     document.getElementById("owner-heading").textContent = s.ownerHeading;
@@ -3162,6 +3496,7 @@
     document.getElementById("lbl-owner-manager").textContent = s.ownerManagerLabel;
     document.getElementById("lbl-owner-amount").textContent = s.ownerAmountLabel;
     document.getElementById("lbl-owner-location-link").textContent = s.ownerLocationLinkLabel;
+    elOwnerLocationLinkHelper.textContent = s.ownerLocationLinkHelper;
     elOwnerLocationLink.setAttribute("placeholder", s.locationLinkPlaceholder);
     document.getElementById("lbl-owner-email").textContent = s.emailLabel;
     elOwnerEmail.setAttribute("placeholder", s.emailPlaceholder);
@@ -3272,6 +3607,9 @@
      [s.receiptRowsLabels.phone, data.phone],
      [s.receiptRowsLabels.time, data.time]
     ];
+    if (data.deadline) {
+     pairs.splice(3, 0, [s.receiptRowsLabels.deadline, data.deadline]);
+    }
     for (var i = 0; i < pairs.length; i++) {
      var li = document.createElement("li");
      li.className = "receipt-row";
@@ -3300,19 +3638,21 @@
    }
 
    function buildReceiptPlainText(data) {
-    return [
+    var lines = [
      "IDLE SPOT — CONFIRMATION RECEIPT",
      "Reference ID: " + data.refId,
      "Area: " + data.area,
      "Details: " + data.item,
-     "Schedule: " + data.when,
-     "Phone: " + data.phone,
-     "Submitted: " + data.time,
-     "",
-     data.summary,
-     "",
-     "Launching soon. Any money paid is fully refundable."
-    ].join("\n");
+     "Schedule: " + data.when
+    ];
+    if (data.deadline) lines.push("Cancel before: " + data.deadline);
+    lines.push("Phone: " + data.phone);
+    lines.push("Submitted: " + data.time);
+    lines.push("");
+    lines.push(data.summary);
+    lines.push("");
+    lines.push("Launching soon. Any money paid is fully refundable.");
+    return lines.join("\n");
    }
 
    // 7. VALIDATION & ERROR HELPERS
@@ -3330,20 +3670,50 @@
 
    function clearAllInlineErrors() {
     var ids = [
+     "err-profile-name", "err-profile-phone", "err-profile-email", "err-profile-vehicle-no",
+     "err-profile-vehicle-proof", "err-profile-dl",
      "err-survey-name", "err-survey-area", "err-survey-phone", "err-survey-email",
      "err-survey-q1", "err-survey-q2", "err-survey-q3", "err-survey-q4",
      "err-driver-city", "err-driver-area", "err-driver-custom-area", "err-driver-vehicle", "err-driver-duration",
      "err-driver-date", "err-driver-hours", "err-driver-name", "err-driver-phone",
-     "err-driver-vehicle-no", "err-driver-email", "err-driver-confirm-check", "err-owner-name", "err-owner-phone",
-     "err-owner-city", "err-owner-area", "err-owner-custom-area", "err-owner-space-type", "err-owner-hours",
-     "err-owner-capacity", "err-owner-manager", "err-owner-location-link", "err-owner-email", "err-owner-confirm-check"
+     "err-driver-vehicle-no", "err-driver-email", "err-driver-confirm-check", "err-driver-cancel-policy-check",
+     "err-owner-name", "err-owner-phone", "err-owner-city", "err-owner-area", "err-owner-custom-area",
+     "err-owner-space-type", "err-owner-hours", "err-owner-capacity", "err-owner-manager",
+     "err-owner-location-link", "err-owner-email", "err-owner-confirm-check"
     ];
     for (var i = 0; i < ids.length; i++) setFieldError(ids[i], "");
+    elProfileSubmitErr.classList.add("hidden"); elProfileSubmitErr.textContent = "";
     elSurveySubmitErr.classList.add("hidden"); elSurveySubmitErr.textContent = "";
     elDriverSubmitErr.classList.add("hidden"); elDriverSubmitErr.textContent = "";
     elDriverConfirmSubmitErr.classList.add("hidden"); elDriverConfirmSubmitErr.textContent = "";
     elOwnerSubmitErr.classList.add("hidden"); elOwnerSubmitErr.textContent = "";
     elOwnerConfirmSubmitErr.classList.add("hidden"); elOwnerConfirmSubmitErr.textContent = "";
+   }
+
+   function validateProfileForm() {
+    var e = STRINGS[currentLang].errors;
+    var valid = true;
+    var firstBadEl = null;
+    function fail(errId, msg, inputEl) {
+     setFieldError(errId, msg);
+     valid = false;
+     if (!firstBadEl && inputEl) firstBadEl = inputEl;
+    }
+    setFieldError("err-profile-name", "");
+    setFieldError("err-profile-phone", "");
+    setFieldError("err-profile-email", "");
+    setFieldError("err-profile-vehicle-no", "");
+    setFieldError("err-profile-vehicle-proof", "");
+    setFieldError("err-profile-dl", "");
+    elProfileSubmitErr.classList.add("hidden");
+
+    if (!elProfileName.value.trim()) fail("err-profile-name", e.nameRequired, elProfileName);
+    if (!cleanTenDigitPhone(elProfilePhone.value)) fail("err-profile-phone", e.phoneInvalid, elProfilePhone);
+    if (!isValidRequiredEmail(elProfileEmail.value)) fail("err-profile-email", e.emailInvalid, elProfileEmail);
+    if (!elProfileVehicleNo.value.trim()) fail("err-profile-vehicle-no", e.vehicleNoRequired, elProfileVehicleNo);
+    if (!vehicleProofUpload.dataUrl) fail("err-profile-vehicle-proof", e.vehicleProofRequired, elProfileVehicleProofFile);
+    if (firstBadEl) firstBadEl.focus();
+    return valid;
    }
 
    function validateDriverForm() {
@@ -3382,7 +3752,7 @@
     if (!elDriverName.value.trim()) fail("err-driver-name", e.nameRequired, elDriverName);
     if (!cleanTenDigitPhone(elDriverPhone.value)) fail("err-driver-phone", e.phoneInvalid, elDriverPhone);
     if (!elDriverVehicleNo.value.trim()) fail("err-driver-vehicle-no", e.vehicleNoRequired, elDriverVehicleNo);
-    if (!isValidOptionalEmail(elDriverEmail.value)) fail("err-driver-email", e.emailInvalid, elDriverEmail);
+    if (!isValidOptionalEmail(elDriverEmail.value)) fail("err-driver-email", e.emailOptionalInvalid, elDriverEmail);
     if (firstBadEl) firstBadEl.focus();
     return valid;
    }
@@ -3416,13 +3786,13 @@
     if (!cityKey || CITY_KEYS.indexOf(cityKey) === -1) fail("err-owner-city", e.cityRequired, elOwnerCity);
     if (!areaKey) fail("err-owner-area", e.areaRequired, elOwnerArea);
     if (areaKey === "other" && !elOwnerCustomArea.value.trim()) fail("err-owner-custom-area", e.ownerCustomAreaRequired, elOwnerCustomArea);
+    if (!isValidGoogleMapsUrl(elOwnerLocationLink.value)) fail("err-owner-location-link", e.locationLinkInvalid, elOwnerLocationLink);
     if (!elOwnerSpaceType.value) fail("err-owner-space-type", e.spaceTypeRequired, elOwnerSpaceType);
     if (!elOwnerHours.value.trim()) fail("err-owner-hours", e.hoursRequired, elOwnerHours);
     var capVal = parseInt(elOwnerCapacity.value, 10);
     if (!elOwnerCapacity.value || isNaN(capVal) || capVal < 1) fail("err-owner-capacity", e.capacityRequired, elOwnerCapacity);
     if (!elOwnerManager.value.trim()) fail("err-owner-manager", e.managerRequired, elOwnerManager);
-    if (!isValidOptionalUrl(elOwnerLocationLink.value)) fail("err-owner-location-link", e.locationLinkInvalid, elOwnerLocationLink);
-    if (!isValidOptionalEmail(elOwnerEmail.value)) fail("err-owner-email", e.emailInvalid, elOwnerEmail);
+    if (!isValidOptionalEmail(elOwnerEmail.value)) fail("err-owner-email", e.emailOptionalInvalid, elOwnerEmail);
     if (firstBadEl) firstBadEl.focus();
     return valid;
    }
@@ -3468,12 +3838,15 @@
 
    elDriverForm.addEventListener("submit", function (event) {
     event.preventDefault();
-    if (!currentUser || !currentUser.emailVerified) { syncAuthGateUi(); return; }
+    if (!currentUser || !currentUser.emailVerified || !isUserProfileCompleted()) { syncAuthGateUi(); return; }
     if (driverSubmitting || driverSubmitted || driverConfirming || !validateDriverForm()) return;
     driverConfirming = true;
     elDriverConfirmText.textContent = buildDriverConfirmSentence();
+    elDriverCancellationRule.textContent = buildCancellationRuleSentence();
     elDriverConfirmCheck.checked = false;
+    elDriverCancelPolicyCheck.checked = false;
     setFieldError("err-driver-confirm-check", "");
+    setFieldError("err-driver-cancel-policy-check", "");
     elDriverConfirmSubmitErr.classList.add("hidden");
     elDriverConfirmSubmitErr.textContent = "";
     elDriverConfirmYesBtn.disabled = false;
@@ -3488,7 +3861,9 @@
     if (driverSubmitting || driverSubmitted) return;
     driverConfirming = false;
     elDriverConfirmCheck.checked = false;
+    elDriverCancelPolicyCheck.checked = false;
     setFieldError("err-driver-confirm-check", "");
+    setFieldError("err-driver-cancel-policy-check", "");
     elDriverConfirmSubmitErr.classList.add("hidden");
     elDriverConfirmBox.classList.add("hidden");
     elDriverForm.classList.remove("hidden");
@@ -3498,11 +3873,20 @@
     if (elDriverConfirmCheck.checked) setFieldError("err-driver-confirm-check", "");
    });
 
+   elDriverCancelPolicyCheck.addEventListener("change", function () {
+    if (elDriverCancelPolicyCheck.checked) setFieldError("err-driver-cancel-policy-check", "");
+   });
+
    elDriverConfirmYesBtn.addEventListener("click", function () {
     if (driverSubmitting || driverSubmitted) return;
     if (!elDriverConfirmCheck.checked) {
      setFieldError("err-driver-confirm-check", STRINGS[currentLang].errors.confirmCheckRequired);
      elDriverConfirmCheck.focus();
+     return;
+    }
+    if (!elDriverCancelPolicyCheck.checked) {
+     setFieldError("err-driver-cancel-policy-check", STRINGS[currentLang].errors.cancelPolicyRequired);
+     elDriverCancelPolicyCheck.focus();
      return;
     }
     var s = STRINGS[currentLang];
@@ -3519,6 +3903,9 @@
     var quotedPrice = getQuotedPriceForSelection(cityKey, areaKey, vehicleKey, duration);
     var confirmationSentence = buildDriverConfirmSentence();
     var matchedSummary = selectedSpace ? (selectedSpace.space_type + " in " + selectedSpace.area + " (" + selectedSpace.hours_free + ")") : null;
+    var deadlineDate = computeCancellationDeadline(elDriverDate.value) || new Date(Date.now() - CANCELLATION_HOURS * 60 * 60 * 1000);
+    var deadlineIso = formatLocalIsoWithOffset(deadlineDate);
+    var deadlineDisplay = deadlineIso.slice(0, 16).replace("T", " ");
     var payload = {
      form_type: "driver",
      matched_space_id: selectedSpace ? selectedSpace.id : null,
@@ -3541,7 +3928,9 @@
      vehicle_number: elDriverVehicleNo.value.trim(),
      commitment_confirmed: "yes",
      commitment_time: formatLocalIsoWithOffset(new Date()),
-     confirmation_text: confirmationSentence
+     confirmation_text: confirmationSentence,
+     cancellation_policy_accepted: true,
+     cancellation_deadline_iso: deadlineDate.toISOString()
     };
 
     ensureGoogleSignedInForSubmit().then(function (user) {
@@ -3555,6 +3944,7 @@
       { label: "Area", value: payload.area },
       { label: "Vehicle", value: vehicleKey + " (" + payload.vehicle_number + ")" },
       { label: "Schedule", value: payload.start_date + " · " + payload.hours_needed },
+      { label: "Free cancel before", value: deadlineDisplay },
       { label: "Quoted price", value: priceStr },
       { label: "Phone", value: payload.phone }
      ];
@@ -3571,12 +3961,15 @@
      driverSubmitted = true;
      elDriverConfirmBox.classList.add("hidden");
      elDriverThankYouText.textContent = STRINGS[currentLang].thankYou;
+     elDriverSafeNote.textContent = STRINGS[currentLang].driverSafeNote;
+     elDriverCancelSummary.textContent = buildCancellationRuleSentence() + " (" + STRINGS[currentLang].cancellationDeadlineLabel + ": " + deadlineDisplay + ")";
      elDriverReloadNote.textContent = STRINGS[currentLang].reloadNote;
      driverReceiptData = {
       refId: res.refId,
       area: getDisplayAreaLabel(cityKey, areaKey, elDriverCustomArea.value),
       item: (STRINGS[currentLang].vehicles[vehicleKey] || vehicleKey) + " (" + payload.vehicle_number + ") · " + res.priceStr,
       when: payload.start_date + " · " + payload.hours_needed,
+      deadline: deadlineDisplay,
       phone: payload.phone,
       email: payload.email,
       emailSent: res.emailSent,
@@ -3601,7 +3994,7 @@
 
    elOwnerForm.addEventListener("submit", function (event) {
     event.preventDefault();
-    if (!currentUser || !currentUser.emailVerified) { syncAuthGateUi(); return; }
+    if (!currentUser || !currentUser.emailVerified || !isUserProfileCompleted()) { syncAuthGateUi(); return; }
     if (ownerSubmitting || ownerSubmitted || ownerConfirming || !validateOwnerForm()) return;
     ownerConfirming = true;
     elOwnerConfirmText.textContent = buildOwnerConfirmSentence();
@@ -3666,7 +4059,7 @@
      vehicles_fit: parseInt(elOwnerCapacity.value, 10),
      property_owner_or_manager: elOwnerManager.value.trim(),
      desired_monthly_amount: elOwnerAmount.value.trim() || null,
-     location_link: elOwnerLocationLink.value.trim() || null,
+     location_link: elOwnerLocationLink.value.trim(),
      commitment_confirmed: "yes",
      commitment_time: formatLocalIsoWithOffset(new Date()),
      confirmation_text: confirmationSentence
@@ -3736,12 +4129,127 @@
    }
 
    function syncChoiceOptionHighlights() {
-    var radios = document.querySelectorAll('#survey-form input[type="radio"]');
+    var radios = document.querySelectorAll('#survey-form input[type="radio"], #profile-onboarding-form input[type="radio"]');
     for (var i = 0; i < radios.length; i++) {
      var label = radios[i].closest(".choice-option");
      if (label) label.classList.toggle("is-selected", radios[i].checked);
     }
    }
+
+   function prefillWorkspaceFormsFromProfile(prof) {
+    if (!prof) return;
+    var nameVal = prof.display_name || (currentUser ? currentUser.displayName : "");
+    var emailVal = prof.contact_email || prof.email || (currentUser ? currentUser.email : "");
+    if (!elSurveyName.value.trim() && nameVal) elSurveyName.value = nameVal;
+    if (!elDriverName.value.trim() && nameVal) elDriverName.value = nameVal;
+    if (!elOwnerName.value.trim() && nameVal) elOwnerName.value = nameVal;
+    if (!elSurveyPhone.value.trim() && prof.phone) elSurveyPhone.value = prof.phone;
+    if (!elDriverPhone.value.trim() && prof.phone) elDriverPhone.value = prof.phone;
+    if (!elOwnerPhone.value.trim() && prof.phone) elOwnerPhone.value = prof.phone;
+    if (!elSurveyEmail.value.trim() && emailVal) elSurveyEmail.value = emailVal;
+    if (!elDriverEmail.value.trim() && emailVal) elDriverEmail.value = emailVal;
+    if (!elOwnerEmail.value.trim() && emailVal) elOwnerEmail.value = emailVal;
+    if (!elDriverVehicleNo.value.trim() && prof.vehicle_number) elDriverVehicleNo.value = prof.vehicle_number;
+   }
+
+   elProfileForm.addEventListener("change", function (ev) {
+    if (ev.target && ev.target.type === "radio") syncChoiceOptionHighlights();
+   });
+
+   elProfileVehicleProofFile.addEventListener("change", function () {
+    setFieldError("err-profile-vehicle-proof", "");
+    var file = elProfileVehicleProofFile.files && elProfileVehicleProofFile.files[0];
+    if (!file) {
+     vehicleProofUpload = { dataUrl: "", fileName: "" };
+     elProfileVehicleProofStatus.classList.add("hidden");
+     elProfileVehicleProofStatus.textContent = "";
+     return;
+    }
+    readAndCompressProofFile(
+     file,
+     function (res) {
+      vehicleProofUpload = res;
+      elProfileVehicleProofStatus.textContent = STRINGS[currentLang].profileFileReady.replace("{fileName}", res.fileName);
+      elProfileVehicleProofStatus.classList.remove("hidden");
+     },
+     function (errMsg) {
+      vehicleProofUpload = { dataUrl: "", fileName: "" };
+      elProfileVehicleProofStatus.classList.add("hidden");
+      elProfileVehicleProofStatus.textContent = "";
+      setFieldError("err-profile-vehicle-proof", errMsg);
+     }
+    );
+   });
+
+   elProfileDlFile.addEventListener("change", function () {
+    setFieldError("err-profile-dl", "");
+    var file = elProfileDlFile.files && elProfileDlFile.files[0];
+    if (!file) {
+     dlDocUpload = { dataUrl: "", fileName: "" };
+     elProfileDlFileStatus.classList.add("hidden");
+     elProfileDlFileStatus.textContent = "";
+     return;
+    }
+    readAndCompressProofFile(
+     file,
+     function (res) {
+      dlDocUpload = res;
+      elProfileDlFileStatus.textContent = STRINGS[currentLang].profileFileReady.replace("{fileName}", res.fileName);
+      elProfileDlFileStatus.classList.remove("hidden");
+     },
+     function (errMsg) {
+      dlDocUpload = { dataUrl: "", fileName: "" };
+      elProfileDlFileStatus.classList.add("hidden");
+      elProfileDlFileStatus.textContent = "";
+      setFieldError("err-profile-dl", errMsg);
+     }
+    );
+   });
+
+   elProfileForm.addEventListener("submit", function (event) {
+    event.preventDefault();
+    if (!currentUser || !currentUser.emailVerified) { syncAuthGateUi(); return; }
+    if (profileSubmitting || !validateProfileForm()) return;
+
+    var fb = window.IdleSpotFirebase;
+    if (!fb) return;
+    var s = STRINGS[currentLang];
+    profileSubmitting = true;
+    elProfileSubmitBtn.disabled = true;
+    elProfileSubmitBtn.textContent = s.submitting;
+    elProfileSubmitErr.classList.add("hidden");
+
+    var proofType = getCheckedRadioValue("vehicle_proof_type") === "rc_document" ? "rc_document" : "vehicle_photo";
+    var dlNo = elProfileDlNo.value.trim().toUpperCase();
+    var dlMethod = dlDocUpload.dataUrl ? "dl_doc_upload" : (dlNo ? "dl_number_only" : null);
+    fb.saveUserProfileAndVerification({
+     display_name: elProfileName.value.trim(),
+     phone: cleanTenDigitPhone(elProfilePhone.value),
+     contact_email: elProfileEmail.value.trim(),
+     vehicle_proof_type: proofType,
+     vehicle_number: elProfileVehicleNo.value.trim().toUpperCase(),
+     vehicle_proof_data_url: vehicleProofUpload.dataUrl,
+     vehicle_proof_file_name: vehicleProofUpload.fileName,
+     dl_verification_method: dlMethod,
+     driving_license_number: dlNo,
+     dl_document_data_url: dlDocUpload.dataUrl || null,
+     dl_document_file_name: dlDocUpload.fileName || null
+    }).then(function (savedProfile) {
+     profileSubmitting = false;
+     elProfileSubmitBtn.disabled = false;
+     elProfileSubmitBtn.textContent = STRINGS[currentLang].profileSubmitBtn;
+     userProfile = savedProfile;
+     profileResolved = true;
+     prefillWorkspaceFormsFromProfile(savedProfile);
+     renderAccountBar();
+    }).catch(function () {
+     profileSubmitting = false;
+     elProfileSubmitBtn.disabled = false;
+     elProfileSubmitBtn.textContent = STRINGS[currentLang].profileSubmitBtn;
+     elProfileSubmitErr.textContent = STRINGS[currentLang].errors.submitFailed;
+     elProfileSubmitErr.classList.remove("hidden");
+    });
+   });
 
    function validateSurveyForm() {
     var e = STRINGS[currentLang].errors;
@@ -3766,7 +4274,7 @@
     if (!elSurveyArea.value.trim()) fail("err-survey-area", e.surveyAreaRequired, elSurveyArea);
     var phoneTrimmed = elSurveyPhone.value.trim();
     if (phoneTrimmed && !cleanTenDigitPhone(phoneTrimmed)) fail("err-survey-phone", e.surveyPhoneInvalid, elSurveyPhone);
-    if (!isValidOptionalEmail(elSurveyEmail.value)) fail("err-survey-email", e.emailInvalid, elSurveyEmail);
+    if (!isValidOptionalEmail(elSurveyEmail.value)) fail("err-survey-email", e.emailOptionalInvalid, elSurveyEmail);
     if (!getCheckedRadioValue("survey_owns_spot")) fail("err-survey-q1", e.surveyQ1Required, document.getElementById("srv-q1-avail"));
     if (!getCheckedRadioValue("survey_problem")) fail("err-survey-q2", e.surveyQ2Required, document.getElementById("srv-q2-often"));
     if (!getCheckedRadioValue("survey_use_app")) fail("err-survey-q3", e.surveyQ3Required, document.getElementById("srv-q3-yes"));
@@ -3787,7 +4295,7 @@
 
    elSurveyForm.addEventListener("submit", function (event) {
     event.preventDefault();
-    if (!currentUser || !currentUser.emailVerified) { syncAuthGateUi(); return; }
+    if (!currentUser || !currentUser.emailVerified || !isUserProfileCompleted()) { syncAuthGateUi(); return; }
     if (surveySubmitting || surveySubmitted || !validateSurveyForm()) return;
 
     var s = STRINGS[currentLang];
@@ -4061,10 +4569,12 @@
    syncDatePresetHighlights();
    syncHourPresetHighlights("driver");
    syncHourPresetHighlights("owner");
+   syncChoiceOptionHighlights();
 
    // 10. FIREBASE AUTH + FIRESTORE REAL-TIME SYNC
    function clearUserSubscriptions() {
     if (unsubPublicSpaces) { unsubPublicSpaces(); unsubPublicSpaces = null; }
+    if (unsubMyProfile) { unsubMyProfile(); unsubMyProfile = null; }
     if (unsubMyRequests) { unsubMyRequests(); unsubMyRequests = null; }
     if (unsubMySpaces) { unsubMySpaces(); unsubMySpaces = null; }
     if (unsubMySurveys) { unsubMySurveys(); unsubMySurveys = null; }
@@ -4073,7 +4583,7 @@
 
    function startPublicSpacesSubscription() {
     var fb = window.IdleSpotFirebase;
-    if (!fb || unsubPublicSpaces || !currentUser || !currentUser.emailVerified) return;
+    if (!fb || unsubPublicSpaces || !currentUser || !currentUser.emailVerified || !isUserProfileCompleted()) return;
     unsubPublicSpaces = fb.subscribePublicSpaces(
      function (spaces) {
       spacesLoadFailed = false;
@@ -4094,6 +4604,10 @@
     fb.subscribeAuth(function (user) {
      authResolved = true;
      currentUser = user;
+     userProfile = null;
+     profileResolved = false;
+     vehicleProofUpload = { dataUrl: "", fileName: "" };
+     dlDocUpload = { dataUrl: "", fileName: "" };
      clearUserSubscriptions();
      availableSpaces = [];
      selectedSpace = null;
@@ -4106,6 +4620,8 @@
      renderAvailableSpaces();
 
      if (user && user.emailVerified) {
+      if (!elProfileName.value.trim() && user.displayName) elProfileName.value = user.displayName;
+      if (!elProfileEmail.value.trim() && user.email) elProfileEmail.value = user.email;
       if (!elSurveyName.value.trim() && user.displayName) elSurveyName.value = user.displayName;
       if (!elDriverName.value.trim() && user.displayName) elDriverName.value = user.displayName;
       if (!elOwnerName.value.trim() && user.displayName) elOwnerName.value = user.displayName;
@@ -4113,7 +4629,23 @@
       if (!elDriverEmail.value.trim() && user.email) elDriverEmail.value = user.email;
       if (!elOwnerEmail.value.trim() && user.email) elOwnerEmail.value = user.email;
 
-      startPublicSpacesSubscription();
+      unsubMyProfile = fb.subscribeMyProfile(
+       user.uid,
+       function (profile) {
+        userProfile = profile;
+        profileResolved = true;
+        if (profile && profile.profile_completed) {
+         prefillWorkspaceFormsFromProfile(profile);
+         startPublicSpacesSubscription();
+        }
+        renderAccountBar();
+       },
+       function () {
+        userProfile = null;
+        profileResolved = true;
+        renderAccountBar();
+       }
+      );
 
       unsubMyRequests = fb.subscribeMyRequests(
        user.uid,
@@ -4148,6 +4680,8 @@
         function () {}
        );
       }
+     } else {
+      profileResolved = true;
      }
      renderAccountBar();
     });
