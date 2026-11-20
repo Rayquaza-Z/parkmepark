@@ -182,9 +182,10 @@ function runSecurityVerification(): void {
     "Dirty #3 spoofed admin rejected"
   );
 
-  // Also verify city validation, Google Maps URL guard, cancellation policy, and Pune/Dadar areaKeys
+  // Also verify city validation, Google Maps URL guard, cancellation policy, locationLink update guard, and Pune/Dadar areaKeys
   assertMatchesRule(rulesSource, "isValidCity(", "City allowlist guard");
   assertMatchesRule(rulesSource, "isValidGoogleMapsUrl(data.locationLink)", "Mandatory Google Maps URL guard");
+  assertMatchesRule(rulesSource, "incoming().diff(existing()).affectedKeys().hasOnly(['locationLink'])", "Location link update scoped guard");
   assertMatchesRule(rulesSource, "incoming().cancellationPolicyAccepted == true", "Driver cancellation acceptance guard");
   assertMatchesRule(rulesSource, "incoming().cancellationDeadline is timestamp", "Driver cancellation deadline timestamp guard");
   assertMatchesRule(rulesSource, "'dadar'", "Mumbai dadar areaKey");
@@ -195,6 +196,8 @@ function runSecurityVerification(): void {
   for (const forbidden of ["phone", "email", "ownerName", "propertyOwnerOrManager", "locationLink"]) {
     assert.ok(!publicSpaceProps.includes(forbidden), `PII leakage risk in PublicSpace: ${forbidden}`);
   }
+  assert.ok("vehicleDetails" in blueprint.entities.UserProfile.properties, "UserProfile must declare vehicleDetails in blueprint");
+  assertMatchesRule(rulesSource, "isStr(data.vehicleDetails, 0, 120)", "UserProfile vehicleDetails length bound");
   assert.ok(!rulesSource.toLowerCase().includes("digilocker"), "DigiLocker references must be removed from firestore.rules");
 
   console.log("Verified firebase-blueprint.json + firestore.rules against all 12 Dirty Dozen invariants.");

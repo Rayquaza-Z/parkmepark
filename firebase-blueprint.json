@@ -37,6 +37,11 @@
         "profileCompleted": {
           "type": "boolean"
         },
+        "vehicleDetails": {
+          "type": "string",
+          "maxLength": 120,
+          "description": "Typed car or vehicle details such as make, model, and colour."
+        },
         "vehicleProofType": {
           "type": "string",
           "enum": ["vehicle_photo", "rc_document", null]
