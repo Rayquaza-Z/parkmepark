@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ParkMe – Login</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1 class="title">Login with Phone</h1>
+    <form id="loginForm" class="form">
+      <label for="phone" class="label">Phone number</label>
+      <input
+        type="tel"
+        id="phone"
+        name="phone"
+        class="input"
+        placeholder="+91 98765‑43210"
+        required
+      />
+      <p id="error" class="error" aria-live="polite"></p>
+      <button type="submit" class="button">Continue</button>
+    </form>
+    <p class="footer">Launching soon. Any money paid is fully refundable.</p>
+  </div>
+  <script>
+    // Simple client‑side validation – no npm, pure JS
+    const form = document.getElementById('loginForm');
+    const phoneInput = document.getElementById('phone');
+    const errorEl = document.getElementById('error');
+    form.addEventListener('submit', e => {
+      e.preventDefault();
+      const val = phoneInput.value.replace(/\s+/g, '');
+      if (!/^\+?\d{10,20}$/.test(val)) {
+        errorEl.textContent = 'Please enter a valid phone number (10‑20 digits).';
+        return;
+      }
+      errorEl.textContent = '';
+      // In a real app you would now send the number to your backend.
+      alert('Phone submitted: ' + val);
+    });
+  </script>
+</body>
+</html>
